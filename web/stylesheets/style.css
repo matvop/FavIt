@@ -1,0 +1,14 @@
+html {
+    background-color: darkslategrey;
+}
+body {
+}
+.flex {
+    display: flex;
+    justify-content: center;
+}
+img {
+    height: 100%;
+    width: 40%;
+    margin: 5px
+}
