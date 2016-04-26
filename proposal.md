@@ -1,6 +1,4 @@
-# Capstone Proposal
-
-## PyCamZ
+# PyCamZ
 
 ## Functionality:
     The PyCamZ web-app will provide user with a secure web interface to
