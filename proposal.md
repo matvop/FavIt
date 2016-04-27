@@ -7,6 +7,40 @@
     and then combine the images into a time-lapse video upon completion. User
     can choose to playback in browser and/or download.
 
+    ## Specific Functionality
+    + Main page
+      * Provide User with Navigation Options
+        * Monitor Cameras
+          * Video streams with nav bar
+        * Manage Cameras
+          * Add Camera
+            * Pop-up window
+              * Enter camera url(IP/Hostname with Port)
+              * Enter username
+              * Enter password
+              * Option to enable snapshots for time-lapse
+              * Select from pre-defined snapshot intervals
+              * Enter duration of time-lapse (or select from pre-defined options)
+              * Option to cancel/go back
+          * Edit Camera
+            * Pop-up window
+              * Enter camera url(IP/Hostname with Port)
+              * Enter username
+              * Enter password
+              * Option to enable snapshots for time-lapse
+              * Select from pre-defined snapshot intervals
+              * Enter duration of time-lapse (or select from pre-defined options)
+              * Option to remove camera
+              * Option to cancel/go back
+          * Playback
+            * Provide user with list of completed time-lapse videos
+              * Pop-up window on snapshot thumbnail click
+                * Automatically start playing associated video
+                * Option to download video
+                * Option to delete video
+                * Option to cancel/go back
+          * Exit/Go back
+
 ## Technical Components:
 + Database(s)
   * Required to store web user login info, store camera url(s), camera login info, video/images with search-able string
@@ -23,40 +57,6 @@
 + HTML/CSS and/or JavaScript
   * Configuration settings for camera's network info(i.e. IP, user name, password, ports).
   * Interface to monitor video streams and edit configuration settings, as well as search for recordings.
-+ Front-End Structure
-  * Main page
-    * Provide User with Navigation Options
-      * Monitor Cameras
-        * Video streams with nav bar
-      * Manage Cameras
-        * Add Camera
-          * Pop-up window
-            * Enter camera url(IP/Hostname with Port)
-            * Enter username
-            * Enter password
-            * Option to enable snapshots for time-lapse
-            * Select from pre-defined snapshot intervals
-            * Enter duration of time-lapse (or select from pre-defined options)
-            * Option to cancel/go back
-        * Edit Camera
-          * Pop-up window
-            * Enter camera url(IP/Hostname with Port)
-            * Enter username
-            * Enter password
-            * Option to enable snapshots for time-lapse
-            * Select from pre-defined snapshot intervals
-            * Enter duration of time-lapse (or select from pre-defined options)
-            * Option to remove camera
-            * Option to cancel/go back
-        * Exit/Go back
-      * Playback
-        * Provide user with list of completed time-lapse videos
-          * Pop-up window on snapshot thumbnail click
-            * Automatically start playing associated video
-            * Option to download video
-            * Option to delete video
-            * Option to cancel/go back
-      * Exit/Go back
 
 ## Timeline:
 1. Writing the Python module to record and store snapshots and combine into video. - primary focus until solved
