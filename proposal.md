@@ -1,6 +1,6 @@
 # PyCamZ
 
-## Functionality:
+## High-Level Product:
     The PyCamZ web-app will provide user with a web interface to access, add,
     remove, monitor public or private network/IP camera(s). Will include the
     ability to take snapshots at a specified interval for a specified duration
