@@ -19,9 +19,8 @@
 + HTML5
   * Use to playback video files
 + JavaScript
-  * To enlarge low resolution MJPEG stream(s) to full/higher resolution streams (pop-up and pause main page streams)
+  * To enlarge low resolution stream(s) to full/higher resolution streams (pop-up and pause main page streams)
 + HTML/CSS and/or JavaScript
-  * Prompt user for login and password
   * Configuration settings for camera's network info(i.e. IP, user name, password, ports).
   * Interface to monitor video streams and edit configuration settings, as well as search for recordings.
 + Front-End Structure
