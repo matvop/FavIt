@@ -49,7 +49,15 @@
             * Enter duration of time-lapse (or select from pre-defined options)
             * Option to remove camera
             * Option to cancel/go back
-        * Exit
+        * Exit/Go back
+      * Playback
+        * Provide user with list of completed time-lapse videos
+          * Pop-up window on thumbnail click
+            * Automatically start playing associated video
+            * Option to download video
+            * Option to delete video
+            * Option to cancel/go back
+      * Exit/Go back
 
 ## Timeline:
 1. Writing the Python module to record and store snapshots and combine into video. - primary focus until solved
