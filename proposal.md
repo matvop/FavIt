@@ -1,8 +1,10 @@
 # PyCamZ
 
 ## Functionality:
-    The PyCamZ web-app will provide user with a secure web interface to
-    add, remove, monitor, record/playback network/IP camera(s).
+    The PyCamZ web-app will provide user with a secure web interface access
+    add, remove, monitor public or private network/IP camera(s). Will include the
+    ability to take snapshots at a specified interval for a specified duration
+    and then combine the images into a time-lapse video upon completion.
 
 ## Technical Components:
 + Database(s)
@@ -21,9 +23,14 @@
   * Prompt user for login and password
   * Configuration settings for camera's network info(i.e. IP, user name, password, ports).
   * Interface to monitor video streams and edit configuration settings, as well as search for recordings.
++ Front-End Structure
+  * Main page
+    * Video streams with nav bar on left
+  * System Configuration
+    * 
 
 ## Timeline:
-1. Writing the Python module to record the camera(s). - primary focus until solved
-1. Provide user with ability to search/view recorded video. - secondary since full motion video rec/play may not be possible(snapshots are a fall-back)
+1. Writing the Python module to record and store snapshots and combine into video. - primary focus until solved
+1. Provide user with ability to view recorded video.
 1. Build a database solution to store and retrieve video/images along with configuration settings.
 1. Develop a user interface using HTML, CSS, and JavaScript will follow once the above tasks have been completed.
