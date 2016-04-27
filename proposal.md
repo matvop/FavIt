@@ -26,9 +26,30 @@
   * Interface to monitor video streams and edit configuration settings, as well as search for recordings.
 + Front-End Structure
   * Main page
-    * Video streams with nav bar
-  * System Configuration
-    *
+    * Provide User with Navigation Options
+      * Monitor Cameras
+        * Video streams with nav bar
+      * Manage Cameras
+        * Add Camera
+          * Pop-up window
+            * Enter camera url(IP/Hostname with Port)
+            * Enter username
+            * Enter password
+            * Option to enable snapshots for time-lapse
+            * Select from pre-defined snapshot intervals
+            * Enter duration of time-lapse (or select from pre-defined options)
+            * Option to cancel/go back
+        * Edit Camera
+          * Pop-up window
+            * Enter camera url(IP/Hostname with Port)
+            * Enter username
+            * Enter password
+            * Option to enable snapshots for time-lapse
+            * Select from pre-defined snapshot intervals
+            * Enter duration of time-lapse (or select from pre-defined options)
+            * Option to remove camera
+            * Option to cancel/go back
+        * Exit/Logout
 
 ## Timeline:
 1. Writing the Python module to record and store snapshots and combine into video. - primary focus until solved
