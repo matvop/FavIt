@@ -7,39 +7,39 @@
     and then combine the images into a time-lapse video upon completion. User
     can choose to playback in browser and/or download.
 
-## Specific Functionality
-    + Main page
-      * Provide User with Navigation Options
-        * Monitor Cameras
-          * Video streams with nav bar
-        * Manage Cameras
-          * Add Camera
-            * Pop-up window
-              * Enter camera url(IP/Hostname with Port)
-              * Enter username
-              * Enter password
-              * Option to enable snapshots for time-lapse
-              * Select from pre-defined snapshot intervals
-              * Enter duration of time-lapse (or select from pre-defined options)
-              * Option to cancel/go back
-          * Edit Camera
-            * Pop-up window
-              * Enter camera url(IP/Hostname with Port)
-              * Enter username
-              * Enter password
-              * Option to enable snapshots for time-lapse
-              * Select from pre-defined snapshot intervals
-              * Enter duration of time-lapse (or select from pre-defined options)
-              * Option to remove camera
-              * Option to cancel/go back
-          * Playback
-            * Provide user with list of completed time-lapse videos
-              * Pop-up window on snapshot thumbnail click
-                * Automatically start playing associated video
-                * Option to download video
-                * Option to delete video
-                * Option to cancel/go back
-          * Exit/Go back
+## Specific Functionality:
++ Main page
+  * Provide User with Navigation Options
+    * Monitor Cameras
+      * Video streams with nav bar
+    * Manage Cameras
+      * Add Camera
+        * Pop-up window
+          * Enter camera url(IP/Hostname with Port)
+          * Enter username
+          * Enter password
+          * Option to enable snapshots for time-lapse
+          * Select from pre-defined snapshot intervals
+          * Enter duration of time-lapse (or select from pre-defined options)
+          * Option to cancel/go back
+      * Edit Camera
+        * Pop-up window
+          * Enter camera url(IP/Hostname with Port)
+          * Enter username
+          * Enter password
+          * Option to enable snapshots for time-lapse
+          * Select from pre-defined snapshot intervals
+          * Enter duration of time-lapse (or select from pre-defined options)
+          * Option to remove camera
+          * Option to cancel/go back
+      * Playback
+        * Provide user with list of completed time-lapse videos
+          * Pop-up window on snapshot thumbnail click
+            * Automatically start playing associated video
+            * Option to download video
+            * Option to delete video
+            * Option to cancel/go back
+      * Exit/Go back
 
 ## Technical Components:
 + Database(s)
