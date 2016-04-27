@@ -1,8 +1,8 @@
 # PyCamZ
 
 ## Functionality:
-    The PyCamZ web-app will provide user with a secure web interface to access,
-    add, remove, monitor public or private network/IP camera(s). Will include the
+    The PyCamZ web-app will provide user with a web interface to access, add,
+    remove, monitor public or private network/IP camera(s). Will include the
     ability to take snapshots at a specified interval for a specified duration
     and then combine the images into a time-lapse video upon completion. User
     can choose to playback in browser and/or download.
@@ -13,8 +13,8 @@
 + Django
   * Use to communicate input from the user into the database
 + Python
-  * Use to record full motion video from camera(s) and/or save snapshots on an interval or click.
-  * Generate 5 minute clips instead of long massive files
+  * Save snapshots on a specified interval
+  * Combine images to create time-lapse video.
   * Generate search-able string to store with media in database(date/time)
 + HTML5
   * Use to playback video files
@@ -49,7 +49,7 @@
             * Enter duration of time-lapse (or select from pre-defined options)
             * Option to remove camera
             * Option to cancel/go back
-        * Exit/Logout
+        * Exit
 
 ## Timeline:
 1. Writing the Python module to record and store snapshots and combine into video. - primary focus until solved
