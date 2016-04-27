@@ -52,7 +52,7 @@
         * Exit/Go back
       * Playback
         * Provide user with list of completed time-lapse videos
-          * Pop-up window on thumbnail click
+          * Pop-up window on snapshot thumbnail click
             * Automatically start playing associated video
             * Option to download video
             * Option to delete video
@@ -63,4 +63,4 @@
 1. Writing the Python module to record and store snapshots and combine into video. - primary focus until solved
 1. Provide user with ability to view recorded video.
 1. Build a database solution to store and retrieve video/images along with configuration settings.
-1. Develop a user interface using HTML, CSS, and JavaScript will follow once the above tasks have been completed.
+1. Develop a user interface using HTML, CSS, and JavaScript once the above tasks have been completed.
