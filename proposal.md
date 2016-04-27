@@ -7,7 +7,7 @@
     and then combine the images into a time-lapse video upon completion. User
     can choose to playback in browser and/or download.
 
-    ## Specific Functionality
+## Specific Functionality
     + Main page
       * Provide User with Navigation Options
         * Monitor Cameras
