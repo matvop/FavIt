@@ -2,7 +2,7 @@
 
 ## Functionality:
     The PyCamZ web-app will provide user with a secure web interface to
-    login, add, remove, monitor, record/playback network/IP camera(s).
+    add, remove, monitor, record/playback network/IP camera(s).
 
 ## Technical Components:
 + Database(s)
