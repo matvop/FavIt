@@ -1,4 +1,4 @@
-# PyCamZ
+# PyLapse
 
 ## High-Level Product:
 The PyCamZ web-app will provide user with a web interface to access, add,
