@@ -45,20 +45,20 @@ snapshots.
           * Option to remove camera
             * Prompt to delete project directory
           * Option to cancel/go back
-      * Playback Video/Display Snapshots
-        * View Snapshots:
-          * List of project directories sorted by project name
-            * List of snapshot directories sorted by record date('%m.%d.%Y')
-              * Thumbnails/tiles of snapshot images sorted by time('%H.%M.%S')
-                * Thumbnails to open into a 'pop-up' and/or gallery viewing solution using CSS/HTML/JavaScript/JQuery
-        * Playback Video:
-          * Provide user with list of completed time-lapse videos
-            * Pop-up window on snapshot thumbnail click
-              * Automatically start playing associated video
-              * Option to download video
-              * Option to delete video
-              * Option to cancel/go back
-      * Exit/Go back
+    * Playback Video/Display Snapshots
+      * View Snapshots:
+        * List of project directories sorted by project name
+          * List of snapshot directories sorted by record date('%m.%d.%Y')
+            * Thumbnails/tiles of snapshot images sorted by time('%H.%M.%S')
+              * Thumbnails to open into a 'pop-up' and/or gallery viewing solution using CSS/HTML/JavaScript/JQuery
+    * Playback Video:
+      * Provide user with list of completed time-lapse videos
+        * Pop-up window on snapshot thumbnail click
+          * Automatically start playing associated video
+          * Option to download video
+          * Option to delete video
+          * Option to cancel/go back
+    * Exit/Go back
 
 ## Technical Components:
 + Database(s)
