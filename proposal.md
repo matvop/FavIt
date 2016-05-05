@@ -7,6 +7,11 @@ ability to take snapshots at a specified interval for a specified duration
 and then combine the images into a time-lapse video upon completion. User
 can choose to playback in browser and/or download.
 
+## Minimum Viable Product:
+Support creating and storing snapshots from videos streams configured by
+the user. App will provide the user with a method of displaying stored
+snapshots.
+
 ## Specific Functionality:
 + Main page
   * Provide User with Navigation Options
@@ -15,30 +20,44 @@ can choose to playback in browser and/or download.
     * Manage Cameras
       * Add Camera
         * Pop-up window
+          * Enable/disable camera stream
+          * Select whether camera stream is public or private
           * Enter camera url(IP/Hostname with Port)
-          * Enter username
-          * Enter password
+          * Enter user-name(grayed out unless private)
+          * Enter password(grayed out unless private)
           * Option to enable snapshots for time-lapse
-          * Select from pre-defined snapshot intervals
-          * Enter duration of time-lapse (or select from pre-defined options)
+          * Select from predefined snapshot intervals
+          * Select/choose day or night time window of time-lapse (or select from predefined options)
+          * Select schedule(date calendar)
+          * Enter duration of time-lapse (or select from predefined options)
           * Option to cancel/go back
       * Edit Camera
         * Pop-up window
-          * Enter camera url(IP/Hostname with Port)
-          * Enter username
-          * Enter password
-          * Option to enable snapshots for time-lapse
-          * Select from pre-defined snapshot intervals
-          * Enter duration of time-lapse (or select from pre-defined options)
+          * Enable/disable camera stream
+          * View/edit whether camera stream is public or private
+          * View/edit camera url(IP/Hostname with Port)
+          * View/edit user-name(grayed out unless private)
+          * View/edit password(grayed out unless private)
+          * View/edit option to enable/disable snapshots
+          * View/edit predefined snapshot intervals
+          * View/edit daily duration of time-lapse (or select from predefined options)
+          * View/edit schedule(date calendar)
           * Option to remove camera
+            * Prompt to delete project directory
           * Option to cancel/go back
-      * Playback
-        * Provide user with list of completed time-lapse videos
-          * Pop-up window on snapshot thumbnail click
-            * Automatically start playing associated video
-            * Option to download video
-            * Option to delete video
-            * Option to cancel/go back
+      * Playback Video/Display Snapshots
+        * View Snapshots:
+          * List of project directories sorted by project name
+            * List of snapshot directories sorted by record date('%m.%d.%Y')
+              * Thumbnails/tiles of snapshot images sorted by time('%H.%M.%S')
+                * Thumbnails to open into a 'pop-up' and/or gallery viewing solution using CSS/HTML/JavaScript/JQuery
+        * Playback Video:
+          * Provide user with list of completed time-lapse videos
+            * Pop-up window on snapshot thumbnail click
+              * Automatically start playing associated video
+              * Option to download video
+              * Option to delete video
+              * Option to cancel/go back
       * Exit/Go back
 
 ## Technical Components:

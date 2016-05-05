@@ -18,6 +18,11 @@ def create_file(date_and_time, project_num):
     return directory + str(
            date_and_time.strftime('%H.%M.%S')) + '.jpg'
 
+# def snap_on_interval(date_and_time, rate):
+#     figure out the date and time
+#     figure out how many snaps per day
+#
+
 def take_snapshot(project_num):
     url = 'http://esoteric.ddns.net:8181/axis-cgi/jpg/image.cgi?date=0&clock=0'
     now = datetime.datetime.now()
@@ -31,5 +36,7 @@ def take_snapshot(project_num):
                     break
                 image.write(block)
 
+# images_per_day = 120
 project_num = '1'
+# set_snap_interval(images_per_day)
 take_snapshot(project_num)
