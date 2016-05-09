@@ -46,23 +46,19 @@ Configuration database:
 [
     {
         project_name:
-            (
-                session_number,
-                [public_or_private, url, user, pass, snapshot_enable, snap_interval]
-            )
+            [public_or_private, url, user, pass,
+             snapshot_enable, snap_interval, session_number]
     }
 ]
 ```
-Project recording database:
+Project snapshot and video database:
 ```
-[
+{
     session_number:
-        {
-            rec_date:[snap_time_a, snap_time_b, snap_time_c],
-            'video':[datetime_1, datetime_2, datetime_3]
-        }
-]
+        [[snapshot_1, snapshot_2, snapshot_3], video]
+}
 ```
+
 
 ## Technical Components:
 + Database(s)
@@ -71,9 +67,11 @@ Project recording database:
   * Use to communicate input from the user into the database
 + Python
   * Save snapshots on a specified interval
+  * Create time lapse video from snapshots
   * Generate search-able string to store with media in database(date/time)
 + JavaScript
-  * To enlarge low resolution stream(s) to full/higher resolution streams (pop-up and pause main page streams)
+  * To display dynamic content (images and camera streams) using JQuery
+  * To enlarge low resolution stream(s)
 + HTML/CSS and/or JavaScript
   * Configuration settings for camera's network info(i.e. IP, user name, password, ports).
   * Interface to monitor video streams and edit configuration settings, as well as search for recordings.
