@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FavIt</title>
+    <link href="{% static 'favit/style.css' %}" rel="stylesheet">
+    <link href="{% static 'favit/magnific-popup.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Media Gallery</h1>
+        <article>
+            <h2 class="dynamic"></h2>
+            <form>
+                <input id="url-input" placeholder="Upload image - Enter URL"><input type="submit">
+            </form>
+        </article>
+    </header>
+    <div class="main">
+        <section>
+        </section>
+    </div>
+    <footer>
+        <div class='contact-info'>
+            <a href='https://www.linkedin.com/in/mattvoelpel'>
+                <img src="{% static 'favit/LinkedIn_Logo.png' %}">
+            </a>
+            <a href='mailto:matvop@gmail.com'>
+                <img src="{% static 'favit/email-icon.png' %}">
+            </a>
+        </div>
+        <div>
+            Created by Matt Voelpel 2016
+        </div>
+        <div>
+            Support for .jpg, .gif, .png, and .bmp images along with .webm, YouTube, and Vimeo videos.
+        </div>
+    </footer>
+    <script src="http://code.jquery.com/jquery-2.2.3.js"></script>
+    <script src="{% static 'favit/jquery.visible.js' %}"></script>
+    <script src="{% static 'favit/jquery.gifplayer.js' %}"></script>
+    <script src="{% static 'favit/jquery.magnific-popup.js' %}"></script>
+    <script src="{% static 'favit/script.js' %}"></script>
+</body>
+</html>
