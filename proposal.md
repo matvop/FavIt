@@ -2,7 +2,8 @@
 
 The FavIt web-app will provide users with a web interface to build a shared
 gallery of favorite images and videos from around the Internet. Users must be
-logged into their account in order to add or remove content on their page.
+logged into their account in order to add or remove content. Anonymous users are
+ allowed to view the landing page and user galleries.
 
 ## Specific Functionality:
 + Main page
@@ -14,7 +15,7 @@ logged into their account in order to add or remove content on their page.
       * User Search
         * Display found user's Favs in view only mode
       * View Favs(avail only to logged in users)
-        * Add new Fav
+        * Add Fav form
         * Remove Fav
       * Logout(avail only to logged in users)
 
@@ -40,4 +41,6 @@ logged into their account in order to add or remove content on their page.
   * Provide an efficient and visually appealing way of viewing Favs via pop-up style animations
 
 ## Timeline:
-1.
+1. Determine user input that should to be saved for Fav creation
+1. Create functions in JavaScript that generate Fav objects
+1. Write CSS that provides a visually appealing method of viewing Favs
