@@ -54,6 +54,7 @@ function createYtTileElement(url) {
         preloader: false,
         fixedContentPos: false
     });
+    $('form').children('#url-input').val('');
     return tileElement;
 }
 
@@ -142,6 +143,7 @@ function createGifTileElement(url) {
     var flexDivElement = $('<div></div>').toggleClass('comment').append(
         commentHeaderElement);
     tileElement.append(flexDivElement);
+    $('form').children('#url-input').val('');
     return tileElement;
 }
 
