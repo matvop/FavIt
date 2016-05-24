@@ -67,11 +67,8 @@ article {
     border-width: 5px;
     max-width: 355px;
 }
-.vim {
+.vim, .yt {
     width: 355px;
-}
-.yt {
-    width: 266px;
 }
 .top-cont {
     display: flex;

@@ -29,33 +29,53 @@ function createImgTileElement(url) {
     return tileElement;
 }
 
-function createYtTileElement(url) {
-    var videoName = url.slice(-11);
-    var thumbnailUrl = ('http://img.youtube.com/vi/' + videoName + '/0.jpg');
+function createYtTileElement(jsonDict) {
+    var videoURL = $('#url-input').val().slice(0,43);
+    var videoID = videoURL.slice(-11);
+    var thumbnailUrl = ('http://img.youtube.com/vi/' + videoID + '/maxresdefault.jpg');
     var videoThumbnailElement = $('<img></img>').attr('src', thumbnailUrl);
-    var fullSizeLink = $('<a></a>').attr('href', url).append(
+    var fullSizeLink = $('<a></a>').attr('href', videoURL).append(
         videoThumbnailElement).toggleClass('popup-youtube');
     var topContainerElement = $('<div></div>').toggleClass(
         'top-cont').append(fullSizeLink);
     var tileElement = $('<article></article>').toggleClass(
         'yt').append(topContainerElement);
-    var titleElement = $('<div></div>').text(url);
+    var titleElement = $('<div></div>').text(jsonDict['title']);
     var delLink = createDelLink(tileElement);
     var commentHeaderElement = $('<span></span>').append(
-        titleElement).append(delLink);
+        titleElement, delLink);
+    var authorLinkElement = $('<a></a>').text(jsonDict['author_name']).attr(
+        'href', jsonDict['author_url']).attr('target', '_blank');
+    var mediaSourceElement = $('<div></div>').append(
+        authorLinkElement, '<div>&nbsp- on <a target="_blank" href="https://youtube.com/">YouTube</a></div>');
     var flexDivElement = $('<div></div>').toggleClass('comment').append(
-        commentHeaderElement);
+        commentHeaderElement, mediaSourceElement);
     tileElement.append(flexDivElement);
-    $('.popup-youtube').magnificPopup({
-        disableOn: 700,
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        fixedContentPos: false
-    });
-    $('form').children('#url-input').val('');
     return tileElement;
+}
+
+function getYouTubeAPIResponseAndBuildTile() {
+    var videoURL = $('#url-input').val().slice(0,43);
+    var videoID = videoURL.slice(-11);
+    $.ajax({
+        dataType: 'json',
+        url: "https://noembed.com/embed",
+        data: 'url=' + videoURL,
+        success: function(result) {
+            console.log(result);
+            var tileElement = createYtTileElement(result);
+            $('section').prepend(tileElement);
+            $('.popup-youtube').magnificPopup({
+                disableOn: 700,
+                type: 'iframe',
+                mainClass: 'mfp-fade',
+                removalDelay: 160,
+                preloader: false,
+                fixedContentPos: false
+            });
+            $('form').children('#url-input').val('');
+        }
+    });
 }
 
 function createVimeoTileElement(jsonDict) {
@@ -75,30 +95,30 @@ function createVimeoTileElement(jsonDict) {
     var authorLinkElement = $('<a></a>').text(jsonDict['author_name']).attr(
         'href', jsonDict['author_url']).attr('target', '_blank');
     var mediaSourceElement = $('<div></div>').append(
-        authorLinkElement, '<div>&nbsp- on Vimeo</div>');
+        authorLinkElement, '<div>&nbsp- on <a target="_blank" href="https://vimeo.com/"Vimeo</div>');
     var flexDivElement = $('<div></div>').toggleClass('comment').append(
         commentHeaderElement, mediaSourceElement);
     tileElement.append(flexDivElement);
-    $('section').prepend(tileElement);
-    $('.popup-vimeo').magnificPopup({
-        disableOn: 700,
-        type: 'iframe',
-        mainClass: 'mfp-fade',
-        removalDelay: 160,
-        preloader: false,
-        fixedContentPos: false
-    });
-    $('form').children('#url-input').val('');
     return tileElement;
 }
 
-function getAPIResponseAndBuildTile() {
+function getVimeoAPIResponseAndBuildTile() {
     $.ajax({
         dataType: 'json',
         url: "https://vimeo.com/api/oembed.json",
         data: 'url=' + $('#url-input').val(),
         success: function(result) {
-            createVimeoTileElement(result);
+            var tileElement = createVimeoTileElement(result);
+            $('section').prepend(tileElement);
+            $('.popup-vimeo').magnificPopup({
+                disableOn: 700,
+                type: 'iframe',
+                mainClass: 'mfp-fade',
+                removalDelay: 160,
+                preloader: false,
+                fixedContentPos: false
+            });
+            $('form').children('#url-input').val('');
         }
     });
 }
@@ -151,13 +171,12 @@ function getUrlAndAddImgToGrid(imgURL) {
     return $('section').prepend(tileElement);
 }
 
-function getUrlAndAddYtToGrid(ytURL) {
-    var tileElement = createYtTileElement(ytURL);
-    return $('section').prepend(tileElement);
+function getUrlAndAddYtToGrid() {
+    return getYouTubeAPIResponseAndBuildTile();
 }
 
-function getUrlAndAddVimeoToGrid(vimeoURL) {
-    return getAPIResponseAndBuildTile();
+function getUrlAndAddVimeoToGrid() {
+    return getVimeoAPIResponseAndBuildTile();
 }
 
 function getUrlAndAddWebmToGrid(webmURL) {
@@ -203,10 +222,10 @@ function getUploadedMediaType() {
     var vimeoURL = normalizeVimeoURL(mediaURL);
     var fileExt = checkForFileExt(mediaURL);
     if (ytURL === 'https://www.youtube.com/') {
-        getUrlAndAddYtToGrid(mediaURL);
+        getUrlAndAddYtToGrid();
     }
     else if (vimeoURL === 'https://vimeo.com/') {
-        getUrlAndAddVimeoToGrid(mediaURL);
+        getUrlAndAddVimeoToGrid();
     }
     else if (fileExt === 'jpg' || fileExt === 'png' || fileExt === 'bmp' ) {
         getUrlAndAddImgToGrid(mediaURL);
