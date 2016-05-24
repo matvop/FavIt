@@ -10,12 +10,12 @@
 <body>
     <header>
         <h1>Media Gallery</h1>
-        <article>
+        <div class="input">
             <h2 class="dynamic"></h2>
             <form>
                 <input id="url-input" placeholder="Upload image - Enter URL"><input type="submit">
             </form>
-        </article>
+        </div>
     </header>
     <div class="main">
         <section>
@@ -34,13 +34,11 @@
             Created by Matt Voelpel 2016
         </div>
         <div>
-            Support for .jpg, .gif, .png, and .bmp images along with .webm, YouTube, and Vimeo videos.
+            Support for .jpg, .gif, .png, and .bmp images along with YouTube, and Vimeo videos.
         </div>
     </footer>
     <script src="http://code.jquery.com/jquery-2.2.3.js"></script>
-    <script src="{% static 'favit/jquery.visible.js' %}"></script>
-    <script src="{% static 'favit/jquery.gifplayer.js' %}"></script>
-    <script src="{% static 'favit/jquery.magnific-popup.js' %}"></script>
+    <script src="{% static 'favit/jquery.magnific-popup.min.js' %}"></script>
     <script src="{% static 'favit/script.js' %}"></script>
 </body>
 </html>
