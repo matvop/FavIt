@@ -98,7 +98,6 @@ function getAPIResponseAndBuildTile() {
         url: "https://vimeo.com/api/oembed.json",
         data: 'url=' + $('#url-input').val(),
         success: function(result) {
-            console.log(result);
             createVimeoTileElement(result);
         }
     });
