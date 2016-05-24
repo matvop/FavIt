@@ -41,7 +41,8 @@ logged into their account in order to add or remove content. Anonymous users are
   * Provide an efficient and visually appealing way of viewing Favs via pop-up style animations
 
 ## Timeline:
-1. Determine user input that should to be saved for Fav creation and create models to save into the database
+1. Determine user input that should to be saved for Fav creation
+  * create models to save into the database
 1. Write logic to allow users to register and login
 1. Write view that renders all related Favs for user when they sign in
 1. Create functions in JavaScript using JQuery that generate newly added Fav objects
