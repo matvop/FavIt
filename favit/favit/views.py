@@ -25,7 +25,7 @@ def render_login(request):
                 return HttpResponse("Inactive User.")
         else:
             return HttpResponseRedirect(settings.LOGIN_URL)
-    return render(request, 'flutter/login.html', {'redirect_to': next})
+    return render(request, 'favit/login.html', {'redirect_to': next})
 
 def render_index(request):
     return render(request, 'favit/home.html')

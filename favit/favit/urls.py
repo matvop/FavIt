@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.render_index, name='index'),
     url(r'^favicon.ico$', RedirectView.as_view(
-        url=staticfiles_storage.url('flutter/favicon.ico'),
+        url=staticfiles_storage.url('favit/favicon.ico'),
         permanent=False),name="favicon"),
 ]
