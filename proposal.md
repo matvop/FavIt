@@ -49,3 +49,4 @@ logged into their account in order to add or remove content. Anonymous users are
 1. Create functions in JavaScript using JQuery that dynamically generate newly added Fav objects
 1. Write CSS that provides a visually appealing method of viewing Favs
 1. Integrate Vimeo, YouTube, and Imgur data api's using AJAX for media information and thumbnails
+1. Break apart JQuery tile creation code 

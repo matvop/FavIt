@@ -22,7 +22,10 @@ from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.render_index, name='index'),
+    url(r'^login/$', views.render_login, name='login'),
+    url(r'^logout/$', views.render_logout, name='logout'),
     url(r'^favicon.ico$', RedirectView.as_view(
         url=staticfiles_storage.url('favit/favicon.ico'),
         permanent=False),name="favicon"),
+    url(r'^(?P<user_name>.+)/profile/$', views.render_profile, name='profile'),
 ]

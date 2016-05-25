@@ -13,7 +13,8 @@ class Fav(models.Model):
     )
     comment = models.CharField(
         max_length=400,
-        blank=False
+        blank=True,
+        null=True
     )
     datetime = models.DateTimeField(
         auto_now_add=True,

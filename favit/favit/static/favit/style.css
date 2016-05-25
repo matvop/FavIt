@@ -67,8 +67,14 @@ article {
     border-width: 5px;
     max-width: 355px;
 }
-.vim, .yt {
-    width: 355px;
+.vim {
+    width: 320px;
+}
+.yt {
+    width: 240px;
+}
+.comment > span > div {
+    font-size: 1.2em;
 }
 .top-cont {
     display: flex;
@@ -76,12 +82,14 @@ article {
 }
 article > div > a > img {
     display: block;
-    width: auto;
-    height: 200px;
+    width: 100%;
+    height: 180px;
 }
 .comment {
+    height: 80px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     border-top-color: white;
     border-top-width: 5px;
     border-top-style: solid;
@@ -94,6 +102,14 @@ article > div > a > img {
 }
 .comment > span > div {
     word-break: break-all;
+    display: block;
+    /* Fallback for non-webkit */
+    display: -webkit-box;
+    /* Fallback for non-webkit */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .comment > span > a {
     margin-left: 10px;
@@ -103,6 +119,7 @@ article > div > a > img {
     align-self: flex-end;
     color: white;
     margin: 5px;
+    word-break: break-all;
 }
 h2 {
     -webkit-margin-before: 0;
@@ -148,4 +165,27 @@ footer {
 }
 .mfp-fade.mfp-wrap.mfp-removing .mfp-content {
 	opacity: 0;
+}
+
+/*Should be looking for how to create a standard viewport*/
+@media screen and (max-width: 980px) {
+    article > div > a > img {
+        display: block;
+        width: auto;
+        height: 100px;
+        width: 100%;
+    }
+    .vim {
+        width: 177px;
+    }
+    .yt {
+        width: 133px;
+    }
+    .comment > span > div {
+        font-size: 1.0em;
+        -webkit-line-clamp: 3;
+    }
+    .comment > div > div {
+        display: none;
+    }
 }
