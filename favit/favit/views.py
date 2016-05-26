@@ -9,11 +9,7 @@ from . import logic
 
 
 def render_profile(request):
-    favs = logic.get_all_favs_for_user(user_name)
-    template_args = {
-        'favs': favs,
-    }
-    return render(request, 'favit/profile.html', template_args)
+    return render(request, 'favit/profile.html', {})
 
 def render_login(request):
     next = request.GET.get('next', '/')
@@ -24,11 +20,13 @@ def render_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                favs = logic.get_all_favs_for_user(user)
                 return HttpResponseRedirect(next)
             else:
                 return HttpResponse("Inactive User.")
         else:
             return HttpResponseRedirect(settings.LOGIN_URL)
+
     return render(request, 'favit/login.html', {'redirect_to': next})
 
 def render_ack(request):
@@ -37,10 +35,6 @@ def render_ack(request):
 def render_logout(request):
     logout(request)
     return render(request, 'favit/home.html', {})
-
-# def render_logout(request):
-#     logout(request)
-#     return HttpResponseRedirect(settings.LOGIN_URL)
 
 def render_index(request):
     return render(request, 'favit/home.html', {})

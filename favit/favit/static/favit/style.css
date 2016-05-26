@@ -37,7 +37,7 @@ h1 {
     flex-direction: column;
     float: right;
 }
-.dynamic {
+.dynamic, h2 {
     background-color: white;
     border-style: solid;
     -webkit-margin-before: 0em;

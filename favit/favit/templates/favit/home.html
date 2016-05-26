@@ -18,7 +18,11 @@
             {% endif %}
         </div>
         <div class="input">
-            <h2 class="dynamic"></h2>
+            {% if user.is_authenticated %}
+                <h2 class="dynamic"></h2>
+            {% else %}
+                <h2>Currently viewing most recent Favs</h2>
+            {% endif %}
             <form>
                 <input id="url-input" placeholder="E.g. https://vimeo.com/108448978">
                 <input id="comment-input" placeholder="E.g. Wish I had one of these!">

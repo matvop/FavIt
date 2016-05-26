@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Fav(models.Model):
-    user_name = models.ForeignKey(
-        User,
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
     )
     media_url = models.URLField(
         max_length=200,
