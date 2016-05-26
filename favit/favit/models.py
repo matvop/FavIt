@@ -1,11 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Fav(models.Model):
-    user_name = models.CharField(
-        max_length=32,
-        blank=False,
-        default='Anonymous'
+    user_name = models.ForeignKey(
+        User,
     )
     media_url = models.URLField(
         max_length=200,
@@ -20,8 +19,6 @@ class Fav(models.Model):
         auto_now_add=True,
         auto_now=False
     )
-
-    ordering_fields = ('datetime', 'user_name')
 
     def __str__(self):
         return '{} {} {}'.format(

@@ -14,6 +14,9 @@ header {
     justify-content: space-between;
     align-items: flex-start;
 }
+header a {
+    color: black;
+}
 a {
     text-decoration: none;
     outline: none;
@@ -65,7 +68,7 @@ article {
     border-style: solid;
     border-color: white;
     border-width: 5px;
-    max-width: 355px;
+    max-width: 495px;
 }
 .vim {
     width: 320px;
@@ -73,6 +76,7 @@ article {
 .yt {
     width: 240px;
 }
+
 .comment > span > div {
     font-size: 1.2em;
 }
@@ -84,6 +88,15 @@ article > div > a > img {
     display: block;
     width: 100%;
     height: 180px;
+}
+.imgur > div > a > img {
+    width: auto;
+}
+.img > div > a > img {
+    width: auto;
+}
+.img > .comment > span > div {
+    max-width: 280px;
 }
 .comment {
     height: 80px;
@@ -169,10 +182,14 @@ footer {
 
 /*Should be looking for how to create a standard viewport*/
 @media screen and (max-width: 980px) {
-    article > div > a > img {
-        display: block;
-        width: auto;
+    .publisher {
+        display: none;
+    }
+    .thumb {
         height: 100px;
+        width: auto;
+    }
+    .vim > div > a > img {
         width: 100%;
     }
     .vim {
@@ -183,9 +200,5 @@ footer {
     }
     .comment > span > div {
         font-size: 1.0em;
-        -webkit-line-clamp: 3;
-    }
-    .comment > div > div {
-        display: none;
     }
 }
