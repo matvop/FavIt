@@ -42,11 +42,11 @@ logged into their account in order to add or remove content. Anonymous users are
 
 ## Timeline:
 1. Determine user input that should be saved for Fav creation
-  * create models to save into the database
+1. Create models to save into the database
 1. Write logic to allow users to register and login
 1. Write view that renders all the Favs for the user once signed in
 1. Create functions in JavaScript using JQuery that dynamically generate newly added Fav objects
 1. Write CSS that provides a visually appealing method of viewing Favs
-1. Integrate Vimeo, YouTube, and Imgur data api's using AJAX for media information and thumbnails
+1. Integrate Vimeo, YouTube, and Imgur data api's using AJAX for media information(title/descrip) and thumbnail images
 1. Break apart JQuery tile creation code
 1. Add magnific-popup form method for login
