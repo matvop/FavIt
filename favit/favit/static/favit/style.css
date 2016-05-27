@@ -68,7 +68,7 @@ article {
     border-style: solid;
     border-color: white;
     border-width: 5px;
-    max-width: 495px;
+    max-width: 320px;
 }
 .vim {
     width: 320px;
@@ -181,7 +181,7 @@ footer {
 }
 
 /*Should be looking for how to create a standard viewport*/
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 800px) {
     .publisher {
         display: none;
     }

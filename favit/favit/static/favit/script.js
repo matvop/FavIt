@@ -77,7 +77,38 @@ function createEmptyTile() {
     return tileElement;
 }
 
-function convertEmptyTileToImgur(jsonDict, emptyTile) {
+function convertEmptyTileToImgurGal(jsonDict, emptyTile) {
+    console.log('gallery');
+    console.log('link: ' + jsonDict['data']['link']);
+    console.log('id: ' + jsonDict['data']['id']);
+    console.log('title: ' + jsonDict['data']['title']);
+    console.dir(jsonDict);
+    var imgurTile = emptyTile;
+    imgurTile.toggleClass('imgur');
+    if (jsonDict['data']['animated'] === true) {
+        imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+            'href', jsonDict['data']['link'].replace(
+                jsonDict['data']['link'].slice(
+                -5), jsonDict['data']['link'].slice(-4)));
+        imgurTile.find('img').attr('src', jsonDict['data']['link']);
+        imgurTile.find('.author').text('Animated GIF').attr('href', 'https://imgur.com/gallery/' + jsonDict['data']['id']);
+    }
+    else {
+        imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+            'href', jsonDict['data']['link']);
+        imgurTile.find('img').attr('src', jsonDict['data']['link'].replace(
+            jsonDict['data']['link'].slice(
+            -4), 'm' + jsonDict['data']['link'].slice(-4)));
+        imgurTile.find('.author').text('Image').attr('href', 'https://imgur.com/gallery/' + jsonDict['data']['id']);
+    }
+    imgurTile.find('.title').text(jsonDict['data']['title']);
+    imgurTile.find('.publisher').text('Imgur').attr(
+        'href', 'https://imgur.com/');
+    return imgurTile;
+}
+
+function convertEmptyTileToImgurAlb(jsonDict, emptyTile) {
+    console.log('album');
     console.log('link: ' + jsonDict['data']['link']);
     console.log('id: ' + jsonDict['data']['id']);
     console.log('title: ' + jsonDict['data']['title']);
@@ -85,53 +116,103 @@ function convertEmptyTileToImgur(jsonDict, emptyTile) {
     var imgurTile = emptyTile;
     imgurTile.toggleClass('imgur');
     imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-        'href', jsonDict['data']['link']);
-    imgurTile.find('img').attr('src', jsonDict['data']['link'].replace(
-        jsonDict['data']['link'].slice(
-            -4), 'm' + jsonDict['data']['link'].slice(-4)));
+        'href', jsonDict['data']['images'][0]['link']);
+    imgurTile.find('img').attr('src', jsonDict['data']['images'][0]['link'].replace(
+        jsonDict['data']['images'][0]['link'].slice(
+        -4), 'm' + jsonDict['data']['images'][0]['link'].slice(-4))
+    );
     imgurTile.find('.title').text(jsonDict['data']['title']);
-    imgurTile.find('.publisher').text('Imgur').attr(
-        'href', 'https://imgur.com/');
+    if (jsonDict['data']['images'][0]['animated'] === true) {
+        imgurTile.find('.author').text('Animated Album').attr('href', jsonDict['data']['link']);
+    }
+    else {
+        imgurTile.find('.author').text('Album').attr('href', jsonDict['data']['link']);
+    }
+    imgurTile.find('.publisher').text('Imgur').attr('href', 'https://imgur.com/');
     return imgurTile;
 }
 
 function buildImgurTile() {
-    if ($('#url-input').val().slice(0,19) === 'http://i.imgur.com/') {
-        var id = $('#url-input').val().replace('http://i.imgur.com/', '').replace(
-            $('#url-input').val().slice(-4), '')
-                console.log('non https: ' + id);
+    // if method === 'http_image' {
+    //
+    // }
+    // else if method === 'https_image' {
+    //
+    // }
+    // if ($('#url-input').val().slice(0,19) === 'http://i.imgur.com/') {
+    //     var id = $('#url-input').val().replace('http://i.imgur.com/', '').replace(
+    //         $('#url-input').val().slice(-4), '')
+    //             console.log('non https: ' + id);
+    // }
+    // else if ($('#url-input').val().slice(0,20) === 'https://i.imgur.com/') {
+    //     var id = $('#url-input').val().replace('https://i.imgur.com/', '').replace(
+    //         $('#url-input').val().slice(-4), '')
+    //             console.log('https: ' + id);
+    // }
+    if ($('#url-input').val().slice(0,17) === 'http://imgur.com/') {
+        var id = $('#url-input').val().replace('http://imgur.com/gallery/', '');
+            console.log('non https: ' + id);
     }
-    else if ($('#url-input').val().slice(0,20) === 'https://i.imgur.com/') {
-        var id = $('#url-input').val().replace('https://i.imgur.com/', '').replace(
-            $('#url-input').val().slice(-4), '')
-                console.log('https: ' + id);
+    else if ($('#url-input').val().slice(0,18) === 'https://imgur.com/') {
+        var id = $('#url-input').val().replace('https://imgur.com/gallery/', '');
+            console.log('https: ' + id);
     }
-    $.ajax({
-        dataType: 'json',
-        url: 'https://api.imgur.com/3/image/' + id,
-        headers: {Authorization: 'Client-ID 5225450d88ff546'},
-        success: function(result) {
-            var emptyTile = createEmptyTile();
-            var imgurTile = convertEmptyTileToImgur(result, emptyTile);
-            $('section').prepend(imgurTile);
-            updateTileCount();
-            $('.image-popup-no-margins').magnificPopup({
-        		type: 'image',
-        		closeOnContentClick: true,
-        		closeBtnInside: false,
-        		fixedContentPos: true,
-        		mainClass: 'mfp-no-margins mfp-with-zoom',
-        		image: {
-        			verticalFit: true
-        		},
-        		zoom: {
-        			enabled: true,
-        			duration: 500 // don't foget to change the duration also in CSS
-        		}
-            });
-            $('form').children('#url-input').val('');
-        }
-    });
+    if (id.length === 7) { //for gallery images
+        $.ajax({
+            dataType: 'json',
+            url: 'https://api.imgur.com/3/gallery/image/' + id,
+            headers: {Authorization: 'Client-ID 5225450d88ff546'},
+            success: function(result) {
+                var emptyTile = createEmptyTile();
+                var imgurTile = convertEmptyTileToImgurGal(result, emptyTile);
+                $('section').prepend(imgurTile);
+                updateTileCount();
+                $('.image-popup-no-margins').magnificPopup({
+            		type: 'image',
+            		closeOnContentClick: true,
+            		closeBtnInside: false,
+            		fixedContentPos: true,
+            		mainClass: 'mfp-no-margins mfp-with-zoom',
+            		image: {
+            			verticalFit: true
+            		},
+            		zoom: {
+            			enabled: true,
+            			duration: 500 // don't foget to change the duration also in CSS
+            		}
+                });
+                $('form').children('#url-input').val('');
+            }
+        });
+    }
+    else if (id.length === 5) { //for albums
+        $.ajax({
+            dataType: 'json',
+            url: 'http://api.imgur.com/3/gallery/album/' + id,
+            headers: {Authorization: 'Client-ID 5225450d88ff546'},
+            success: function(result) {
+                var emptyTile = createEmptyTile();
+                var imgurTile = convertEmptyTileToImgurAlb(result, emptyTile);
+                $('section').prepend(imgurTile);
+                updateTileCount();
+                $('.image-popup-no-margins').magnificPopup({
+            		type: 'image',
+            		closeOnContentClick: true,
+            		closeBtnInside: false,
+            		fixedContentPos: true,
+            		mainClass: 'mfp-no-margins mfp-with-zoom',
+            		image: {
+            			verticalFit: true
+            		},
+            		zoom: {
+            			enabled: true,
+            			duration: 500 // don't foget to change the duration also in CSS
+            		}
+                });
+                $('form').children('#url-input').val('');
+            }
+        });
+    }
 }
 
 function convertEmptyTileToYoutube(jsonDict, emptyTile) {
@@ -248,8 +329,14 @@ function getUploadedMediaType() {
     else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
         buildVimeoTile();
     }
-    else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/'
-        || mediaURL.slice(0,20) === 'https://i.imgur.com/') {
+    else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') {
+        buildImgurTile();
+    }
+    else if(mediaURL.slice(0,20) === 'https://i.imgur.com/') {
+        buildImgurTile();
+    }
+    else if (mediaURL.slice(0, 17) === 'http://imgur.com/'
+        || mediaURL.slice(0, 18) === 'https://imgur.com/') {
         buildImgurTile();
     }
     else if (fileExt === 'jpg' || fileExt === 'png' || fileExt === 'bmp' ) {
@@ -302,4 +389,21 @@ function setFocusToTextBox(){
 $(document).ready(function () {
     registerGlobalEventHandlers();
     setFocusToTextBox();
+    $('.popup-with-form').magnificPopup({
+		type: 'inline',
+		preloader: false,
+		focus: '#username-entry',
+
+		// When elemened is focused, some mobile browsers in some cases zoom in
+		// It looks not nice, so we disable it:
+		callbacks: {
+			beforeOpen: function() {
+				if($(window).width() < 700) {
+					this.st.focus = false;
+				} else {
+					this.st.focus = '#name';
+				}
+			}
+		}
+	});
 });

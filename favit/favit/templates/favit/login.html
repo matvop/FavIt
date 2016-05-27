@@ -24,11 +24,11 @@
                 {% csrf_token %}
                 <h1>Please sign in</h1>
                 <label for='username'><h3>User Name:</h3></label>
-                <input name="username" class='username-entry' placeholder="username" required></input>
+                <input name="username" id='username-entry' placeholder="username" required></input>
                 <label for='comment'><h3>Password:</h3></label>
-                <input type="password" name="password" class='password-entry' placeholder="password" required></input>
+                <input type="password" name="password" id='password-entry' placeholder="password" required></input>
                 <button class='submit-form' type="submit">Login</button>
-                </form>
+            </form>
         </div>
         <footer class='bottom'>
             <div class='contact-info'>
