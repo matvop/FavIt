@@ -22,7 +22,7 @@
 
 .mfp-container {
   text-align: center;
-  position: absolute;
+  /*position: absolute;*/
   width: 100%;
   height: 100%;
   left: 0;
@@ -49,7 +49,7 @@
 
 .mfp-inline-holder .mfp-content,
 .mfp-ajax-holder .mfp-content {
-  width: 100%;
+  width: auto;
   cursor: auto; }
 
 .mfp-ajax-cur {
@@ -143,7 +143,7 @@ button::-moz-focus-inner {
   .mfp-close:active {
     top: 1px; }
 
-.mfp-close-btn-in .mfp-close {
+.mfp-close-btn-in {
   color: #333; }
 
 .mfp-image-holder .mfp-close,

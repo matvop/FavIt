@@ -115,13 +115,37 @@ function convertEmptyTileToImgurAlb(jsonDict, emptyTile) {
     console.dir(jsonDict);
     var imgurTile = emptyTile;
     imgurTile.toggleClass('imgur');
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-        'href', jsonDict['data']['images'][0]['link']);
-    imgurTile.find('img').attr('src', jsonDict['data']['images'][0]['link'].replace(
-        jsonDict['data']['images'][0]['link'].slice(
-        -4), 'm' + jsonDict['data']['images'][0]['link'].slice(-4))
-    );
     imgurTile.find('.title').text(jsonDict['data']['title']);
+    if (jsonDict['data']['images'][0]['animated'] === true) {
+        var linkID = jsonDict['data']['images'][0]['link'].replace(
+            'http://i.imgur.com/', '').replace(jsonDict['data']['images'][0]['link'].slice(-4), '');
+    }
+    else {
+        var linkID = jsonDict['data']['images'][0]['link'].replace(
+            'http://i.imgur.com/', '').replace(jsonDict['data']['images'][0]['link'].slice(-4), '');
+    }
+    if (linkID.length > 7) {
+        console.log('detected ID longer than 7');
+        imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+            'href', jsonDict['data']['images'][0]['link'].replace(
+            jsonDict['data']['images'][0]['link'].slice(
+            -5), jsonDict['data']['images'][0]['link'].slice(-4))
+        );
+        imgurTile.find('img').attr('src', jsonDict['data']['images'][0]['link'].replace(
+            jsonDict['data']['images'][0]['link'].slice(
+            -5), 'm' + jsonDict['data']['images'][0]['link'].slice(-4))
+        );
+    }
+    else {
+        console.log('detected normal 5-7 char ID');
+        imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+            'href', jsonDict['data']['images'][0]['link']
+        );
+        imgurTile.find('img').attr('src', jsonDict['data']['images'][0]['link'].replace(
+            jsonDict['data']['images'][0]['link'].slice(
+            -4), 'm' + jsonDict['data']['images'][0]['link'].slice(-4))
+        );
+    }
     if (jsonDict['data']['images'][0]['animated'] === true) {
         imgurTile.find('.author').text('Animated Album').attr('href', jsonDict['data']['link']);
     }
@@ -149,11 +173,11 @@ function buildImgurTile() {
     //         $('#url-input').val().slice(-4), '')
     //             console.log('https: ' + id);
     // }
-    if ($('#url-input').val().slice(0,17) === 'http://imgur.com/') {
+    if ($('#url-input').val().slice(0,18) === 'http://imgur.com/g') {
         var id = $('#url-input').val().replace('http://imgur.com/gallery/', '');
             console.log('non https: ' + id);
     }
-    else if ($('#url-input').val().slice(0,18) === 'https://imgur.com/') {
+    else if ($('#url-input').val().slice(0,19) === 'https://imgur.com/g') {
         var id = $('#url-input').val().replace('https://imgur.com/gallery/', '');
             console.log('https: ' + id);
     }
@@ -188,7 +212,7 @@ function buildImgurTile() {
     else if (id.length === 5) { //for albums
         $.ajax({
             dataType: 'json',
-            url: 'http://api.imgur.com/3/gallery/album/' + id,
+            url: 'https://api.imgur.com/3/gallery/album/' + id,
             headers: {Authorization: 'Client-ID 5225450d88ff546'},
             success: function(result) {
                 var emptyTile = createEmptyTile();
@@ -289,7 +313,6 @@ function buildVimeoTile() {
     });
 }
 
-
 function getUrlAndAddImgToGrid(imgURL) {
     var tileElement = createImgTileElement(imgURL);
     return $('section').prepend(tileElement);
@@ -352,7 +375,7 @@ function getUploadedMediaType() {
 
 function registerGlobalEventHandlers() {
     updateTileCount();
-    $('form').on('submit', function (event) {
+    $('.fav-input').on('submit', function (event) {
         event.preventDefault();
         getUploadedMediaType();
         // $('form').children('#url-input').val('');
@@ -393,17 +416,5 @@ $(document).ready(function () {
 		type: 'inline',
 		preloader: false,
 		focus: '#username-entry',
-
-		// When elemened is focused, some mobile browsers in some cases zoom in
-		// It looks not nice, so we disable it:
-		callbacks: {
-			beforeOpen: function() {
-				if($(window).width() < 700) {
-					this.st.focus = false;
-				} else {
-					this.st.focus = '#name';
-				}
-			}
-		}
 	});
 });

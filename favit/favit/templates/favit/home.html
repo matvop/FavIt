@@ -2,10 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
+        initial-scale=1.0" charset="UTF-8">
     <title>FavIt</title>
-    <link href="{% static 'favit/style.css' %}" rel="stylesheet">
     <link href="{% static 'favit/magnific-popup.css' %}" rel="stylesheet">
+    <link href="{% static 'favit/style.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'favit/all.min.css' %}" rel="stylesheet"> -->
 </head>
 <body>
     <header>
@@ -14,17 +16,16 @@
                 <div>User: {{ user }}</div>
                 <a href="/logout/">Logout</a>
             {% else %}
-                <a href="/login/?next={{ request.path }}">Login</a>
-                <a href="#login-form">Login Pop-up</a>
+                <a class="popup-with-form" href="#login-form">Login</a>
             {% endif %}
         </div>
         <div class="input">
             {% if user.is_authenticated %}
                 <h2 class="dynamic"></h2>
             {% else %}
-                <h2>Currently viewing most recent Favs</h2>
+                <h2 class="static">Currently viewing most recent Favs</h2>
             {% endif %}
-            <form>
+            <form class="fav-input">
                 <input id="url-input" placeholder="E.g. https://vimeo.com/108448978">
                 <input id="comment-input" placeholder="E.g. Wish I had one of these!">
                 <input type="submit">
@@ -35,6 +36,17 @@
         <section>
         </section>
     </div>
+    <form id="login-form" class="mfp-hide white-popup-block" action="{% url 'login' %}" method='post'>
+        {% csrf_token %}
+        <h1 class="form-title">Please sign in</h1>
+        <fieldset style="border:0;">
+            <label for='username'><h3>User Name:</h3></label>
+            <input name="username" id='username-entry' placeholder="username" required></input>
+            <label for='comment'><h3>Password:</h3></label>
+            <input type="password" name="password" id='password-entry' placeholder="password" required></input>
+            <button class='submit-form' type="submit">Login</button>
+        </fieldset>
+    </form>
     <footer>
         <div class='contact-info'>
             <a href='https://www.linkedin.com/in/mattvoelpel'>
@@ -48,7 +60,10 @@
             Created by Matt Voelpel 2016
         </div>
         <div>
-            Support for .jpg, .gif, .png, and .bmp images along with YouTube, and Vimeo videos.
+            Supports direct linking of .jpg, .gif, .png, and .bmp images.
+        </div>
+        <div>
+            Integrated API for Imgur, YouTube, and Vimeo URLs.
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
