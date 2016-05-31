@@ -57,4 +57,24 @@ def render_logout(request):
     # return render(request, 'favit/home.html', {'redirect_to': next})
 
 def render_index(request):
+    response_data = []
+    if request.user.is_authenticated() == True:
+        favs = logic.get_all_favs_for_user(request.user)
+    else:
+        favs = logic.get_recent_favs()
+
+    for fav in favs:
+        print(fav)
+        response_data.append({
+            'user_id': fav.user_id,
+            'media_url': media_url,
+            'comment': comment,
+            'created': datetime.strftime('%B %d, %Y %I:%M %p')
+            })
+        # response_data['user'] = fav.user.username
+        # response_data['media_url'] = fav.media_url
+        # response_data['comment'] = fav.comment
+        # response_data['created'] = fav.datetime.strftime('%B %d, %Y %I:%M %p')
+    print(response_data)
+
     return render(request, 'favit/home.html', {})
