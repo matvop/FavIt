@@ -1,13 +1,14 @@
 from django.db import models
-from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Fav(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
+        on_delete=models.CASCADE
     )
     media_url = models.URLField(
-        max_length=200,
+        max_length=400,
         blank=False
     )
     comment = models.CharField(
@@ -21,17 +22,19 @@ class Fav(models.Model):
     )
 
     def __str__(self):
-        return '{} {} {}'.format(
+        return '{} {} {} {}'.format(
+            self.user.username,
             self.datetime,
-            self.user_name,
             self.comment,
+            self.media_url,
         )
 
     def __repr__(self):
         return 'user={!r} datetime={!r} comment={!r}'.format(
-            self.user_name,
+            self.user.username,
             self.datetime,
             self.comment,
+            self.media_url,
         )
 
     class Meta:

@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^login/$', views.render_login, name='login'),
     url(r'^login/ack$', views.render_ack, name='ack'),
     url(r'^logout/$', views.render_logout, name='logout'),
+    url(r'^create_fav/$', views.create_fav, name='create_fav'),
     url(r'^favicon.ico$', RedirectView.as_view(
         url=staticfiles_storage.url('favit/favicon.ico'),
         permanent=False),name="favicon"),

@@ -21,15 +21,16 @@
         </div>
         <div class="input">
             {% if user.is_authenticated %}
-                <h2 class="dynamic"></h2>
-            {% else %}
-                <h2 class="static">Currently viewing most recent Favs</h2>
-            {% endif %}
-            <form class="fav-input">
+            <h2 class="dynamic"></h2>
+            <form class="fav-input" action="{% url 'create_fav' %}" method='post'>
+                {% csrf_token %}
                 <input id="url-input" placeholder="E.g. https://vimeo.com/108448978">
                 <input id="comment-input" placeholder="E.g. Wish I had one of these!">
                 <input type="submit">
             </form>
+            {% else %}
+            <h2 class="static">Currently viewing most recent Favs</h2>
+            {% endif %}
         </div>
     </header>
     <div class="main">
@@ -39,7 +40,7 @@
     <form id="login-form" class="mfp-hide white-popup-block" action="{% url 'login' %}" method='post'>
         {% csrf_token %}
         <h1 class="form-title">Please sign in</h1>
-        <fieldset style="border:0;">
+        <fieldset>
             <label for='username'><h3>User Name:</h3></label>
             <input name="username" id='username-entry' placeholder="username" required></input>
             <label for='comment'><h3>Password:</h3></label>
@@ -60,10 +61,10 @@
             Created by Matt Voelpel 2016
         </div>
         <div>
-            Supports direct linking of .jpg, .gif, .png, and .bmp images.
+            Integrated API for Imgur, YouTube, and Vimeo content.
         </div>
         <div>
-            Integrated API for Imgur, YouTube, and Vimeo URLs.
+            Supports direct linking of .jpg, .gif, .png, and .bmp images.
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-2.2.4.js"></script>

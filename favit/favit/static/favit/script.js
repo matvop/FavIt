@@ -26,7 +26,8 @@ function createImgTileElement(url) {
     var flexDivElement = $('<div></div>').toggleClass('comment').append(
         commentHeaderElement);
     tileElement.append(flexDivElement);
-    $('form').children('#url-input').val('');
+    $('.fav-input').children('#url-input').val('');
+    $('.fav-input').children('#comment-input').val('');
     return tileElement;
 }
 
@@ -181,7 +182,7 @@ function buildImgurTile() {
         var id = $('#url-input').val().replace('https://imgur.com/gallery/', '');
             console.log('https: ' + id);
     }
-    if (id.length === 7) { //for gallery images
+    if (id.length === 7) { //for image gallery
         $.ajax({
             dataType: 'json',
             url: 'https://api.imgur.com/3/gallery/image/' + id,
@@ -205,11 +206,12 @@ function buildImgurTile() {
             			duration: 500 // don't foget to change the duration also in CSS
             		}
                 });
-                $('form').children('#url-input').val('');
+                $('.fav-input').children('#url-input').val('');
+                $('.fav-input').children('#comment-input').val('');
             }
         });
     }
-    else if (id.length === 5) { //for albums
+    else if (id.length === 5) { //for image albums
         $.ajax({
             dataType: 'json',
             url: 'https://api.imgur.com/3/gallery/album/' + id,
@@ -233,7 +235,8 @@ function buildImgurTile() {
             			duration: 500 // don't foget to change the duration also in CSS
             		}
                 });
-                $('form').children('#url-input').val('');
+                $('.fav-input').children('#url-input').val('');
+                $('.fav-input').children('#comment-input').val('');
             }
         });
     }
@@ -271,7 +274,8 @@ function buildYoutubeTile() {
                 preloader: false,
                 fixedContentPos: false
             });
-            $('form').children('#url-input').val('');
+            $('.fav-input').children('#url-input').val('');
+            $('.fav-input').children('#comment-input').val('');
         }
     });
 }
@@ -308,7 +312,8 @@ function buildVimeoTile() {
                 preloader: false,
                 fixedContentPos: false
             });
-            $('form').children('#url-input').val('');
+            $('.fav-input').children('#url-input').val('');
+            $('.fav-input').children('#comment-input').val('');
         }
     });
 }
@@ -373,34 +378,40 @@ function getUploadedMediaType() {
     }
 }
 
+function create_fav() {
+    console.log("create post is working!") // sanity check
+    $.ajax({
+        url : "create_fav/", // the endpoint
+        type : "POST", // http method
+        data : {
+            url_text : $('#url-input').val(),
+            comment_text: $('#comment-input').val(),
+        }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+    console.log($('#url-input').val());
+    console.log($('#comment-input').val());
+}
+
 function registerGlobalEventHandlers() {
     updateTileCount();
     $('.fav-input').on('submit', function (event) {
+        console.log("form submitted!")  // sanity check
         event.preventDefault();
         getUploadedMediaType();
-        // $('form').children('#url-input').val('');
-        $('.image-popup-no-margins').magnificPopup({
-    		type: 'image',
-    		closeOnContentClick: true,
-    		closeBtnInside: false,
-    		fixedContentPos: true,
-    		mainClass: 'mfp-no-margins mfp-with-zoom',
-    		image: {
-    			verticalFit: true
-    		},
-    		zoom: {
-    			enabled: true,
-    			duration: 500 // don't foget to change the duration also in CSS
-    		}
-        });
-        $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
-            disableOn: 0,
-            type: 'iframe',
-            mainClass: 'mfp-fade',
-            removalDelay: 160,
-            preloader: false,
-            fixedContentPos: false
-        });
+        create_fav();
     });
 }
 
@@ -411,10 +422,69 @@ function setFocusToTextBox(){
 
 $(document).ready(function () {
     registerGlobalEventHandlers();
-    setFocusToTextBox();
+    // setFocusToTextBox();
     $('.popup-with-form').magnificPopup({
 		type: 'inline',
 		preloader: false,
 		focus: '#username-entry',
 	});
+});
+
+
+
+
+$(function() {
+
+
+    // This function gets cookie with a given name
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    /*
+    The functions below will create a header with csrftoken
+    */
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
 });
