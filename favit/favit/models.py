@@ -23,7 +23,8 @@ class Fav(models.Model):
     )
 
     def __str__(self):
-        return '{} {} {} {}'.format(
+        return '{} {} {} {} {}'.format(
+            self.id,
             self.user.username,
             self.datetime,
             self.comment,

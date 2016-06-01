@@ -26,6 +26,29 @@ def create_fav(request):
         response_data['result'] = 'Error - Failed to create Fav!'
         return JsonResponse(response_data)
 
+def get_favs(request):
+    if request.method == 'GET':
+        response_data = {'fav_list':[]}
+        if request.user.is_authenticated() == True:
+            favs = logic.get_all_favs_for_user(request.user)
+        else:
+            favs = logic.get_recent_favs()
+
+        for fav in favs:
+            response_data['fav_list'].append({
+                'user': fav.user.username,
+                'media_url': fav.media_url,
+                'comment': fav.comment,
+                'created': fav.datetime.strftime('%B %d, %Y %I:%M %p')
+                })
+        response_data['result'] = 'Successfully retrieved Fav data.'
+        print(response_data)
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = 'Error - Failed to retrieve Fav data.'
+        return JsonResponse(response_data)
+
+
 def render_profile(request):
     return render(request, 'favit/profile.html', {})
 
@@ -44,8 +67,8 @@ def render_login(request):
                 return HttpResponse("Inactive User.")
         else:
             return HttpResponseRedirect(settings.LOGIN_URL)
-
-    return render(request, 'favit/login.html', {'redirect_to': next})
+    #
+    # return render(request, 'favit/login.html', {'redirect_to': next})
 
 def render_ack(request):
     return render(request, 'favit/home.html', {})
@@ -57,24 +80,4 @@ def render_logout(request):
     # return render(request, 'favit/home.html', {'redirect_to': next})
 
 def render_index(request):
-    response_data = []
-    if request.user.is_authenticated() == True:
-        favs = logic.get_all_favs_for_user(request.user)
-    else:
-        favs = logic.get_recent_favs()
-
-    for fav in favs:
-        print(fav)
-        response_data.append({
-            'user_id': fav.user_id,
-            'media_url': media_url,
-            'comment': comment,
-            'created': datetime.strftime('%B %d, %Y %I:%M %p')
-            })
-        # response_data['user'] = fav.user.username
-        # response_data['media_url'] = fav.media_url
-        # response_data['comment'] = fav.comment
-        # response_data['created'] = fav.datetime.strftime('%B %d, %Y %I:%M %p')
-    print(response_data)
-
     return render(request, 'favit/home.html', {})

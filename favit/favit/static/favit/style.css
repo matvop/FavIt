@@ -44,11 +44,11 @@ fieldset {
 .mfp-close {
     color: white;
 }
-.input {
+/*.input {
     display: flex;
     flex-direction: column;
     float: right;
-}
+}*/
 .dynamic, h2, .static {
     background-color: white;
     border-style: solid;
