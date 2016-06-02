@@ -9,7 +9,6 @@ function updateTileCount() {
   return $('.dynamic').text('Favs in your gallery: ' + tileCount);
 }
 
-
 /** DOCSTRING INFO
 */
 function createDelLink(tileElement) {
@@ -436,8 +435,7 @@ function getUploadedMediaType(mediaURL) {
 }
 
 /**
- * [registerGlobalEventHandlers description]
- * @return {[type]} [description]
+DOC STRING
  */
 function registerGlobalEventHandlers() {
   updateTileCount();
@@ -452,9 +450,7 @@ function registerGlobalEventHandlers() {
 }
 
 /**
- * [$ description]
- * @param  {[type]} document [description]
- * @return {[type]}          [description]
+DOC STRING
  */
 $(document).ready(function() {
   registerGlobalEventHandlers();

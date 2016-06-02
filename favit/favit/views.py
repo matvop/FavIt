@@ -91,7 +91,7 @@ def post_login(request):
         return HttpResponseRedirect(next)
 
 
-def render_logout(request):
+def logout_user(request):
     """Doc string."""
     next = request.GET.get('next', '/')
     logout(request)
