@@ -52,7 +52,6 @@ function createGifTileElement(url) {
 }
 
 function createEmptyTile() {
-    var url = $('#url-input').val();
     var imageElement = $('<img></img>').attr(
         'src', "").toggleClass('thumb');
     var fullSizeLink = $('<a></a>').attr('href', '').append(
@@ -157,29 +156,29 @@ function convertEmptyTileToImgurAlb(jsonDict, emptyTile) {
     return imgurTile;
 }
 
-function buildImgurTile() {
+function buildImgurTile(mediaURL) {
     // if method === 'http_image' {
     //
     // }
     // else if method === 'https_image' {
     //
     // }
-    // if ($('#url-input').val().slice(0,19) === 'http://i.imgur.com/') {
-    //     var id = $('#url-input').val().replace('http://i.imgur.com/', '').replace(
-    //         $('#url-input').val().slice(-4), '')
+    // if (mediaURL.slice(0,19) === 'http://i.imgur.com/') {
+    //     var id = mediaURL.replace('http://i.imgur.com/', '').replace(
+    //         mediaURL.slice(-4), '')
     //             console.log('non https: ' + id);
     // }
-    // else if ($('#url-input').val().slice(0,20) === 'https://i.imgur.com/') {
-    //     var id = $('#url-input').val().replace('https://i.imgur.com/', '').replace(
-    //         $('#url-input').val().slice(-4), '')
+    // else if (mediaURL.slice(0,20) === 'https://i.imgur.com/') {
+    //     var id = mediaURL.replace('https://i.imgur.com/', '').replace(
+    //         mediaURL.slice(-4), '')
     //             console.log('https: ' + id);
     // }
-    if ($('#url-input').val().slice(0,18) === 'http://imgur.com/g') {
-        var id = $('#url-input').val().replace('http://imgur.com/gallery/', '');
+    if (mediaURL.slice(0,18) === 'http://imgur.com/g') {
+        var id = mediaURL.replace('http://imgur.com/gallery/', '');
             console.log('non https: ' + id);
     }
-    else if ($('#url-input').val().slice(0,19) === 'https://imgur.com/g') {
-        var id = $('#url-input').val().replace('https://imgur.com/gallery/', '');
+    else if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
+        var id = mediaURL.replace('https://imgur.com/gallery/', '');
             console.log('https: ' + id);
     }
     if (id.length === 7) { //for image gallery
@@ -256,11 +255,11 @@ function convertEmptyTileToYoutube(jsonDict, emptyTile) {
     return youtubeTile;
 }
 
-function buildYoutubeTile() {
+function buildYoutubeTile(mediaURL) {
     $.ajax({
         dataType: 'json',
         url: "https://noembed.com/embed",
-        data: 'url=' + $('#url-input').val(),
+        data: 'url=' + mediaURL,
         success: function(result) {
             var emptyTile = createEmptyTile();
             var youtubeTile = convertEmptyTileToYoutube(result, emptyTile);
@@ -294,11 +293,11 @@ function convertEmptyTileToVimeo(jsonDict, emptyTile) {
     return vimeoTile;
 }
 
-function buildVimeoTile() {
+function buildVimeoTile(mediaURL) {
     $.ajax({
         dataType: 'json',
         url: "https://noembed.com/embed",
-        data: 'url=' + $('#url-input').val(),
+        data: 'url=' + mediaURL,
         success: function(result) {
             var emptyTile = createEmptyTile();
             var vimeoTile = convertEmptyTileToVimeo(result, emptyTile);
@@ -348,24 +347,23 @@ function checkForFileExt(url) {
     return fileExt;
 }
 
-function getUploadedMediaType() {
-    var mediaURL = $('#url-input').val();;
+function getUploadedMediaType(mediaURL) {
     var fileExt = checkForFileExt(mediaURL);
     if (mediaURL.slice(0,24) === 'https://www.youtube.com/') {
-        buildYoutubeTile();
+        buildYoutubeTile(mediaURL);
     }
     else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
-        buildVimeoTile();
+        buildVimeoTile(mediaURL);
     }
     else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') {
-        buildImgurTile();
+        buildImgurTile(mediaURL);
     }
     else if(mediaURL.slice(0,20) === 'https://i.imgur.com/') {
-        buildImgurTile();
+        buildImgurTile(mediaURL);
     }
     else if (mediaURL.slice(0, 17) === 'http://imgur.com/'
         || mediaURL.slice(0, 18) === 'https://imgur.com/') {
-        buildImgurTile();
+        buildImgurTile(mediaURL);
     }
     else if (fileExt === 'jpg' || fileExt === 'png' || fileExt === 'bmp' ) {
         getUrlAndAddImgToGrid(mediaURL);
@@ -378,14 +376,14 @@ function getUploadedMediaType() {
     }
 }
 
-function post_fav() {
+function postFav(mediaURL, comment) {
     console.log("create post is working!") // sanity check
     $.ajax({
         url : "create_fav/", // the endpoint
         type : "POST", // http method
         data : {
-            url_text : $('#url-input').val(),
-            comment_text: $('#comment-input').val(),
+            url_text : mediaURL,
+            comment_text: comment,
         }, // data sent with the post request
 
         // handle a successful response
@@ -401,19 +399,29 @@ function post_fav() {
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
-    console.log($('#url-input').val());
+    console.log(mediaURL);
     console.log($('#comment-input').val());
 }
 
-function get_favs() {
+function loadFavs(jsonDict) {
+    for (var i = 0; i < jsonDict['fav_list'].length; i++) {
+        console.log(jsonDict['fav_list'][i]);
+        var mediaURL = jsonDict['fav_list'][i]['media_url'];
+        console.log(mediaURL);
+        getUploadedMediaType(mediaURL);
+    }
+}
+
+function getFavs() {
     console.log("get favs is working!") // sanity check
     $.ajax({
         url : "get_favs/", // the endpoint
         type : "GET", // http method
         // handle a successful response
-        success : function(json) {
-            console.log(json); // log the returned json to the console
+        success : function(result) {
+            console.log(result); // log the returned json to the console
             console.log("success"); // another sanity check
+            loadFavs(result);
         },
 
         // handle a non-successful response
@@ -428,20 +436,15 @@ function get_favs() {
 function registerGlobalEventHandlers() {
     updateTileCount();
     $('.fav-input').on('submit', function (event) {
-        console.log("form submitted!")  // sanity check
+        console.log("form submitted!");
         event.preventDefault();
-        getUploadedMediaType();
-        post_fav();
+        var mediaURL = $('#url-input').val();
+        var comment = $('#comment-input').val();
+        getUploadedMediaType(mediaURL);
+        postFav(mediaURL, comment);
     });
 }
 
-$('.fav-input').on('load', function (event) {
-    setFocusToTextBox();
-});
-
-function setFocusToTextBox(){
-    $('#url-input').focus();
-}
 
 
 $(document).ready(function () {
@@ -451,10 +454,8 @@ $(document).ready(function () {
 		preloader: false,
 		focus: '#username-entry',
 	});
-    setFocusToTextBox();
+    getFavs();
 });
-
-
 
 
 $(function() {

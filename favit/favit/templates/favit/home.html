@@ -15,7 +15,6 @@
             {% if user.is_authenticated %}
                 <div>User: {{ user }}</div>
                 <a href="{% url 'logout' %}">Logout</a>
-                <a href="{% url 'get_favs' %}">Load Favs</a>
             {% else %}
                 <a class="popup-with-form" href="#login-form">Login</a>
             {% endif %}
@@ -25,7 +24,7 @@
             <h2 class="dynamic"></h2>
             <form class="fav-input" action="{% url 'create_fav' %}" method='post'>
                 {% csrf_token %}
-                <input id="url-input" placeholder="E.g. https://vimeo.com/108448978">
+                <input id="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
                 <input id="comment-input" placeholder="E.g. Wish I had one of these!">
                 <input type="submit">
             </form>

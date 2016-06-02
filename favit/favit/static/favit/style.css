@@ -17,6 +17,9 @@ header {
 header a {
     color: black;
 }
+#load-favs {
+    cursor: pointer;
+}
 header > div {
     margin: 5px;
 }

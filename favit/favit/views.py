@@ -52,6 +52,7 @@ def get_favs(request):
 def render_profile(request):
     return render(request, 'favit/profile.html', {})
 
+
 def render_login(request):
     next = request.GET.get('next', '/')
     if request.method == "POST":
@@ -65,19 +66,19 @@ def render_login(request):
                 return HttpResponseRedirect(next)
             else:
                 return HttpResponse("Inactive User.")
-        else:
-            return HttpResponseRedirect(settings.LOGIN_URL)
-    #
-    # return render(request, 'favit/login.html', {'redirect_to': next})
+    else:
+        return HttpResponseRedirect(next)
+
 
 def render_ack(request):
     return render(request, 'favit/home.html', {})
+
 
 def render_logout(request):
     next = request.GET.get('next', '/')
     logout(request)
     return HttpResponseRedirect(next)
-    # return render(request, 'favit/home.html', {'redirect_to': next})
+
 
 def render_index(request):
     return render(request, 'favit/home.html', {})
