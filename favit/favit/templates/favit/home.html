@@ -4,24 +4,35 @@
 <head>
     <meta name="viewport" content="width=device-width,
         initial-scale=1.0" charset="UTF-8">
-    <title>FavIt</title>
+    {% if user.is_authenticated %}
+    <title>{{ user }}'s FavIt Gallery</title>
+    {% else %}
+    <title>FavIt - Most Recent Favs</title>
+    {% endif %}
     <link href="{% static 'favit/magnific-popup.css' %}" rel="stylesheet">
     <link href="{% static 'favit/style.css' %}" rel="stylesheet">
-    <!-- <link href="{% static 'favit/all.min.css' %}" rel="stylesheet"> -->
 </head>
 <body>
     <header>
-        <div>
+        <nav>
             {% if user.is_authenticated %}
                 <div>User: {{ user }}</div>
-                <a href="{% url 'logout' %}">Logout</a>
+                    <a href="{% url 'logout' %}">Logout</a>
             {% else %}
-                <a class="popup-with-form" href="#login-form">Login</a>
+                <div>
+                    <a class="popup-with-form" href="#login-form">Login</a>
+                </div>
+                <div>
+                    <a class="popup-with-form" href="#register-form">Register</a>
+                </div>
             {% endif %}
-        </div>
+        </nav>
+        <h1 class="logo">
+            FavIt
+        </h1>
         <div class="input">
             {% if user.is_authenticated %}
-            <h2 class="dynamic"></h2>
+            <!-- <h2 class="dynamic"></h2> -->
             <form class="fav-input" action="{% url 'create_fav' %}" method='post'>
                 {% csrf_token %}
                 <input id="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
@@ -29,7 +40,7 @@
                 <input type="submit">
             </form>
             {% else %}
-            <h2 class="static">Currently viewing most recent Favs</h2>
+            <h2 class="static">Recent Favs</h2>
             {% endif %}
         </div>
     </header>
@@ -41,7 +52,18 @@
         {% csrf_token %}
         <h1 class="form-title">Please sign in</h1>
         <fieldset>
-            <label for='username'><h3>User Name:</h3></label>
+            <label for='username'><h3>Username:</h3></label>
+            <input name="username" id='username-entry' placeholder="username" required></input>
+            <label for='comment'><h3>Password:</h3></label>
+            <input type="password" name="password" id='password-entry' placeholder="password" required></input>
+            <button class='submit-form' type="submit">Login</button>
+        </fieldset>
+    </form>
+    <form id="register-form" class="mfp-hide white-popup-block" action="{% url 'register' %}" method='post'>
+        {% csrf_token %}
+        <h1 class="form-title">Please register</h1>
+        <fieldset>
+            <label for='username'><h3>Username:</h3></label>
             <input name="username" id='username-entry' placeholder="username" required></input>
             <label for='comment'><h3>Password:</h3></label>
             <input type="password" name="password" id='password-entry' placeholder="password" required></input>
@@ -69,6 +91,9 @@
     </footer>
     <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
     <script src="{% static 'favit/jquery.magnific-popup.js' %}"></script>
-    <script src="{% static 'favit/script.js' %}"></script>
+    <script src="{% static 'favit/ajax_setup.js' %}"></script>
+    <script src="{% static 'favit/post.js' %}"></script>
+    <script src="{% static 'favit/get.js' %}"></script>
+    <script src="{% static 'favit/main.js' %}"></script>
 </body>
 </html>

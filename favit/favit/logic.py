@@ -1,18 +1,27 @@
-from . import models
+"""All server-side logic is placed here."""
 from django.contrib.auth.models import User
+
+from . import models
 
 
 def get_recent_favs():
+    """Retrieve the 100 most recent Fav objects from the database."""
     return models.Fav.objects.all()[0:100]
 
+
 def get_all_favs_for_user(user):
+    """Retrieve all fav objects for specified user from the database."""
     return models.Fav.objects.all().filter(user=user)
 
+
 def save_fav(media_url, comment, user):
+    """Save user's fav object into the database."""
     new_fav = models.Fav(media_url=media_url, comment=comment, user=user)
     new_fav.save()
     return new_fav
 
-def register_user(user_name, email, password):
-    user = User.objects.create_user(user_name, email, password)
+
+def register_user(user_name, password):
+    """Register new user."""
+    user = User.objects.create_user(username=user_name, password=password)
     user.save()

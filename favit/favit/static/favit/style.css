@@ -13,15 +13,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-}
-header a {
-    color: black;
+    padding: 5px;
 }
 #load-favs {
     cursor: pointer;
-}
-header > div {
-    margin: 5px;
 }
 a {
     text-decoration: none;
@@ -52,15 +47,18 @@ fieldset {
     flex-direction: column;
     float: right;
 }*/
-.dynamic, h2, .static {
-    background-color: white;
+.dynamic, h2, .static, .logo, nav {
+    background-color: #3C3C3C;
+    color: white;
     border-style: solid;
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
-    margin: 5px;
-    border-width: 10px;
+    border-width: 5px;
     border-color: white;
     box-shadow: 1px 1px 10px 5px rgba(192, 192, 192, 1);
+}
+h2, .logo, nav {
+    padding: 5px;
 }
 form, p {
     margin: 5px;

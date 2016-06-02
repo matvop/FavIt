@@ -1,4 +1,4 @@
-"""favit URL Configuration
+"""favit URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
@@ -13,20 +13,23 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.views.generic.base import RedirectView
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
+
 from . import views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.render_index, name='index'),
-    url(r'^login/$', views.render_login, name='login'),
+    url(r'^login/$', views.post_login, name='login'),
+    url(r'^register/$', views.post_register, name='register'),
     url(r'^logout/$', views.render_logout, name='logout'),
     url(r'^create_fav/$', views.create_fav, name='create_fav'),
     url(r'^get_favs/$', views.get_favs, name='get_favs'),
     url(r'^favicon.ico$', RedirectView.as_view(
         url=staticfiles_storage.url('favit/favicon.ico'),
-        permanent=False),name="favicon"),
+        permanent=False), name='favicon'),
 ]
