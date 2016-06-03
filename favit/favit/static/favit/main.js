@@ -9,6 +9,7 @@ function updateTileCount() {
   return $('.dynamic').text('Favs in your gallery: ' + tileCount);
 }
 
+
 /** DOCSTRING INFO
 */
 function createDelLink(tileElement) {
@@ -85,14 +86,19 @@ function createEmptyTile() {
   var delLink = createDelLink(tileElement);
   var commentHeaderElement = $('<span></span>').append(
     titleElement, delLink);
+
   var authorLinkElement = $('<a></a>').attr(
     'href', '').attr('target', '_blank').toggleClass('author');
+  var authorDiv = $('<div></div>').toggleClass('auth-div').append(
+      authorLinkElement);
+
   var publisher = $('<a></a>').toggleClass('publisher').attr(
     'target', '_blank');
-  var seperatorAndPublisher = $('<div>&nbsp- </div>').append(
+  var seperatorAndPublisher = $('<div></div>').toggleClass('pub-div').append(
     publisher);
+
   var mediaSourceElement = $('<div></div>').toggleClass('source').append(
-    authorLinkElement, seperatorAndPublisher);
+    authorDiv, seperatorAndPublisher);
   var flexDivElement = $('<div></div>').toggleClass('comment').append(
     commentHeaderElement, mediaSourceElement);
   tileElement.append(flexDivElement);
@@ -215,6 +221,12 @@ function buildImgurTile(mediaURL) {
   }  else if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
     var id = mediaURL.replace('https://imgur.com/gallery/', '');
     console.log('https: ' + id);
+  }  else if (mediaURL.slice(0,28) === 'http://imgur.com/account/fav') {
+    var id = mediaURL.replace('http://imgur.com/account/favorites/', '');
+    console.log('http user fav: ' + id);
+  }  else if (mediaURL.slice(0,29) === 'https://imgur.com/account/fav') {
+    var id = mediaURL.replace('https://imgur.com/account/favorites/', '');
+    console.log('https user fav: ' + id);
   }
   if (id.length === 7) { //for image gallery
     $.ajax({
@@ -435,7 +447,8 @@ function getUploadedMediaType(mediaURL) {
 }
 
 /**
-DOC STRING
+ * [registerGlobalEventHandlers description]
+ * @return {[type]} [description]
  */
 function registerGlobalEventHandlers() {
   updateTileCount();
@@ -450,7 +463,9 @@ function registerGlobalEventHandlers() {
 }
 
 /**
-DOC STRING
+ * [$ description]
+ * @param  {[type]} document [description]
+ * @return {[type]}          [description]
  */
 $(document).ready(function() {
   registerGlobalEventHandlers();

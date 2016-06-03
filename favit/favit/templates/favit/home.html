@@ -27,9 +27,6 @@
                 </div>
             {% endif %}
         </nav>
-        <h1 class="logo">
-            FavIt
-        </h1>
         <div class="input">
             {% if user.is_authenticated %}
             <!-- <h2 class="dynamic"></h2> -->
@@ -37,12 +34,14 @@
                 {% csrf_token %}
                 <input id="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
                 <input id="comment-input" placeholder="E.g. Wish I had one of these!">
-                <input type="submit">
             </form>
-            {% else %}
-            <h2 class="static">Recent Favs</h2>
+            {#{% else %}#}
+            {#<h2 class="static">Recent Favs</h2>#}
             {% endif %}
         </div>
+        <a href="{% url 'index' %}">
+            <h1 class="logo">FavIt</h1>
+        </a>
     </header>
     <div class="main">
         <section>
