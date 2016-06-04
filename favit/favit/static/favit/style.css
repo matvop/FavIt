@@ -24,17 +24,21 @@ a {
     outline: none;
     color: white;
 }
+.fav-input > fieldset {
+    display: flex;
+    flex-direction: column;
+}
 a:hover {
     color: dodgerblue;
 }
 .input {
-    position: absolute;
+    /*position: absolute;
     left: 0;
     right: 0;
     top: 10%;
     margin-left: auto;
     margin-right: auto;
-    max-width: 72px;
+    max-width: 72px;*/
     -webkit-filter: grayscale(100%);
     -webkit-transition: .3s ease-in-out;
     -moz-filter: grayscale(100%);
@@ -63,10 +67,6 @@ a:hover {
     border-color: white;
     box-shadow: 1px 1px 10px 5px rgba(192, 192, 192, 1);
 }*/
-#url-input {
-    display: block;
-    margin-bottom: 5px;
-}
 .form-title {
     color: white;
 }
@@ -81,6 +81,9 @@ fieldset {
     flex-direction: column;
     float: right;
 }*/
+nav {
+    min-width: 80px;
+}
 .dynamic, h2, .static, .logo, nav {
     background-color: #3C3C3C;
     color: white;
@@ -96,6 +99,15 @@ h2, .logo, nav {
 }
 form, p {
     margin: 5px;
+}
+/*li {
+    display: flex;
+}
+label {
+    margin-right: 10px;
+}*/
+#url-input, #comment-input {
+    width: 200px;
 }
 .main {
     flex: 1;
@@ -120,19 +132,21 @@ article {
     border-color: white;
     border-width: 5px;
     max-width: 280px;
-    -webkit-filter: grayscale(100%);
-    -webkit-transition: .3s ease-in-out;
-    -moz-filter: grayscale(100%);
-    -moz-transition: .3s ease-in-out;
-    -o-filter: grayscale(100%);
-    -o-transition: .3s ease-in-out;
 }
-article:hover {
-  -webkit-filter: grayscale(0%);
+.thumb {
+    -webkit-filter: saturate(0%);
+    -webkit-transition: 3s ease-in-out;
+    -moz-filter: saturate(0%);
+    -moz-transition: 3s ease-in-out;
+    -o-filter: saturate(0%);
+    -o-transition: 3s ease-in-out;
+}
+.thumb:hover {
+  -webkit-filter: saturate(100%);
   -webkit-transition: .3s ease-in-out;
-  -moz-filter: grayscale(0%);
+  -moz-filter: saturate(100%);
   -moz-transition: .3s ease-in-out;
-  -o-filter: grayscale(0%);
+  -o-filter: saturate(100%);
   -o-transition: .3s ease-in-out;
 }
 .vim {
@@ -279,11 +293,14 @@ fieldset {
 }
 
 /*Should be looking for how to create a standard viewport*/
-/*@media screen and (max-width: 800px) {
+@media screen and (max-width: 460px) {
+    #url-input, #comment-input {
+        width: 100px;
+    }
     .publisher {
         display: none;
     }
-    .thumb {
+    /*.thumb {
         height: 100px;
         width: auto;
     }
@@ -301,5 +318,5 @@ fieldset {
     }
     .comment > span > div {
         font-size: 1.0em;
-    }
-}*/
+    }*/
+}

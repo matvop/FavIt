@@ -27,17 +27,20 @@
                 </div>
             {% endif %}
         </nav>
-        <div class="input">
             {% if user.is_authenticated %}
-            <!-- <h2 class="dynamic"></h2> -->
-            <form class="fav-input" action="{% url 'create_fav' %}" method='post'>
-                {% csrf_token %}
-                <input id="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
-                <input id="comment-input" placeholder="E.g. Wish I had one of these!">
-            </form>
-            {#{% else %}#}
-            {#<h2 class="static">Recent Favs</h2>#}
-            {% endif %}
+                <form class="fav-input" action="{% url 'create_fav' %}" method="post">
+                    <fieldset>
+                    {% csrf_token %}
+                        <label for="url">Media URL(required):</label>
+                        <input name="url" id="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
+                        <label for="comment">Comment(optional):</label>
+                        <input name="comment" id="comment-input" placeholder="E.g. Wish I had one of these!">
+                    </fieldset>
+                </form>
+                {#{% else %}#}
+                {#<h2 class="static">Recent Favs</h2>#}
+                {% endif %}
+            </div>
         </div>
         <a href="{% url 'index' %}">
             <h1 class="logo">FavIt</h1>
@@ -47,32 +50,32 @@
         <section>
         </section>
     </div>
-    <form id="login-form" class="mfp-hide white-popup-block" action="{% url 'login' %}" method='post'>
+    <form id="login-form" class="mfp-hide white-popup-block" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <h1 class="form-title">Please sign in</h1>
         <fieldset>
-            <label for='username'><h3>Username:</h3></label>
-            <input name="username" id='username-entry' placeholder="username" required></input>
-            <label for='comment'><h3>Password:</h3></label>
-            <input type="password" name="password" id='password-entry' placeholder="password" required></input>
-            <button class='submit-form' type="submit">Login</button>
+            <label for="username"><h3>Username:</h3></label>
+            <input name="username" id="username-entry" placeholder="username" required></input>
+            <label for="comment"><h3>Password:</h3></label>
+            <input type="password" name="password" id="password-entry" placeholder="password" required></input>
+            <button class="submit-form" type="submit">Login</button>
         </fieldset>
     </form>
-    <form id="register-form" class="mfp-hide white-popup-block" action="{% url 'register' %}" method='post'>
+    <form id="register-form" class="mfp-hide white-popup-block" action="{% url 'register' %}" method="post">
         {% csrf_token %}
         <h1 class="form-title">Please register</h1>
         <fieldset>
-            <label for='username'><h3>Username:</h3></label>
-            <input name="username" id='username-entry' placeholder="username" required></input>
-            <label for='comment'><h3>Password:</h3></label>
-            <input type="password" name="password" id='password-entry' placeholder="password" required></input>
-            <button class='submit-form' type="submit">Login</button>
+            <label for="username"><h3>Username:</h3></label>
+            <input name="username" id="username-entry" placeholder="username" required></input>
+            <label for="comment"><h3>Password:</h3></label>
+            <input type="password" name="password" id="password-entry" placeholder="password" required></input>
+            <button class="submit-form" type="submit">Login</button>
         </fieldset>
     </form>
     <footer>
-        <div class='contact-info'>
-            <a href='https://www.linkedin.com/in/mattvoelpel'>
-                <img src="{% static 'favit/LinkedIn_Logo.png' %}">
+        <div class="contact-info">
+            <a href="https://www.linkedin.com/in/mattvoelpel">
+                <img src="{% static 'favit/LLogo.png' %}">
             </a>
             <a href='mailto:matvop@gmail.com'>
                 <img src="{% static 'favit/email-icon.png' %}">
@@ -82,10 +85,7 @@
             Created by Matt Voelpel 2016
         </div>
         <div>
-            Integrated API for Imgur, YouTube, and Vimeo content.
-        </div>
-        <div>
-            Supports direct linking of .jpg, .gif, .png, and .bmp images.
+            Supports Imgur, YouTube, and Vimeo content.
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
