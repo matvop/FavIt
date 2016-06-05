@@ -16,32 +16,42 @@
     <header>
         <nav>
             {% if user.is_authenticated %}
-                <div>User: {{ user }}</div>
-                    <a href="{% url 'logout' %}">Logout</a>
+            <div>User: {{ user }}</div>
+                <a href="{% url 'logout' %}">Logout</a>
             {% else %}
-                <div>
-                    <a class="popup-with-form" href="#login-form">Login</a>
-                </div>
-                <div>
-                    <a class="popup-with-form" href="#register-form">Register</a>
-                </div>
+            <div>
+                <a class="popup-with-form" href="#login-form">Login</a>
+            </div>
+            <div>
+                <a class="popup-with-form" href="#register-form">Register</a>
+            </div>
             {% endif %}
         </nav>
-            {% if user.is_authenticated %}
-                <form class="fav-input" action="{% url 'create_fav' %}" method="post">
-                    <fieldset>
-                    {% csrf_token %}
-                        <label for="url">Media URL(required):</label>
-                        <input name="url" id="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
-                        <label for="comment">Comment(optional):</label>
-                        <input name="comment" id="comment-input" placeholder="E.g. Wish I had one of these!">
-                    </fieldset>
-                </form>
-                {#{% else %}#}
-                {#<h2 class="static">Recent Favs</h2>#}
-                {% endif %}
+        {% if user.is_authenticated %}
+        <div class="center">
+            <div class="logos">
+                <div class="supported">Supported Content Providers:</div>
+                <img src="{% static 'favit/im.png' %}">
+                <img src="{% static 'favit/vi.jpg' %}">
+                <img src="{% static 'favit/yo.png' %}">
             </div>
+            <form class="fav-input" action="{% url 'create_fav' %}" method="post">
+                <fieldset>
+                {% csrf_token %}
+                    <label for="url">Media URL:</label>
+                    <input name="url" class="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
+                </fieldset>
+            </form>
         </div>
+        {% else %}
+        <div class="logos">
+            <div class="supported">Supported Content Providers:</div>
+            <img src="{% static 'favit/im.png' %}">
+            <img src="{% static 'favit/vi.jpg' %}">
+            <img src="{% static 'favit/yo.png' %}">
+        </div>
+        {#<h2 class="static">Recent Favs</h2>#}
+        {% endif %}
         <a href="{% url 'index' %}">
             <h1 class="logo">FavIt</h1>
         </a>
@@ -55,9 +65,9 @@
         <h1 class="form-title">Please sign in</h1>
         <fieldset>
             <label for="username"><h3>Username:</h3></label>
-            <input name="username" id="username-entry" placeholder="username" required></input>
+            <input name="username" class="username-entry" placeholder="username" required></input>
             <label for="comment"><h3>Password:</h3></label>
-            <input type="password" name="password" id="password-entry" placeholder="password" required></input>
+            <input type="password" name="password" class="password-entry" placeholder="password" required></input>
             <button class="submit-form" type="submit">Login</button>
         </fieldset>
     </form>
@@ -66,9 +76,9 @@
         <h1 class="form-title">Please register</h1>
         <fieldset>
             <label for="username"><h3>Username:</h3></label>
-            <input name="username" id="username-entry" placeholder="username" required></input>
+            <input name="username" class="username-entry" placeholder="username" required></input>
             <label for="comment"><h3>Password:</h3></label>
-            <input type="password" name="password" id="password-entry" placeholder="password" required></input>
+            <input type="password" name="password" class="password-entry" placeholder="password" required></input>
             <button class="submit-form" type="submit">Login</button>
         </fieldset>
     </form>
@@ -82,10 +92,10 @@
             </a>
         </div>
         <div>
-            Created by Matt Voelpel 2016
+            Created by Matthew Voelpel 2016
         </div>
         <div>
-            Supports Imgur, YouTube, and Vimeo content.
+            Supports Imgur, Vimeo, and YouTube content.
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-2.2.4.js"></script>

@@ -16,71 +16,49 @@ header {
     padding: 5px;
     position: relative;
 }
-#load-favs {
-    cursor: pointer;
+.center {
+    display: flex;
+    flex-direction: column;
 }
+.supported {
+    color: white;
+    max-width: 100px;
+    text-align: right;
+    margin-right: 5px;
+}
+.logos {
+    display: flex;
+    align-self: center;
+    align-items: center;
+}
+.logos > img {
+    margin: 5px;
+    height: 40px;
+    width: auto;
+}
+/*#load-favs {
+    cursor: pointer;
+}*/
 a {
     text-decoration: none;
     outline: none;
     color: white;
 }
-.fav-input > fieldset {
-    display: flex;
-    flex-direction: column;
-}
 a:hover {
     color: dodgerblue;
 }
-.input {
-    /*position: absolute;
-    left: 0;
-    right: 0;
-    top: 10%;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 72px;*/
-    -webkit-filter: grayscale(100%);
-    -webkit-transition: .3s ease-in-out;
-    -moz-filter: grayscale(100%);
-    -moz-transition: .3s ease-in-out;
-    -o-filter: grayscale(100%);
-    -o-transition: .3s ease-in-out;
-
-}
-.logo:hover {
-    background-color: dodgerblue;
-    -webkit-filter: grayscale(0%);
-    -webkit-transition: .3s ease-in-out;
-    -moz-filter: grayscale(0%);
-    -moz-transition: .3s ease-in-out;
-    -o-filter: grayscale(0%);
-    -o-transition: .3s ease-in-out;
-
-}
-/*h1 {
-    -webkit-margin-before: 0em;
-    margin: 5px;
-    margin-bottom: 0;
-    background-color: white;
-    border-style: solid;
-    border-width: 10px;
-    border-color: white;
-    box-shadow: 1px 1px 10px 5px rgba(192, 192, 192, 1);
-}*/
 .form-title {
     color: white;
 }
 fieldset {
     color: white;
 }
+/*.fav-input > fieldset > label {
+    text-align: center;
+}*/
 .mfp-close {
     color: white;
 }
-/*.input {
-    display: flex;
-    flex-direction: column;
-    float: right;
-}*/
 nav {
     min-width: 80px;
 }
@@ -92,22 +70,12 @@ nav {
     -webkit-margin-after: 0em;
     border-width: 5px;
     border-color: white;
-    /*box-shadow: 1px 1px 10px 5px rgba(192, 192, 192, 1);*/
 }
 h2, .logo, nav {
     padding: 5px;
 }
 form, p {
     margin: 5px;
-}
-/*li {
-    display: flex;
-}
-label {
-    margin-right: 10px;
-}*/
-#url-input, #comment-input {
-    width: 200px;
 }
 .main {
     flex: 1;
@@ -119,12 +87,13 @@ section {
     clear: both;
     display: flex;
     flex-wrap: wrap;
-    width: 804px;
+    max-width: 1100px;
     margin-left: 0;
     justify-content: center;
     align-self: center;
 }
 article {
+    font-size: .9em;
     background-color: #3C3C3C;
     box-shadow: 1px 1px 10px 5px rgba(30, 30, 30, 1);
     margin: 5px;
@@ -133,24 +102,30 @@ article {
     border-width: 5px;
     max-width: 280px;
 }
-.thumb {
-    -webkit-filter: saturate(0%);
-    -webkit-transition: 3s ease-in-out;
-    -moz-filter: saturate(0%);
-    -moz-transition: 3s ease-in-out;
-    -o-filter: saturate(0%);
-    -o-transition: 3s ease-in-out;
+article, .logos img {
+    -webkit-filter: saturate(100%);
+    -webkit-transition: .3s ease-in-out;
+    -moz-filter: saturate(100%);
+    -moz-transition: .3s ease-in-out;
+    -o-filter: saturate(100%);
+    -o-transition: .3s ease-in-out;
 }
-.thumb:hover {
-  -webkit-filter: saturate(100%);
+article:hover, .logos img:hover {
+  -webkit-filter: saturate(2) brightness(1.2);
   -webkit-transition: .3s ease-in-out;
-  -moz-filter: saturate(100%);
+  -moz-filter: saturate(2) brightness(1.2);
   -moz-transition: .3s ease-in-out;
-  -o-filter: saturate(100%);
+  -o-filter: saturate(2) brightness(1.2);
   -o-transition: .3s ease-in-out;
 }
 .vim {
     width: 248px;
+}
+.vim .thumb, .imgur .thumb {
+    width: 100%;
+}
+.yt .thumb {
+    width: auto;
 }
 .vim > .comment {
     background-color: #1ab7ea;
@@ -161,14 +136,8 @@ article {
 .yt > .comment {
     background-color: #bb0000;
 }
-.imgur {
-    width: 248px;
-}
 .imgur > .comment {
     background-color: #85BF25;
-}
-.comment > span > div {
-    font-size: 1.2em;
 }
 .top-cont {
     display: flex;
@@ -176,14 +145,8 @@ article {
 }
 article > div > a > img {
     display: block;
-    width: auto%;
-    height: 140px;
-}
-.img > div > a > img {
     width: auto;
-}
-.img > .comment > span > div {
-    max-width: 280px;
+    height: 140px;
 }
 .comment {
     height: 88px;
@@ -206,7 +169,7 @@ article > div > a > img {
     /* Fallback for non-webkit */
     display: -webkit-box;
     /* Fallback for non-webkit */
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -215,7 +178,8 @@ article > div > a > img {
     margin-left: 10px;
 }
 .comment a:hover {
-    color: firebrick;
+    text-decoration: underline;
+    color: white;
 }
 .comment > div {
     display: flex;
@@ -227,6 +191,16 @@ article > div > a > img {
 .publisher {
     margin-left: 10px;
     font-size: .8em;
+}
+.auth-div {
+    max-width: auto;
+}
+.pub-div {
+    text-align: right;
+    min-width: 40px;
+}
+.yt > .comment > .source > .pub-div {
+    min-width: 52px;
 }
 .publisher > a {
     display: -webkit-box;
@@ -293,12 +267,21 @@ fieldset {
 }
 
 /*Should be looking for how to create a standard viewport*/
-@media screen and (max-width: 460px) {
-    #url-input, #comment-input {
+@media screen and (max-width: 535px) {
+    .url-input, .comment-input {
         width: 100px;
     }
-    .publisher {
+    .supported {
         display: none;
+    }
+    .logos > img {
+        margin: 2px;
+        height: 24px;
+        width: auto;
+    }
+    .fav-input > fieldset {
+        display: flex;
+        flex-direction: column;
     }
     /*.thumb {
         height: 100px;
