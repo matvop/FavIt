@@ -35,25 +35,27 @@
                 <img src="{% static 'favit/vi.jpg' %}">
                 <img src="{% static 'favit/yo.png' %}">
             </div>
-            <form class="fav-input" action="{% url 'create_fav' %}" method="post">
+            <a class="popup-with-form top-links" href="#fav-form">
+                <div>Add Fav</div>
+            </a>
+            <!-- <form class="fav-input" action="{% url 'create_fav' %}" method="post">
                 <fieldset>
-                {% csrf_token %}
+                    {% csrf_token %}
                     <label for="url">Media URL:</label>
                     <input name="url" class="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
                 </fieldset>
-            </form>
+            </form> -->
         </div>
         {% else %}
         <div class="logos">
             <div class="supported">Supported Content Providers:</div>
-            <img src="{% static 'favit/im.png' %}">
+            <img src="{% static 'favit/im.png' %}" id="imgur-logo">
             <img src="{% static 'favit/vi.jpg' %}">
             <img src="{% static 'favit/yo.png' %}">
         </div>
-        {#<h2 class="static">Recent Favs</h2>#}
         {% endif %}
         <a href="{% url 'index' %}">
-            <h1 class="logo">FavIt</h1>
+            <h1 class="top-links">FavIt</h1>
         </a>
     </header>
     <div class="main">
@@ -66,7 +68,7 @@
         <fieldset>
             <label for="username"><h3>Username:</h3></label>
             <input name="username" class="username-entry" placeholder="username" required></input>
-            <label for="comment"><h3>Password:</h3></label>
+            <label for="password"><h3>Password:</h3></label>
             <input type="password" name="password" class="password-entry" placeholder="password" required></input>
             <button class="submit-form" type="submit">Login</button>
         </fieldset>
@@ -77,9 +79,19 @@
         <fieldset>
             <label for="username"><h3>Username:</h3></label>
             <input name="username" class="username-entry" placeholder="username" required></input>
-            <label for="comment"><h3>Password:</h3></label>
+            <label for="password"><h3>Password:</h3></label>
             <input type="password" name="password" class="password-entry" placeholder="password" required></input>
             <button class="submit-form" type="submit">Login</button>
+        </fieldset>
+    </form>
+    <form id="fav-form" class="mfp-hide white-popup-block" action="{% url 'create_fav' %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <label for="url"><h3>Media URL:</h3></label>
+            <input name="url" class="url-input" placeholder="E.g. https://vimeo.com/108448978" required></input>
+            <label for="comment"><h3>Comment:</h3></label>
+            <input name="comment" class="comment-input" placeholder="E.g. Most epic video ever!"></input>
+            <button class="submit-form" type="submit">Submit</button>
         </fieldset>
     </form>
     <footer>

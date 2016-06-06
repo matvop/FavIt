@@ -62,7 +62,24 @@ fieldset {
 nav {
     min-width: 80px;
 }
-.dynamic, h2, .static, .logo, nav {
+.center > .top-links {
+    align-self: center;
+    margin: 5px;
+}
+.top-links {
+    -webkit-transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -o-transition: .3s ease-in-out;
+}
+.top-links:hover {
+    background-color: white;
+    color: #3C3C3C;
+    border-color: #3C3C3C;
+    -webkit-transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -o-transition: .3s ease-in-out;
+}
+.dynamic, h2, .static, .top-links, nav {
     background-color: #3C3C3C;
     color: white;
     border-style: solid;
@@ -71,7 +88,7 @@ nav {
     border-width: 5px;
     border-color: white;
 }
-h2, .logo, nav {
+h2, .top-links, nav {
     padding: 5px;
 }
 form, p {
@@ -117,6 +134,14 @@ article:hover, .logos img:hover {
   -moz-transition: .3s ease-in-out;
   -o-filter: saturate(2) brightness(1.2);
   -o-transition: .3s ease-in-out;
+}
+#imgur-logo:hover {
+    -webkit-filter: saturate(10) brightness(2);
+    -webkit-transition: .3s ease-in-out;
+    -moz-filter: saturate(10) brightness(2);
+    -moz-transition: .3s ease-in-out;
+    -o-filter: saturate(10) brightness(2);
+    -o-transition: .3s ease-in-out;
 }
 .vim {
     width: 248px;
@@ -228,7 +253,9 @@ footer {
     color: white;
 }
 fieldset {
-     border: 0;
+    display: flex;
+    flex-direction: column;
+    border: 0;
 }
 .contact-info {
     display: flex;
@@ -268,9 +295,9 @@ fieldset {
 
 /*Should be looking for how to create a standard viewport*/
 @media screen and (max-width: 535px) {
-    .url-input, .comment-input {
+    /*.url-input, .comment-input {
         width: 100px;
-    }
+    }*/
     .supported {
         display: none;
     }
