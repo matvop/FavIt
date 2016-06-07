@@ -26,6 +26,25 @@ def create_fav(request):
         return JsonResponse(response_data)
 
 
+def get_recent_favs_from_database(request):
+    """Doc string."""
+    if request.method == 'GET':
+        response_data = {'fav_list': []}
+        favs = logic.get_recent_favs()
+        for fav in favs:
+            response_data['fav_list'].append({
+                'user': fav.user.username,
+                'media_url': fav.media_url,
+                'comment': fav.comment,
+                'created': fav.datetime.strftime('%B %d, %Y %I:%M %p')
+                })
+        response_data['result'] = 'Successfully retrieved Fav data.'
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = 'Error - Failed to retrieve Fav data.'
+        return JsonResponse(response_data)
+
+
 def get_favs(request):
     """Doc string."""
     if request.method == 'GET':

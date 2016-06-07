@@ -1,16 +1,17 @@
 'use strict';
 
 /**
- * [updateTileCount description]
- * @return {[type]} [description]
+ * Update dynamic class element to show current number of Favs in their view.
  */
 function updateTileCount() {
   var tileCount = $('article').length;
   return $('.dynamic').text('Favs in your gallery: ' + tileCount);
 }
 
-/** DOCSTRING INFO
-*/
+/**
+ * Create hyplerlink which includes an event handler to delete Fav on click.
+ * Currently only hides Fav from view until the Favs are reloaded.
+ */
 function createDelLink(tileElement) {
   var delLink = $('<a></a>').text('X').attr('href', '');
   delLink.on('click', function(event) {
@@ -22,8 +23,8 @@ function createDelLink(tileElement) {
 }
 
 /**
- * [createEmptyTile description]
- * @return {[type]} [description]
+ * Return empty Fav HTML tile object which can be converted to suit any media
+ * type.
  */
 function createEmptyTile() {
   var imageElement = $('<img></img>').attr(
@@ -56,12 +57,6 @@ function createEmptyTile() {
 /**
  * Conserve aspect ratio of the orignal region. Useful when shrinking/enlarging
  * images to fit into a certain area.
- *
- * @param {Number} srcWidth Source area width
- * @param {Number} srcHeight Source area height
- * @param {Number} maxWidth Fittable area maximum available width
- * @param {Number} maxHeight Fittable area maximum available height
- * @return {Object} { width, heigth }
  */
 function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 
@@ -74,16 +69,29 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 /**
- * [convertEmptyTileToImgurGal description]
- * @param  {[type]} jsonDict  [description]
- * @param  {[type]} emptyTile [description]
- * @return {[type]}           [description]
+ * [removeThumbnailSuffixFromLinkID description]
+ * @param  {[type]} link [description]
+ * @return {[type]}      [description]
  */
-function convertEmptyTileToImgurGal(jsonDict, emptyTile) {
-  // console.dir(jsonDict);
+function removeThumbnailSuffixFromGIFLinkID(link) {
+  return link.replace(link.slice(-5), link.slice(-4));
+}
+function changeThumbnailSuffix(link) {
+  return link.replace(link.slice(-5), 'm' + link.slice(-4));
+}
+function addThumbnailSuffix(link) {
+  return link.replace(link.slice(-4), 'm' + link.slice(-4));
+}
+
+/**
+ * Take in Imgur's API gallery endpoint json response and empty Fav HTML tile
+ * object and convert empty tile to add data from the 's json response
+ */
+function convertEmptyTileToImgurGal(json, emptyTile) {
+  // console.dir(json);
   var imgurTile = emptyTile;
-  var srcWidth = jsonDict.data.width;
-  var srcHeight = jsonDict.data.height;
+  var srcWidth = json.data.width;
+  var srcHeight = json.data.height;
   var imageSize = calculateAspectRatioFit(srcWidth, srcHeight, 248, 140);
   // console.log(imageSize);
   var viewWidth = imageSize.width;
@@ -91,22 +99,35 @@ function convertEmptyTileToImgurGal(jsonDict, emptyTile) {
     viewWidth = 90;
   }
   imgurTile.toggleClass('imgur').css('width', viewWidth);
-  if (jsonDict.data.animated === true) {
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', jsonDict.data.link.replace(
-        jsonDict.data.link.slice(
-        -5), jsonDict.data.link.slice(-4)));
-    imgurTile.find('img').attr('src', jsonDict.data.link);
-    imgurTile.find('.author').text('Animated GIF').attr('href', 'https://imgur.com/gallery/' + jsonDict.data.id);
-  }  else {
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', jsonDict.data.link);
-    imgurTile.find('img').attr('src', jsonDict.data.link.replace(
-      jsonDict.data.link.slice(
-      -4), 'm' + jsonDict.data.link.slice(-4)));
-    imgurTile.find('.author').text('Image').attr('href', 'https://imgur.com/gallery/' + jsonDict.data.id);
+
+  if (json.data.animated === true) {
+    imgurTile.find('.author').text('Animated GIF').attr(
+      'href', 'https://imgur.com/gallery/' + json.data.id);
+    var linkID = json.data.link.replace(
+      'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
+  } else {
+    imgurTile.find('.author').text('Image').attr(
+      'href', 'https://imgur.com/gallery/' + json.data.id);
+    var linkID = json.data.link.replace(
+      'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
   }
-  imgurTile.find('.title').text(jsonDict.data.title);
+
+  if (linkID.length > 7) {
+    // console.log('detected ID longer than 7');
+    var correctGIFLink = removeThumbnailSuffixFromGIFLinkID(json.data.link);
+    var updatedThumbLink = changeThumbnailSuffix(json.data.link);
+    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+      'href', correctGIFLink);
+    imgurTile.find('img').attr('src', updatedThumbLink);
+  }  else {
+    var linkWithThumbSuffix = addThumbnailSuffix(json.data.link);
+    // console.log('detected normal 5-7 char ID');
+    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+      'href', json.data.link);
+    imgurTile.find('img').attr('src', linkWithThumbSuffix);
+  }
+
+  imgurTile.find('.title').text(json.data.title);
   imgurTile.find('.publisher').text('Imgur').attr(
     'href', 'https://imgur.com/');
   return imgurTile;
@@ -114,15 +135,15 @@ function convertEmptyTileToImgurGal(jsonDict, emptyTile) {
 
 /**
  * [convertEmptyTileToImgurAlb description]
- * @param  {[type]} jsonDict  [description]
+ * @param  {[type]} json  [description]
  * @param  {[type]} emptyTile [description]
  * @return {[type]}           [description]
  */
-function convertEmptyTileToImgurAlb(jsonDict, emptyTile) {
-  // console.dir(jsonDict);
+function convertEmptyTileToImgurAlb(json, emptyTile) {
+  // console.dir(json);
   var imgurTile = emptyTile;
-  var srcWidth = jsonDict.data.images[0].width;
-  var srcHeight = jsonDict.data.images[0].height;
+  var srcWidth = json.data.images[0].width;
+  var srcHeight = json.data.images[0].height;
   var imageSize = calculateAspectRatioFit(srcWidth, srcHeight, 248, 140);
   // console.log(imageSize);
   var viewWidth = imageSize.width;
@@ -130,44 +151,66 @@ function convertEmptyTileToImgurAlb(jsonDict, emptyTile) {
     viewWidth = 90;
   }
   imgurTile.toggleClass('imgur').css('width', viewWidth);
-  imgurTile.find('.title').text(jsonDict.data.title);
-  if (jsonDict.data.images[0].animated === true) {
-    var linkID = jsonDict.data.images[0].link.replace(
-      'http://i.imgur.com/', '').replace(jsonDict.data.images[0].link.slice(-4), '');
+  imgurTile.find('.title').text(json.data.title);
+
+
+  if (json.data.images[0].animated === true) {
+    var linkID = json.data.images[0].link.replace(
+      'http://i.imgur.com/', '').replace(json.data.images[0].link.slice(-4), '');
   }  else {
-    var linkID = jsonDict.data.images[0].link.replace(
-      'http://i.imgur.com/', '').replace(jsonDict.data.images[0].link.slice(-4), '');
+    var linkID = json.data.images[0].link.replace(
+      'http://i.imgur.com/', '').replace(json.data.images[0].link.slice(-4), '');
   }
+
+
   if (linkID.length > 7) {
     // console.log('detected ID longer than 7');
     imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', jsonDict.data.images[0].link.replace(
-      jsonDict.data.images[0].link.slice(
-      -5), jsonDict.data.images[0].link.slice(-4))
+      'href', json.data.images[0].link.replace(
+      json.data.images[0].link.slice(
+      -5), json.data.images[0].link.slice(-4))
     );
-    imgurTile.find('img').attr('src', jsonDict.data.images[0].link.replace(
-      jsonDict.data.images[0].link.slice(
-      -5), 'm' + jsonDict.data.images[0].link.slice(-4))
+    imgurTile.find('img').attr('src', json.data.images[0].link.replace(
+      json.data.images[0].link.slice(
+      -5), 'm' + json.data.images[0].link.slice(-4))
     );
   }  else {
     // console.log('detected normal 5-7 char ID');
     imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', jsonDict.data.images[0].link
+      'href', json.data.images[0].link
     );
-    imgurTile.find('img').attr('src', jsonDict.data.images[0].link.replace(
-      jsonDict.data.images[0].link.slice(
-      -4), 'm' + jsonDict.data.images[0].link.slice(-4))
+    imgurTile.find('img').attr('src', json.data.images[0].link.replace(
+      json.data.images[0].link.slice(
+      -4), 'm' + json.data.images[0].link.slice(-4))
     );
   }
-  if (jsonDict.data.images[0].animated === true) {
+
+
+  if (json.data.images[0].animated === true) {
     imgurTile.find('.author').text('Animated Album').attr(
-        'href', jsonDict.data.link);
+        'href', json.data.link);
   }  else {
-    imgurTile.find('.author').text('Album').attr('href', jsonDict.data.link);
+    imgurTile.find('.author').text('Album').attr('href', json.data.link);
   }
   imgurTile.find('.publisher').text('Imgur').attr('href', 'https://imgur.com/');
   return imgurTile;
 }
+
+
+function resolveID(mediaURL) {
+  if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
+    var id = mediaURL.replace('https://imgur.com/gallery/', '');
+    // console.log('https: ' + id);
+  } else if (mediaURL.slice(0,29) === 'https://imgur.com/account/fav') {
+    var id = mediaURL.replace('https://imgur.com/account/favorites/', '');
+    // console.log('https user fav: ' + id);
+  } else if (mediaURL.slice(0,20) === 'https://imgur.com/a/') {
+    var id = mediaURL.replace('https://imgur.com/a/', '');
+    // console.log('https alb link2: ' + id);
+  }
+  return id;
+}
+
 
 /**
  * [buildImgurTile description]
@@ -175,25 +218,7 @@ function convertEmptyTileToImgurAlb(jsonDict, emptyTile) {
  * @return {[type]}          [description]
  */
 function buildImgurTile(mediaURL) {
-  if (mediaURL.slice(0,18) === 'http://imgur.com/g') {
-    var id = mediaURL.replace('http://imgur.com/gallery/', '');
-    // console.log('non https: ' + id);
-  } else if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
-    var id = mediaURL.replace('https://imgur.com/gallery/', '');
-    // console.log('https: ' + id);
-  } else if (mediaURL.slice(0,28) === 'http://imgur.com/account/fav') {
-    var id = mediaURL.replace('http://imgur.com/account/favorites/', '');
-    // console.log('http user fav: ' + id);
-  } else if (mediaURL.slice(0,29) === 'https://imgur.com/account/fav') {
-    var id = mediaURL.replace('https://imgur.com/account/favorites/', '');
-    // console.log('https user fav: ' + id);
-  } else if (mediaURL.slice(0,19) === 'http://imgur.com/a/') {
-    var id = mediaURL.replace('http://imgur.com/a/', '');
-    // console.log('http alb link2: ' + id);
-  } else if (mediaURL.slice(0,20) === 'https://imgur.com/a/') {
-    var id = mediaURL.replace('https://imgur.com/a/', '');
-    // console.log('https alb link2: ' + id);
-  }
+  var id = resolveID(mediaURL);
   if (id.length === 7) { //for image gallery
     $.ajax({
       dataType: 'json',
@@ -214,7 +239,7 @@ function buildImgurTile(mediaURL) {
             verticalFit: true
           },
           zoom: {
-            enabled: true,
+            enabled: false,
             duration: 500 // don't foget to change the duration also in CSS
           }
         });
@@ -242,7 +267,7 @@ function buildImgurTile(mediaURL) {
             verticalFit: true
           },
           zoom: {
-            enabled: true,
+            enabled: false,
             duration: 500 // don't foget to change the duration also in CSS
           }
         });
@@ -255,21 +280,21 @@ function buildImgurTile(mediaURL) {
 
 /**
  * [convertEmptyTileToYoutube description]
- * @param  {[type]} jsonDict  [description]
+ * @param  {[type]} json  [description]
  * @param  {[type]} emptyTile [description]
  * @return {[type]}           [description]
  */
-function convertEmptyTileToYoutube(jsonDict, emptyTile) {
+function convertEmptyTileToYoutube(json, emptyTile) {
   var youtubeTile = emptyTile;
   youtubeTile.toggleClass('yt');
   youtubeTile.find('.top-cont > a').toggleClass(
-    'popup-youtube').attr('href', jsonDict.url);
-  youtubeTile.find('img').attr('src', jsonDict.thumbnail_url);
-  youtubeTile.find('.title').text(jsonDict.title);
-  youtubeTile.find('.author').attr('href', jsonDict.author_url).text(
-    jsonDict.author_name);
-  youtubeTile.find('.publisher').text(jsonDict.provider_name).attr(
-    'href', jsonDict.provider_url);
+    'popup-youtube').attr('href', json.url);
+  youtubeTile.find('img').attr('src', json.thumbnail_url);
+  youtubeTile.find('.title').text(json.title);
+  youtubeTile.find('.author').attr('href', json.author_url).text(
+    json.author_name);
+  youtubeTile.find('.publisher').text(json.provider_name).attr(
+    'href', json.provider_url);
   return youtubeTile;
 }
 
@@ -304,21 +329,21 @@ function buildYoutubeTile(mediaURL) {
 
 /**
  * [convertEmptyTileToVimeo description]
- * @param  {[type]} jsonDict  [description]
+ * @param  {[type]} json  [description]
  * @param  {[type]} emptyTile [description]
  * @return {[type]}           [description]
  */
-function convertEmptyTileToVimeo(jsonDict, emptyTile) {
+function convertEmptyTileToVimeo(json, emptyTile) {
   var vimeoTile = emptyTile;
   vimeoTile.toggleClass('vim');
-  vimeoTile.find('.top-cont > a').attr('href', jsonDict.url).toggleClass(
+  vimeoTile.find('.top-cont > a').attr('href', json.url).toggleClass(
     'popup-vimeo');
-  vimeoTile.find('img').attr('src', jsonDict.thumbnail_url);
-  vimeoTile.find('.title').text(jsonDict.title);
-  vimeoTile.find('.author').attr('href', jsonDict.author_url).text(
-    jsonDict.author_name);
-  vimeoTile.find('.publisher').text(jsonDict.provider_name).attr(
-    'href', jsonDict.provider_url);
+  vimeoTile.find('img').attr('src', json.thumbnail_url);
+  vimeoTile.find('.title').text(json.title);
+  vimeoTile.find('.author').attr('href', json.author_url).text(
+    json.author_name);
+  vimeoTile.find('.publisher').text(json.provider_name).attr(
+    'href', json.provider_url);
   return vimeoTile;
 }
 
@@ -370,20 +395,27 @@ function buildVimeoTile(mediaURL) {
  * @param  {[type]} mediaURL [description]
  * @return {[type]}          [description]
  */
-function getUploadedMediaType(mediaURL) {
+function checkTypeBuildTile(mediaURL) {
   // var fileExt = checkForFileExt(mediaURL);
   if (mediaURL.slice(0,24) === 'https://www.youtube.com/') {
     buildYoutubeTile(mediaURL);
-  }  else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
+    return 'youtube';
+  } else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
     buildVimeoTile(mediaURL);
-  }  else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') {
+    return 'vimeo';
+  } else if (mediaURL.slice(0, 17) === 'http://imgur.com/') {
+    mediaURL = mediaURL.replace('http://imgur.com', 'https://imgur.com');
     buildImgurTile(mediaURL);
-  }  else if(mediaURL.slice(0,20) === 'https://i.imgur.com/') {
+    return 'imgur';
+  } else if (mediaURL.slice(0, 18) === 'https://imgur.com/') {
     buildImgurTile(mediaURL);
-  }  else if (mediaURL.slice(0, 17) === 'http://imgur.com/' ||
-    mediaURL.slice(0, 18) === 'https://imgur.com/') {
+    return 'imgur';
+  } else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') {
+    buildImgurTile(mediaURL);
+  } else if(mediaURL.slice(0,20) === 'https://i.imgur.com/') {
     buildImgurTile(mediaURL);
   }
+  return false;
   // else if (fileExt === 'jpg' || fileExt === 'png' || fileExt === 'bmp') {
   //   getUrlAndAddImgToGrid(mediaURL);
   // }  else if (fileExt === 'gif') {
@@ -392,32 +424,37 @@ function getUploadedMediaType(mediaURL) {
 }
 
 /**
- * [registerGlobalEventHandlers description]
- * @return {[type]} [description]
+ * Set's up the event handler for the submit button on #fav-form.
  */
 function registerGlobalEventHandlers() {
-  updateTileCount();
-  $('.fav-input').on('submit', function(event) {
-    console.log('form submitted!');
+  $('#fav-form').on('submit', function(event) {
     event.preventDefault();
     var mediaURL = $('.url-input').val();
     var comment = $('.comment-input').val();
-    getUploadedMediaType(mediaURL);
+    $('#fav-form').magnificPopup('close');
+    checkTypeBuildTile(mediaURL);
     postFav(mediaURL, comment);
+  });
+  $('#recent-favs').on('mouseup', function() {
+    $('section').empty();
+    getRecentFavs();
+  });
+  $('#user-favs').on('mouseup', function() {
+    $('section').empty();
+    getFavs();
   });
 }
 
 /**
- * [$ description]
- * @param  {[type]} document [description]
- * @return {[type]}          [description]
- */
+ * Starts up the application and loads Favs once the HTML document is fully loaded.
+*/
 $(document).ready(function() {
   registerGlobalEventHandlers();
+  getFavs();
+  updateTileCount();
   $('.popup-with-form').magnificPopup({
     type: 'inline',
     preloader: false,
     focus: '',
   });
-  getFavs();
 });

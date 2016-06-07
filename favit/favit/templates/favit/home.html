@@ -29,22 +29,19 @@
         </nav>
         {% if user.is_authenticated %}
         <div class="center">
-            <div class="logos">
+            <span>
                 <div class="supported">Supported Content Providers:</div>
-                <img src="{% static 'favit/im.png' %}">
-                <img src="{% static 'favit/vi.jpg' %}">
-                <img src="{% static 'favit/yo.png' %}">
+                <div class="logos">
+                    <img src="{% static 'favit/im.png' %}" id="imgur-logo">
+                    <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo">
+                    <img src="{% static 'favit/yo.png' %}" id="yt-logo">
+                </div>
+            </span>
+            <div class="action-links">
+                <div id="recent-favs" class="top-links">Recent</div>
+                <a class="popup-with-form top-links" href="#fav-form">Submit</a>
+                <div id="user-favs" class="top-links">Profile</div>
             </div>
-            <a class="popup-with-form top-links" href="#fav-form">
-                <div>Add Fav</div>
-            </a>
-            <!-- <form class="fav-input" action="{% url 'create_fav' %}" method="post">
-                <fieldset>
-                    {% csrf_token %}
-                    <label for="url">Media URL:</label>
-                    <input name="url" class="url-input" placeholder="E.g. https://vimeo.com/108448978" autofocus>
-                </fieldset>
-            </form> -->
         </div>
         {% else %}
         <div class="logos">
@@ -64,7 +61,6 @@
     </div>
     <form id="login-form" class="mfp-hide white-popup-block" action="{% url 'login' %}" method="post">
         {% csrf_token %}
-        <h1 class="form-title">Please sign in</h1>
         <fieldset>
             <label for="username"><h3>Username:</h3></label>
             <input name="username" class="username-entry" placeholder="username" required></input>
@@ -75,9 +71,8 @@
     </form>
     <form id="register-form" class="mfp-hide white-popup-block" action="{% url 'register' %}" method="post">
         {% csrf_token %}
-        <h1 class="form-title">Please register</h1>
         <fieldset>
-            <label for="username"><h3>Username:</h3></label>
+            <label for="username"><h3>Desired Username:</h3></label>
             <input name="username" class="username-entry" placeholder="username" required></input>
             <label for="password"><h3>Password:</h3></label>
             <input type="password" name="password" class="password-entry" placeholder="password" required></input>

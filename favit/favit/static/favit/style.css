@@ -20,15 +20,50 @@ header {
     display: flex;
     flex-direction: column;
 }
+.action-links {
+    display: flex;
+    align-self: center;
+    margin-top: 5px;
+}
+.action-links .top-links {
+    margin: 3px;
+}
+.center > .top-links {
+    align-self: center;
+    margin: 5px;
+}
+.center span {
+    display: flex;
+}
+.top-links {
+    cursor: pointer;
+    background-color: #3C3C3C;
+    color: white;
+    border-style: solid;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    border-width: 3px;
+    border-color: white;
+    -webkit-transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -o-transition: .3s ease-in-out;
+}
+.top-links:hover {
+    background-color: white;
+    color: #3C3C3C;
+    border-color: #3C3C3C;
+    -webkit-transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -o-transition: .3s ease-in-out;
+}
 .supported {
     color: white;
-    max-width: 100px;
+    width: 72px;
     text-align: right;
     margin-right: 5px;
 }
 .logos {
     display: flex;
-    align-self: center;
     align-items: center;
 }
 .logos > img {
@@ -36,9 +71,6 @@ header {
     height: 40px;
     width: auto;
 }
-/*#load-favs {
-    cursor: pointer;
-}*/
 a {
     text-decoration: none;
     outline: none;
@@ -53,39 +85,19 @@ a:hover {
 fieldset {
     color: white;
 }
-/*.fav-input > fieldset > label {
-    text-align: center;
-}*/
 .mfp-close {
     color: white;
 }
 nav {
     min-width: 80px;
 }
-.center > .top-links {
-    align-self: center;
-    margin: 5px;
-}
-.top-links {
-    -webkit-transition: .3s ease-in-out;
-    -moz-transition: .3s ease-in-out;
-    -o-transition: .3s ease-in-out;
-}
-.top-links:hover {
-    background-color: white;
-    color: #3C3C3C;
-    border-color: #3C3C3C;
-    -webkit-transition: .3s ease-in-out;
-    -moz-transition: .3s ease-in-out;
-    -o-transition: .3s ease-in-out;
-}
-.dynamic, h2, .static, .top-links, nav {
+.dynamic, h2, .static, nav {
     background-color: #3C3C3C;
     color: white;
     border-style: solid;
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
-    border-width: 5px;
+    border-width: 3px;
     border-color: white;
 }
 h2, .top-links, nav {
@@ -116,15 +128,15 @@ article {
     margin: 5px;
     border-style: solid;
     border-color: white;
-    border-width: 5px;
+    border-width: 3px;
     max-width: 280px;
 }
-article, .logos img {
-    -webkit-filter: saturate(100%);
+article, .logos > img {
+    -webkit-filter: saturate(100%) brightness(100%);
     -webkit-transition: .3s ease-in-out;
-    -moz-filter: saturate(100%);
+    -moz-filter: saturate(100%) brightness(100%);
     -moz-transition: .3s ease-in-out;
-    -o-filter: saturate(100%);
+    -o-filter: saturate(100%) brightness(100%);
     -o-transition: .3s ease-in-out;
 }
 article:hover, .logos img:hover {
@@ -136,11 +148,11 @@ article:hover, .logos img:hover {
   -o-transition: .3s ease-in-out;
 }
 #imgur-logo:hover {
-    -webkit-filter: saturate(10) brightness(2);
+    -webkit-filter: saturate(10) brightness(1.5);
     -webkit-transition: .3s ease-in-out;
-    -moz-filter: saturate(10) brightness(2);
+    -moz-filter: saturate(10) brightness(1.5);
     -moz-transition: .3s ease-in-out;
-    -o-filter: saturate(10) brightness(2);
+    -o-filter: saturate(10) brightness(1.5);
     -o-transition: .3s ease-in-out;
 }
 .vim {
@@ -179,7 +191,7 @@ article > div > a > img {
     flex-direction: column;
     justify-content: space-between;
     border-top-color: white;
-    border-top-width: 5px;
+    border-top-width: 3px;
     border-top-style: solid;
     color: white;
 }
@@ -294,12 +306,12 @@ fieldset {
 }
 
 /*Should be looking for how to create a standard viewport*/
-@media screen and (max-width: 535px) {
-    /*.url-input, .comment-input {
-        width: 100px;
-    }*/
+@media screen and (max-width: 480px) {
     .supported {
         display: none;
+    }
+    .center > span {
+        justify-content: center;
     }
     .logos > img {
         margin: 2px;
@@ -310,23 +322,8 @@ fieldset {
         display: flex;
         flex-direction: column;
     }
-    /*.thumb {
-        height: 100px;
-        width: auto;
+    .action-links .top-links {
+        font-size: .7em;
+        padding: 2px;
     }
-    .vim > div > a > img {
-        width: 100%;
-    }
-    .vim {
-        width: 177px;
-    }
-    .yt {
-        width: 133px;
-    }
-    .imgur {
-        max-width: 215px;
-    }
-    .comment > span > div {
-        font-size: 1.0em;
-    }*/
 }
