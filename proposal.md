@@ -29,7 +29,7 @@ submitted Favs.
       * username
       * datetime
       * url
-      * comment
+      * comment (optional field)
 + Python/Django
   * Use to render and serve HTML to the user
   * Communicate Favs from the user to the database
@@ -53,10 +53,9 @@ submitted Favs.
 1. Add docstrings to code with concise descriptions
 
 ## Post MVP Features to add/update:
-1. Restructure JQuery fav sumbit function and return variables
 1. Provide user ability to delete Fav from database(don't just remove element using JQuery)
-1. Modify FavIt link using JQuery to empty Fav section and show recent favs for logged in user
-1. Fix ordering issue
+1. Modify FavIt link using JQuery to empty Fav section and show recent favs for logged in user - Completed 6/7
+1. Fix ordering issue - Completed 6/7
 1. Filter results based on which content provider logo is clicked.
 1. Move Imgur API call to server-side logic
 1. Change Imgur Album Favs to add all images in album as hidden links to allow for gallery lightbox
