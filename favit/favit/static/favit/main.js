@@ -59,9 +59,7 @@ function createEmptyTile() {
  * images to fit into a certain area.
  */
 function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-
   var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-
   return {
     width: Math.round(srcWidth * ratio),
     height: Math.round(srcHeight * ratio)
@@ -69,220 +67,234 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 /**
- * [removeThumbnailSuffixFromLinkID description]
- * @param  {[type]} link [description]
- * @return {[type]}      [description]
+ * Remove thumbnail suffix from the URL path.
  */
 function removeThumbnailSuffixFromGIFLinkID(link) {
   return link.replace(link.slice(-5), link.slice(-4));
 }
+
+/**
+ * Remove existing thumbnail suffix and replace with medium quality
+ * thumbnail suffix 'm'.
+ */
 function changeThumbnailSuffix(link) {
   return link.replace(link.slice(-5), 'm' + link.slice(-4));
 }
+
+/**
+ * Append 'm' to the end of a normal ID in the URL path, which provides a medium
+ * quality thumbnail.
+ */
 function addThumbnailSuffix(link) {
   return link.replace(link.slice(-4), 'm' + link.slice(-4));
 }
 
 /**
- * Take in Imgur's API gallery endpoint json response and empty Fav HTML tile
- * object and convert empty tile to add data from the 's json response
+*
+ */
+function fixAndSetImageSrcAndThumb(imgurTile, jsonData) {
+  var correctGIFLink = removeThumbnailSuffixFromGIFLinkID(jsonData.link);
+  var updatedThumbLink = changeThumbnailSuffix(jsonData.link);
+  imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+    'href', correctGIFLink);
+  imgurTile.find('img').attr('src', updatedThumbLink);
+  return imgurTile;
+}
+
+/**
+ * [setImageSrcAndThumb description]
+ */
+function setImageSrcAndThumb(imgurTile, jsonData) {
+  var linkWithThumbSuffix = addThumbnailSuffix(jsonData.link);
+  imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
+    'href', jsonData.link);
+  imgurTile.find('img').attr('src', linkWithThumbSuffix);
+  return imgurTile;
+}
+
+/**
+ * [getViewWidth description]
+ * @param  {[type]} json [description]
+ * @return {[type]}      [description]
+ */
+function getViewWidth(jsonData) {
+  var srcWidth = jsonData.width;
+  var srcHeight = jsonData.height;
+  var imageSize = calculateAspectRatioFit(srcWidth, srcHeight, 248, 140);
+  var viewWidth = imageSize.width;
+  if (viewWidth < 90) {
+    viewWidth = 90;
+  }
+  return viewWidth;
+}
+
+/**
+ * [checkAnimationSetAuthorField description]
+ * @param  {[type]} imgurTile [description]
+ * @param  {[type]} json      [description]
+ * @return {[type]}           [description]
+ */
+function checkAnimationSetAuthorField(imgurTile, json) {
+  if (json.data.animated === true) {
+    imgurTile.find('.author').text('Animated GIF').attr(
+      'href', 'https://imgur.com/gallery/' + json.data.id);
+  } else {
+    imgurTile.find('.author').text('Image').attr(
+      'href', 'https://imgur.com/gallery/' + json.data.id);
+  }
+  return imgurTile;
+}
+
+/**
+ * Take in Imgur's gallery endpoint json response and empty Fav HTML tile
+ * object and modify empty tile to add data from the json response
  */
 function convertEmptyTileToImgurGal(json, emptyTile) {
   // console.dir(json);
   var imgurTile = emptyTile;
-  var srcWidth = json.data.width;
-  var srcHeight = json.data.height;
-  var imageSize = calculateAspectRatioFit(srcWidth, srcHeight, 248, 140);
-  // console.log(imageSize);
-  var viewWidth = imageSize.width;
-  if (viewWidth < 90) {
-    viewWidth = 90;
-  }
+  var viewWidth = getViewWidth(json.data);
   imgurTile.toggleClass('imgur').css('width', viewWidth);
-
-  if (json.data.animated === true) {
-    imgurTile.find('.author').text('Animated GIF').attr(
-      'href', 'https://imgur.com/gallery/' + json.data.id);
-    var linkID = json.data.link.replace(
-      'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
-  } else {
-    imgurTile.find('.author').text('Image').attr(
-      'href', 'https://imgur.com/gallery/' + json.data.id);
-    var linkID = json.data.link.replace(
-      'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
-  }
-
-  if (linkID.length > 7) {
-    // console.log('detected ID longer than 7');
-    var correctGIFLink = removeThumbnailSuffixFromGIFLinkID(json.data.link);
-    var updatedThumbLink = changeThumbnailSuffix(json.data.link);
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', correctGIFLink);
-    imgurTile.find('img').attr('src', updatedThumbLink);
-  }  else {
-    var linkWithThumbSuffix = addThumbnailSuffix(json.data.link);
-    // console.log('detected normal 5-7 char ID');
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', json.data.link);
-    imgurTile.find('img').attr('src', linkWithThumbSuffix);
-  }
-
   imgurTile.find('.title').text(json.data.title);
-  imgurTile.find('.publisher').text('Imgur').attr(
-    'href', 'https://imgur.com/');
+  imgurTile.find('.publisher').text('Imgur').attr('href', 'https://imgur.com/');
+  var imgurTile = checkAnimationSetAuthorField(imgurTile, json);
+  var linkID = json.data.link.replace(
+    'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
+  if (linkID.length > 7) {
+    imgurTile = fixAndSetImageSrcAndThumb(imgurTile, json.data);
+  }  else {
+    imgurTile = setImageSrcAndThumb(imgurTile, json.data);
+  }
   return imgurTile;
 }
 
+
 /**
- * [convertEmptyTileToImgurAlb description]
- * @param  {[type]} json  [description]
- * @param  {[type]} emptyTile [description]
- * @return {[type]}           [description]
+ * Take in Imgur's album endpoint json response and empty Fav HTML tile
+ * object and modify empty tile to add data from the json response
  */
 function convertEmptyTileToImgurAlb(json, emptyTile) {
   // console.dir(json);
   var imgurTile = emptyTile;
-  var srcWidth = json.data.images[0].width;
-  var srcHeight = json.data.images[0].height;
-  var imageSize = calculateAspectRatioFit(srcWidth, srcHeight, 248, 140);
-  // console.log(imageSize);
-  var viewWidth = imageSize.width;
-  if (viewWidth < 90) {
-    viewWidth = 90;
-  }
+  var jsonData = json.data.images[0];
+  var viewWidth = getViewWidth(jsonData);
+  var link = jsonData.link;   //important declaration
   imgurTile.toggleClass('imgur').css('width', viewWidth);
   imgurTile.find('.title').text(json.data.title);
-
-
-  if (json.data.images[0].animated === true) {
-    var linkID = json.data.images[0].link.replace(
-      'http://i.imgur.com/', '').replace(json.data.images[0].link.slice(-4), '');
-  }  else {
-    var linkID = json.data.images[0].link.replace(
-      'http://i.imgur.com/', '').replace(json.data.images[0].link.slice(-4), '');
-  }
-
-
-  if (linkID.length > 7) {
-    // console.log('detected ID longer than 7');
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', json.data.images[0].link.replace(
-      json.data.images[0].link.slice(
-      -5), json.data.images[0].link.slice(-4))
-    );
-    imgurTile.find('img').attr('src', json.data.images[0].link.replace(
-      json.data.images[0].link.slice(
-      -5), 'm' + json.data.images[0].link.slice(-4))
-    );
-  }  else {
-    // console.log('detected normal 5-7 char ID');
-    imgurTile.find('.top-cont > a').toggleClass('image-popup-no-margins').attr(
-      'href', json.data.images[0].link
-    );
-    imgurTile.find('img').attr('src', json.data.images[0].link.replace(
-      json.data.images[0].link.slice(
-      -4), 'm' + json.data.images[0].link.slice(-4))
-    );
-  }
-
-
-  if (json.data.images[0].animated === true) {
-    imgurTile.find('.author').text('Animated Album').attr(
-        'href', json.data.link);
-  }  else {
-    imgurTile.find('.author').text('Album').attr('href', json.data.link);
-  }
   imgurTile.find('.publisher').text('Imgur').attr('href', 'https://imgur.com/');
+  if (jsonData.animated === true) {
+    imgurTile.find('.author').text('Animated Album').attr('href', link);
+  } else {
+    imgurTile.find('.author').text('Album').attr('href', link);
+  }
+  var linkID = link.replace('http://i.imgur.com/', '').replace(
+    link.slice(-4), '');
+  if (linkID.length > 7) {
+    imgurTile = fixAndSetImageSrcAndThumb(imgurTile, jsonData);
+  } else {
+    imgurTile = setImageSrcAndThumb(imgurTile, jsonData);
+  }
   return imgurTile;
 }
 
-
+/**
+ * Resolve the ID at end of an Imgur URL
+ */
 function resolveID(mediaURL) {
   if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
     var id = mediaURL.replace('https://imgur.com/gallery/', '');
-    // console.log('https: ' + id);
   } else if (mediaURL.slice(0,29) === 'https://imgur.com/account/fav') {
     var id = mediaURL.replace('https://imgur.com/account/favorites/', '');
-    // console.log('https user fav: ' + id);
   } else if (mediaURL.slice(0,20) === 'https://imgur.com/a/') {
     var id = mediaURL.replace('https://imgur.com/a/', '');
-    // console.log('https alb link2: ' + id);
   }
   return id;
 }
 
+/**
+ * Get JSON response from Imgur's gallery API endpoint. Requires
+ * 7 digit id. Calls the empty tile func and converts to gallery tile then
+ * pre-pends to the section element in the DOM
+ */
+function buildFromGalleryEndpointResponse(id) {
+  $.ajax({
+    dataType: 'json',
+    url: 'https://api.imgur.com/3/gallery/image/' + id,
+    headers: {Authorization: 'Client-ID 5225450d88ff546'},
+    success: function(result) {
+      var emptyTile = createEmptyTile();
+      var imgurTile = convertEmptyTileToImgurGal(result, emptyTile);
+      $('section').prepend(imgurTile);
+      updateTileCount();
+      $('.image-popup-no-margins').magnificPopup({
+        type: 'image',
+        closeOnContentClick: true,
+        closeBtnInside: false,
+        fixedContentPos: true,
+        mainClass: 'mfp-no-margins mfp-with-zoom',
+        image: {
+          verticalFit: true
+        },
+        zoom: {
+          enabled: false,
+          duration: 500 // don't foget to change the duration also in CSS
+        }
+      });
+      $('fieldset').children('.url-input').val('');
+      $('fieldset').children('.comment-input').val('');
+    }
+  });
+}
 
 /**
- * [buildImgurTile description]
- * @param  {[type]} mediaURL [description]
- * @return {[type]}          [description]
+* Get JSON response from Imgur's album API endpoint. Requires
+* 5 digit id. Calls the empty tile func and converts to gallery tile then
+* pre-pends to the section element in the DOM
+ */
+function buildFromAlbumEndpointResponse(id) {
+  $.ajax({
+    dataType: 'json',
+    url: 'https://api.imgur.com/3/gallery/album/' + id,
+    headers: {Authorization: 'Client-ID 5225450d88ff546'},
+    success: function(result) {
+      var emptyTile = createEmptyTile();
+      var imgurTile = convertEmptyTileToImgurAlb(result, emptyTile);
+      $('section').prepend(imgurTile);
+      updateTileCount();
+      $('.image-popup-no-margins').magnificPopup({
+        type: 'image',
+        closeOnContentClick: true,
+        closeBtnInside: false,
+        fixedContentPos: true,
+        mainClass: 'mfp-no-margins mfp-with-zoom',
+        image: {
+          verticalFit: true
+        },
+        zoom: {
+          enabled: false,
+          duration: 500 // don't foget to change the duration also in CSS
+        }
+      });
+      $('fieldset').children('.url-input').val('');
+      $('fieldset').children('.comment-input').val('');
+    }
+  });
+}
+
+/**
+ * Determine length of ID and call related AJAX function
  */
 function buildImgurTile(mediaURL) {
   var id = resolveID(mediaURL);
   if (id.length === 7) { //for image gallery
-    $.ajax({
-      dataType: 'json',
-      url: 'https://api.imgur.com/3/gallery/image/' + id,
-      headers: {Authorization: 'Client-ID 5225450d88ff546'},
-      success: function(result) {
-        var emptyTile = createEmptyTile();
-        var imgurTile = convertEmptyTileToImgurGal(result, emptyTile);
-        $('section').prepend(imgurTile);
-        updateTileCount();
-        $('.image-popup-no-margins').magnificPopup({
-          type: 'image',
-          closeOnContentClick: true,
-          closeBtnInside: false,
-          fixedContentPos: true,
-          mainClass: 'mfp-no-margins mfp-with-zoom',
-          image: {
-            verticalFit: true
-          },
-          zoom: {
-            enabled: false,
-            duration: 500 // don't foget to change the duration also in CSS
-          }
-        });
-        $('fieldset').children('.url-input').val('');
-        $('fieldset').children('.comment-input').val('');
-      }
-    });
+    buildFromGalleryEndpointResponse(id);
   }  else if (id.length === 5) { //for image albums
-    $.ajax({
-      dataType: 'json',
-      url: 'https://api.imgur.com/3/gallery/album/' + id,
-      headers: {Authorization: 'Client-ID 5225450d88ff546'},
-      success: function(result) {
-        var emptyTile = createEmptyTile();
-        var imgurTile = convertEmptyTileToImgurAlb(result, emptyTile);
-        $('section').prepend(imgurTile);
-        updateTileCount();
-        $('.image-popup-no-margins').magnificPopup({
-          type: 'image',
-          closeOnContentClick: true,
-          closeBtnInside: false,
-          fixedContentPos: true,
-          mainClass: 'mfp-no-margins mfp-with-zoom',
-          image: {
-            verticalFit: true
-          },
-          zoom: {
-            enabled: false,
-            duration: 500 // don't foget to change the duration also in CSS
-          }
-        });
-        $('fieldset').children('.url-input').val('');
-        $('fieldset').children('.comment-input').val('');
-      }
-    });
+    buildFromAlbumEndpointResponse(id);
   }
 }
 
 /**
- * [convertEmptyTileToYoutube description]
- * @param  {[type]} json  [description]
- * @param  {[type]} emptyTile [description]
- * @return {[type]}           [description]
+* Take in noEmbed's json response for the YouTube URL with empty Fav HTML tile
+* object and modify empty tile to add data from the json response
  */
 function convertEmptyTileToYoutube(json, emptyTile) {
   var youtubeTile = emptyTile;
@@ -299,9 +311,8 @@ function convertEmptyTileToYoutube(json, emptyTile) {
 }
 
 /**
- * [buildYoutubeTile description]
- * @param  {[type]} mediaURL [description]
- * @return {[type]}          [description]
+* Get JSON response from noEmbed's url endpoint. Creates empty tile and converts
+* to a YouTube tile then pre-pends to the section element in the DOM
  */
 function buildYoutubeTile(mediaURL) {
   $.ajax({
@@ -328,10 +339,8 @@ function buildYoutubeTile(mediaURL) {
 }
 
 /**
- * [convertEmptyTileToVimeo description]
- * @param  {[type]} json  [description]
- * @param  {[type]} emptyTile [description]
- * @return {[type]}           [description]
+* Take in noEmbed's json response for the Vimeo URL with empty Fav HTML tile
+* object and modify empty tile to add data from the json response
  */
 function convertEmptyTileToVimeo(json, emptyTile) {
   var vimeoTile = emptyTile;
@@ -348,9 +357,8 @@ function convertEmptyTileToVimeo(json, emptyTile) {
 }
 
 /**
- * [buildVimeoTile description]
- * @param  {[type]} mediaURL [description]
- * @return {[type]}          [description]
+* Get JSON response from noEmbed's url endpoint. Creates empty tile and converts
+* to a Vimeo tile then pre-pends to the section element in the DOM
  */
 function buildVimeoTile(mediaURL) {
   $.ajax({
@@ -376,24 +384,22 @@ function buildVimeoTile(mediaURL) {
   });
 }
 
-// /**
-//  * [checkForFileExt description]
-//  * @param  {[type]} url [description]
-//  * @return {[type]}     [description]
-//  */
-// function checkForFileExt(url) {
-//   if (url.charAt(url.length - 4) === '.') {
-//     var fileExt = url.slice(-3);
-//   }  else if (url.charAt(url.length - 5) === '.') {
-//     var fileExt = url.slice(-4);
-//   }
-//   return fileExt;
-// }
+/**
+ * Check if the URL provided is a direct path with a file extension. Currently
+ * not in use.
+ */
+function checkForFileExt(url) { // feature will be re-enabled in the future
+  if (url.charAt(url.length - 4) === '.') {
+    var fileExt = url.slice(-3);
+  }  else if (url.charAt(url.length - 5) === '.') {
+    var fileExt = url.slice(-4);
+  }
+  return fileExt;
+}
 
 /**
- * [getUploadedMediaType description]
- * @param  {[type]} mediaURL [description]
- * @return {[type]}          [description]
+ * Checks submitted URL for match. Calls appropriate build function based
+ * on result.
  */
 function checkTypeBuildTile(mediaURL) {
   // var fileExt = checkForFileExt(mediaURL);
@@ -433,15 +439,15 @@ function registerGlobalEventHandlers() {
     var comment = $('.comment-input').val();
     $('#fav-form').magnificPopup('close');
     checkTypeBuildTile(mediaURL);
-    postFav(mediaURL, comment);
+    postFav(mediaURL, comment); //located in post.js
   });
   $('#recent-favs').on('mouseup', function() {
     $('section').empty();
-    getRecentFavs();
+    getRecentFavs(); //located in get.js
   });
   $('#user-favs').on('mouseup', function() {
     $('section').empty();
-    getFavs();
+    getFavs(); //located in get.js
   });
 }
 
@@ -450,11 +456,11 @@ function registerGlobalEventHandlers() {
 */
 $(document).ready(function() {
   registerGlobalEventHandlers();
-  getFavs();
+  getFavs(); //located in get.js
   updateTileCount();
   $('.popup-with-form').magnificPopup({
     type: 'inline',
     preloader: false,
-    focus: '',
+    focus: 'fieldset > input:first-of-type',
   });
 });

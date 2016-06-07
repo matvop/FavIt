@@ -5,8 +5,8 @@ from . import models
 
 
 def get_recent_favs():
-    """Retrieve the 100 most recent Fav objects from the database."""
-    return models.Fav.objects.all()[0:100]
+    """Retrieve the 50 most recent Fav objects from the database."""
+    return models.Fav.objects.all()[0:49]
 
 
 def get_all_favs_for_user(user):

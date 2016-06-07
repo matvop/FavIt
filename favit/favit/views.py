@@ -1,4 +1,4 @@
-"""Doc string."""
+"""Render HTML documents and handle Post/Get requests from clients."""
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
@@ -8,26 +8,30 @@ from . import logic
 
 
 def create_fav(request):
-    """Doc string."""
+    """Fav post from user saved into the database if valid."""
     if request.method == 'POST':
         url_text = request.POST.get('url_text')
         comment_text = request.POST.get('comment_text')
-        fav = logic.save_fav(url_text, comment_text, request.user)
         response_data = {}
-        response_data['result'] = 'Created fav successfully!'
-        response_data['user'] = fav.user.username
-        response_data['media_url'] = fav.media_url
-        response_data['comment'] = fav.comment
-        response_data['created-on'] = fav.datetime.strftime(
-            '%B %d, %Y %I:%M %p')
-        return JsonResponse(response_data)
+        if url_text[0:3] != 'http':
+            response_data['result'] = 'Error - Failed to create Fav!'
+            return JsonResponse(response_data, status=500)
+        else:
+            fav = logic.save_fav(url_text, comment_text, request.user)
+            response_data['result'] = 'Created fav successfully!'
+            response_data['user'] = fav.user.username
+            response_data['media_url'] = fav.media_url
+            response_data['comment'] = fav.comment
+            response_data['created-on'] = fav.datetime.strftime(
+                '%B %d, %Y %I:%M %p')
+            return JsonResponse(response_data)
     else:
         response_data['result'] = 'Error - Failed to create Fav!'
         return JsonResponse(response_data)
 
 
 def get_recent_favs_from_database(request):
-    """Doc string."""
+    """Retrieve the most recent Favs and send them to the client."""
     if request.method == 'GET':
         response_data = {'fav_list': []}
         favs = logic.get_recent_favs()
@@ -46,7 +50,7 @@ def get_recent_favs_from_database(request):
 
 
 def get_favs(request):
-    """Doc string."""
+    """Retrieve the all Favs and send them to the client."""
     if request.method == 'GET':
         response_data = {'fav_list': []}
         if request.user.is_authenticated() is True:
@@ -68,7 +72,8 @@ def get_favs(request):
 
 
 def post_register(request):
-    """Doc string."""
+    """Post username and password for new user."""
+    """Saves them into the User model as long as they don't already exist."""
     next = request.GET.get('next', '/')
     if request.method == 'POST':
         username = request.POST['username']
@@ -87,7 +92,7 @@ def post_register(request):
 
 
 def post_login(request):
-    """Doc string."""
+    """Receive login information from client and authenticate."""
     next = request.GET.get('next', '/')
     if request.method == 'POST':
         username = request.POST['username']
@@ -111,12 +116,12 @@ def post_login(request):
 
 
 def logout_user(request):
-    """Doc string."""
+    """Log the user out."""
     next = request.GET.get('next', '/')
     logout(request)
     return HttpResponseRedirect(next)
 
 
 def render_index(request):
-    """Doc string."""
+    """Render the home page/index."""
     return render(request, 'favit/home.html', {})
