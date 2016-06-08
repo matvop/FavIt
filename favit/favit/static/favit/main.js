@@ -449,6 +449,26 @@ function registerGlobalEventHandlers() {
     $('section').empty();
     getFavs(); //located in get.js
   });
+  $('#imgur-logo').on('mouseup', function() {
+    $('.imgur').show();
+    $('.vim').hide();
+    $('.yt').hide();
+  });
+  $('#vimeo-logo').on('mouseup', function() {
+    $('.vim').show();
+    $('.imgur').hide();
+    $('.yt').hide();
+  });
+  $('#yt-logo').on('mouseup', function() {
+    $('.yt').show();
+    $('.imgur').hide();
+    $('.vim').hide();
+  });
+  $('.supported').on('mouseup', function() {
+    $('.imgur').show();
+    $('.vim').show();
+    $('.yt').show();
+  })
 }
 
 /**

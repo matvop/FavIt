@@ -57,6 +57,7 @@ header {
     -o-transition: .3s ease-in-out;
 }
 .supported {
+    cursor: pointer;
     color: white;
     width: 72px;
     text-align: right;
@@ -84,6 +85,9 @@ a:hover {
 }
 fieldset {
     color: white;
+}
+input {
+  width: 256px;
 }
 .mfp-close {
     color: white;
@@ -234,7 +238,7 @@ article > div > a > img {
     word-break: break-all;
 }
 .publisher {
-    margin-left: 10px;
+    margin-left: 6px;
     font-size: .8em;
 }
 .auth-div {
@@ -242,10 +246,10 @@ article > div > a > img {
 }
 .pub-div {
     text-align: right;
-    min-width: 40px;
+    min-width: 30px;
 }
 .yt > .comment > .source > .pub-div {
-    min-width: 52px;
+    min-width: 46px;
 }
 .publisher > a {
     display: -webkit-box;

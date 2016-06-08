@@ -5,6 +5,8 @@ Capstone Project
 
 ## How to Use FavIt
 1. Anonymous users can view homepage which will display recent Fav submissions
+1. Clicking any of the social media icons at the top of the page will filter what is currently displayed.
+1. Clicking 'All Content Providers' will reset back to the originally displayed content.
 1. Click 'Login' and sign in or click 'Register' if you don't already have an account
 1. Click 'Recent' to view recent Favs (must be signed in to see)
 1. Click 'Profile' to view your Favs (must be signed in to see)

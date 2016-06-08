@@ -30,7 +30,7 @@
         {% if user.is_authenticated %}
         <div class="center">
             <span>
-                <div class="supported">Supported Content Providers:</div>
+                <div class="supported">All Content Providers:</div>
                 <div class="logos">
                     <img src="{% static 'favit/im.png' %}" id="imgur-logo">
                     <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo">
@@ -47,8 +47,8 @@
         <div class="logos">
             <div class="supported">Supported Content Providers:</div>
             <img src="{% static 'favit/im.png' %}" id="imgur-logo">
-            <img src="{% static 'favit/vi.jpg' %}">
-            <img src="{% static 'favit/yo.png' %}">
+            <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo">
+            <img src="{% static 'favit/yo.png' %}" id="yt-logo">
         </div>
         {% endif %}
         <a href="{% url 'index' %}">

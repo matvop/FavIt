@@ -52,10 +52,11 @@ Users can add content from Imgur, Vimeo, and YouTube via URL.
 1. Add docstrings to code with concise descriptions
 
 ## Post MVP Features to add/update:
+1. Add user search functionality(filter by username)
 1. Provide user ability to delete Fav from database(don't just remove element using JQuery)
-1. Modify FavIt link using JQuery to empty Fav section and show recent favs for logged in user - Completed 6/7
-1. Fix ordering issue - Completed 6/7
-1. Filter results based on which content provider logo is clicked.
+1. Modify FavIt link using JQuery to empty Fav section and show recent favs for logged in user __Completed 6/7__
+1. Fix ordering issue __Completed 6/7__
+1. Filter results based on which content provider logo is clicked. __Completed 6/8__
 1. Move Imgur API call to server-side logic
 1. Change Imgur Album Favs to add all images in album as hidden links to allow for gallery lightbox
 1. Optimize CSS transitions for mobile devices(enable GPU acceleration?)
