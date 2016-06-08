@@ -10,14 +10,13 @@ submitted Favs.
 + Main page
   * Provide User with Navigation Options and show recently added Favs
     * Navigation
-      * Login
-        * Username/Password form
-        * Register/Sign-Up Form
-      * User Search
-        * Display found user's Favs in view only mode
-      * View Favs(avail only to logged in users)
-        * Add Fav form
-      * Logout(avail only to logged in users)
+      * Register form
+      * Login form
+        * User Profile
+          * Recent
+          * Submit
+          * Profile
+          * Logout(avail only to logged in users)
 
 ## Technical Components:
 + Database
