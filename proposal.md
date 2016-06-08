@@ -3,8 +3,8 @@
 The FavIt web-app will provide users with a web interface to build a shared
 gallery of favorite images and videos from around the Internet. Users must be
 logged into their account in order to add content. Anonymous users are
-allowed to view the landing page, which contains an assortment of recently
-submitted Favs.
+allowed to view the landing page, which displays most recently submitted Favs.
+Users can add content from Imgur, Vimeo, and YouTube via URL.
 
 ## Specific Functionality:
 + Main page
