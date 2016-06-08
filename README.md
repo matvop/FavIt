@@ -10,13 +10,13 @@ Capstone Project
 1. Click 'Profile' to view your Favs (must be signed in to see)
 1. Click 'Submit' link/button to enter a media URL and comment(optional - must be signed in to see)
 1. Example URLs:
-  * Imgur
+  * Imgur(http and https)
      * Gallery: http://imgur.com/gallery/HBHbIHI
      * Album: http://imgur.com/gallery/rXfvn
      * Alternate Album: http://imgur.com/a/rXfvn
      * User Favorites: http://imgur.com/account/favorites/ThVv2 (only visible if signed into Imgur and viewing favorites)
-  * YouTube
+  * YouTube(https only)
      * Video: https://www.youtube.com/watch?v=TmyaLRrBIbg
      * Video w/Playlist: https://www.youtube.com/watch?v=nMBndXAaPrw&list=FLDDlbqlfsCwuP8SR_bwOWkQ&index=64
-  * Vimeo
+  * Vimeo(https only)
      * Video: https://vimeo.com/108448978
