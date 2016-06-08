@@ -3,7 +3,7 @@
 /**
  * Update dynamic class element to show current number of Favs in their view.
  */
-function updateTileCount() {
+function updateTileCount() { //feature may or may not be re-enabled
   var tileCount = $('article').length;
   return $('.dynamic').text('Favs in your gallery: ' + tileCount);
 }
@@ -91,7 +91,7 @@ function addThumbnailSuffix(link) {
 
 /**
 * Fixes purposely broken GIF link, so that the GIF is animated and not just a
-* thumbnail.
+* thumbnail. Changes thumbnail link from high res to medium.
  */
 function fixAndSetImageSrcAndThumb(imgurTile, jsonData) {
   var correctGIFLink = removeThumbnailSuffixFromGIFLinkID(jsonData.link);
@@ -200,16 +200,10 @@ function convertEmptyTileToImgurAlb(json, emptyTile) {
 function resolveID(mediaURL) {
   if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
     var id = mediaURL.replace('https://imgur.com/gallery/', '');
-  } else if (mediaURL.slice(0,18) === 'http://imgur.com/g') {
-    var id = mediaURL.replace('http://imgur.com/gallery/', '');
   } else if (mediaURL.slice(0,29) === 'https://imgur.com/account/fav') {
     var id = mediaURL.replace('https://imgur.com/account/favorites/', '');
-  } else if (mediaURL.slice(0,28) === 'http://imgur.com/account/fav') {
-    var id = mediaURL.replace('http://imgur.com/account/favorites/', '');
   } else if (mediaURL.slice(0,20) === 'https://imgur.com/a/') {
     var id = mediaURL.replace('https://imgur.com/a/', '');
-  } else if (mediaURL.slice(0,21) === 'http://imgur.com/a/') {
-    var id = mediaURL.replace('http://imgur.com/a/', '');
   } else {
     throw new TypeError('Resolve ID FAILED' + mediaURL);
   }
@@ -295,6 +289,8 @@ function buildImgurTile(mediaURL) {
     buildFromGalleryEndpointResponse(id);
   }  else if (id.length === 5) { //for image albums
     buildFromAlbumEndpointResponse(id);
+  } else {
+    throw new TypeError('Unexpected ID' + id);
   }
 }
 
@@ -411,22 +407,21 @@ function checkTypeBuildTile(mediaURL) {
   // var fileExt = checkForFileExt(mediaURL);
   if (mediaURL.slice(0,24) === 'https://www.youtube.com/') {
     buildYoutubeTile(mediaURL);
-    return 'youtube';
   } else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
     buildVimeoTile(mediaURL);
-    return 'vimeo';
   } else if (mediaURL.slice(0, 17) === 'http://imgur.com/') {
+    mediaURL = mediaURL.replace('http', 'https');
     buildImgurTile(mediaURL);
-    return 'imgur';
   } else if (mediaURL.slice(0, 18) === 'https://imgur.com/') {
     buildImgurTile(mediaURL);
-    return 'imgur';
   } else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') { //feature not implemented
+    mediaURL = mediaURL.replace('http', 'https');
     buildImgurTile(mediaURL);
-  } else if(mediaURL.slice(0,20) === 'https://i.imgur.com/') { //feature not implemented
+  } else if (mediaURL.slice(0,20) === 'https://i.imgur.com/') { //feature not implemented
     buildImgurTile(mediaURL);
+  } else {
+    throw new TypeError('checkTypeBuildTile FAILED' + mediaURL);
   }
-  return false;
   // else if (fileExt === 'jpg' || fileExt === 'png' || fileExt === 'bmp') {
   //   getUrlAndAddImgToGrid(mediaURL);
   // }  else if (fileExt === 'gif') {

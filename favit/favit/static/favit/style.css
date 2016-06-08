@@ -90,6 +90,14 @@ fieldset {
 }
 nav {
     min-width: 80px;
+    max-width: 120px;
+}
+nav > div {
+  white-space: nowrap;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .dynamic, h2, .static, nav {
     background-color: #3C3C3C;
