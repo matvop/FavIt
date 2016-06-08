@@ -404,7 +404,7 @@ function buildVimeoTile(mediaURL) {
  * Check if the URL provided is a direct path with a file extension. Currently
  * not in use.
  */
-function checkForFileExt(url) { // feature will be re-enabled in the future
+function checkForFileExt(url) { // feature may be re-enabled in the future
   if (url.charAt(url.length - 4) === '.') {
     var fileExt = url.slice(-3);
   }  else if (url.charAt(url.length - 5) === '.') {
@@ -436,11 +436,6 @@ function checkTypeBuildTile(mediaURL) {
   } else {
     throw new TypeError('checkTypeBuildTile FAILED' + mediaURL);
   }
-  // else if (fileExt === 'jpg' || fileExt === 'png' || fileExt === 'bmp') {
-  //   getUrlAndAddImgToGrid(mediaURL);
-  // }  else if (fileExt === 'gif') {
-  //   getUrlAndAddGifToGrid(mediaURL);
-  // }
 }
 
 /**
