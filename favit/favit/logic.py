@@ -1,4 +1,6 @@
 """All server-side logic is placed here."""
+from datetime import datetime, timedelta
+
 from django.contrib.auth.models import User
 
 from . import models
@@ -6,7 +8,9 @@ from . import models
 
 def get_recent_favs():
     """Retrieve the 50 most recent Fav objects from the database."""
-    return models.Fav.objects.all()[0:49]
+    # return models.Fav.objects.all()[0:49]
+    return models.Fav.objects.filter(
+        datetime__gte=datetime.now()-timedelta(days=7))
 
 
 def get_all_favs_for_user(user):

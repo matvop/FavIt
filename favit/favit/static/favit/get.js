@@ -6,8 +6,9 @@
  * @return {[type]}      [description]
  */
 function loadFavs(jsonDict) {
-  for (var i = 0; i < jsonDict.fav_list.length; i++) {
-    var mediaURL = jsonDict.fav_list[i].media_url;
+  var list = jsonDict.fav_list.reverse();
+  for (var i = 0; i < list.length; i++) {
+    var mediaURL = list[i].media_url;
     checkTypeBuildTile(mediaURL);
   }
 }

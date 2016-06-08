@@ -71,6 +71,7 @@ header {
     margin: 5px;
     height: 40px;
     width: auto;
+    cursor: pointer;
 }
 a {
     text-decoration: none;
@@ -249,7 +250,8 @@ article > div > a > img {
     min-width: 30px;
 }
 .yt > .comment > .source > .pub-div {
-    min-width: 46px;
+    white-space: nowrap;
+    min-width: 40px;
 }
 .publisher > a {
     display: -webkit-box;

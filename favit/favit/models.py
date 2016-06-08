@@ -39,4 +39,4 @@ class Fav(models.Model):
         )
 
     class Meta:
-        ordering = ('datetime',)
+        ordering = ('-id',)

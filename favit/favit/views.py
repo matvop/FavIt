@@ -13,7 +13,7 @@ def create_fav(request):
         url_text = request.POST.get('url_text')
         comment_text = request.POST.get('comment_text')
         response_data = {}
-        if url_text[0:3] != 'http':
+        if url_text[0:4] != 'http':
             response_data['result'] = 'Error - Failed to create Fav!'
             return JsonResponse(response_data, status=500)
         else:

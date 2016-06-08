@@ -130,15 +130,29 @@ function getViewWidth(jsonData) {
 }
 
 /**
- * Check if image is animated. Include result in the unused author field.
+ * GALLERY Check if image is animated. Include result in the unused author field.
  */
-function checkAnimationSetAuthorField(imgurTile, jsonData) {
+function checkGalleryAnimationSetAuthorField(imgurTile, jsonData) {
   if (jsonData.animated === true) {
     imgurTile.find('.author').text('Animated GIF').attr(
       'href', 'https://imgur.com/gallery/' + jsonData.id);
   } else {
     imgurTile.find('.author').text('Image').attr(
       'href', 'https://imgur.com/gallery/' + jsonData.id);
+  }
+  return imgurTile;
+}
+
+/**
+ * ALBUM Check if image is animated. Include result in the unused author field.
+ */
+function checkAlbumAnimationSetAuthorField(imgurTile, json) {
+  if (json.data.images[0].animated === true) {
+    imgurTile.find('.author').text('Animated GIF').attr(
+      'href', json.data.images[0].link);
+  } else {
+    imgurTile.find('.author').text('Album').attr(
+      'href', json.data.link);
   }
   return imgurTile;
 }
@@ -166,7 +180,7 @@ function convertEmptyTileToImgurGal(json, emptyTile) {
   imgurTile.toggleClass('imgur').css('width', viewWidth);
   imgurTile.find('.title').text(json.data.title);
   imgurTile.find('.publisher').text('Imgur').attr('href', 'https://imgur.com/');
-  var imgurTile = checkAnimationSetAuthorField(imgurTile, json.data);
+  var imgurTile = checkGalleryAnimationSetAuthorField(imgurTile, json.data);
   var linkID = json.data.link.replace(
     'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
   imgurTile = checkForBrokenGIF(linkID, imgurTile, json.data);
@@ -187,7 +201,7 @@ function convertEmptyTileToImgurAlb(json, emptyTile) {
   imgurTile.toggleClass('imgur').css('width', viewWidth);
   imgurTile.find('.title').text(json.data.title);
   imgurTile.find('.publisher').text('Imgur').attr('href', 'https://imgur.com/');
-  var imgurTile = checkAnimationSetAuthorField(imgurTile, jsonData);
+  var imgurTile = checkAlbumAnimationSetAuthorField(imgurTile, json);
   var linkID = link.replace('http://i.imgur.com/', '').replace(
     link.slice(-4), '');
   imgurTile = checkForBrokenGIF(linkID, imgurTile, jsonData);
@@ -410,7 +424,7 @@ function checkTypeBuildTile(mediaURL) {
   } else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
     buildVimeoTile(mediaURL);
   } else if (mediaURL.slice(0, 17) === 'http://imgur.com/') {
-    mediaURL = mediaURL.replace('http', 'https');
+    mediaURL = mediaURL.replace('http', 'https'); //simply reducing the # of if statements needed later
     buildImgurTile(mediaURL);
   } else if (mediaURL.slice(0, 18) === 'https://imgur.com/') {
     buildImgurTile(mediaURL);
@@ -468,7 +482,7 @@ function registerGlobalEventHandlers() {
     $('.imgur').show();
     $('.vim').show();
     $('.yt').show();
-  })
+  });
 }
 
 /**

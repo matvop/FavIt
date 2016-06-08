@@ -30,11 +30,11 @@
         {% if user.is_authenticated %}
         <div class="center">
             <span>
-                <div class="supported">All Content Providers:</div>
+                <div class="supported" title="Filter All">All Content Providers:</div>
                 <div class="logos">
-                    <img src="{% static 'favit/im.png' %}" id="imgur-logo">
-                    <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo">
-                    <img src="{% static 'favit/yo.png' %}" id="yt-logo">
+                    <img src="{% static 'favit/im.png' %}" id="imgur-logo" draggable="false" title="Filter Imgur">
+                    <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo" draggable="false" title="Filter Vimeo">
+                    <img src="{% static 'favit/yo.png' %}" id="yt-logo" draggable="false" title="Filter YouTube">
                 </div>
             </span>
             <div class="action-links">
@@ -45,10 +45,10 @@
         </div>
         {% else %}
         <div class="logos">
-            <div class="supported">Supported Content Providers:</div>
-            <img src="{% static 'favit/im.png' %}" id="imgur-logo">
-            <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo">
-            <img src="{% static 'favit/yo.png' %}" id="yt-logo">
+            <div class="supported" title="Filter All">All Content Providers:</div>
+            <img src="{% static 'favit/im.png' %}" id="imgur-logo" draggable="false" title="Filter Imgur">
+            <img src="{% static 'favit/vi.jpg' %}" id="vimeo-logo" draggable="false" title="Filter Vimeo">
+            <img src="{% static 'favit/yo.png' %}" id="yt-logo" draggable="false" title="Filter YouTube">
         </div>
         {% endif %}
         <a href="{% url 'index' %}">
@@ -84,7 +84,7 @@
         <fieldset>
             <label for="url"><h3>Media URL:</h3></label>
             <input name="url" class="url-input" placeholder="E.g. https://vimeo.com/108448978" required></input>
-            <label for="comment"><h3>Comment:</h3></label>
+            <label for="comment"><h3>Optional Comment:</h3></label>
             <input name="comment" class="comment-input" placeholder="E.g. Most epic video ever!"></input>
             <button class="submit-form" type="submit">Submit</button>
         </fieldset>
