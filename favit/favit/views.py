@@ -84,11 +84,11 @@ def post_register(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             logic.get_all_favs_for_user(user)
-            return HttpResponseRedirect(next, status=200)
+            return HttpResponseRedirect(next)
         else:
             return HttpResponse('Inactive User.', status=403)
     else:
-        return HttpResponseRedirect(next, status=400)
+        return HttpResponseRedirect(next)
 
 
 def post_login(request):
@@ -102,7 +102,7 @@ def post_login(request):
             if user.is_active:
                 login(request, user)
                 logic.get_all_favs_for_user(user)
-                return HttpResponseRedirect(next, status=200)
+                return HttpResponseRedirect(next)
             else:
                 return HttpResponse('Inactive User.', status=403)
         else:
@@ -112,14 +112,14 @@ def post_login(request):
                 'color:black;font-family:monospace;'' href=''/'
                 '>Back Home</a>', status=401)
     else:
-        return HttpResponseRedirect(next, status=400)
+        return HttpResponseRedirect(next)
 
 
 def logout_user(request):
     """Log the user out."""
     next = request.GET.get('next', '/')
     logout(request)
-    return HttpResponseRedirect(next, status=200)
+    return HttpResponseRedirect(next)
 
 
 def render_index(request):
