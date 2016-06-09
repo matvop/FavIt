@@ -249,7 +249,7 @@ function buildFromGalleryEndpointResponse(id) {
           verticalFit: true
         },
         zoom: {
-          enabled: false,
+          enabled: true, // enable or disable css zoom animation for popup
           duration: 500 // don't foget to change the duration also in CSS
         }
       });
@@ -282,7 +282,7 @@ function buildFromAlbumEndpointResponse(id) {
           verticalFit: true
         },
         zoom: {
-          enabled: false,
+          enabled: true, // enable or disable css zoom animation for popup
           duration: 500 // don't foget to change the duration also in CSS
         }
       });
