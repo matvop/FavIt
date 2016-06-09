@@ -12,7 +12,7 @@ function postFav(mediaURL, comment) {
     }, // data sent with the post request
     // handle a successful response
     success: function(json) {
-      // console.log(json); // log the returned json to the console
+      console.log(json); // log the returned json to the console
     },
     // handle a non-successful response
     error: function(xhr, errmsg, err) {

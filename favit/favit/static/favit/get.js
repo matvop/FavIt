@@ -1,9 +1,7 @@
 'use strict';
 
 /**
- * [loadFavs description]
- * @param  {[type]} jsonDict [description]
- * @return {[type]}      [description]
+ * Load the fav_list from the json response data into the main build tile function.
  */
 function loadFavs(jsonDict) {
   var list = jsonDict.fav_list.reverse();
@@ -14,7 +12,7 @@ function loadFavs(jsonDict) {
 }
 
 /**
- *
+ * AJAX call to the server to retrieve a json response for building Fav tiles.
  */
 function getRecentFavs() {
   $.ajax({
@@ -35,7 +33,7 @@ function getRecentFavs() {
 }
 
 /**
- *
+ * AJAX call to the server to retrieve a json response for building Fav tiles for the user profile.
  */
 function getFavs() {
   $.ajax({

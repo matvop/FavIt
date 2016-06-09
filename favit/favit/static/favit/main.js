@@ -163,7 +163,7 @@ function checkAlbumAnimationSetAuthorField(imgurTile, json) {
 function checkForBrokenGIF(linkID, imgurTile, jsonData) {
   if (linkID.length > 7) {
     imgurTile = fixAndSetImageSrcAndThumb(imgurTile, jsonData);
-  }  else {
+  } else {
     imgurTile = setImageSrcAndThumb(imgurTile, jsonData);
   }
   return imgurTile;
@@ -219,7 +219,7 @@ function resolveID(mediaURL) {
   } else if (mediaURL.slice(0,20) === 'https://imgur.com/a/') {
     var id = mediaURL.replace('https://imgur.com/a/', '');
   } else {
-    throw new TypeError('Resolve ID FAILED' + mediaURL);
+    throw new TypeError('Resolve ID FAILED - MediaURL: ' + mediaURL);
   }
   return id;
 }
@@ -253,8 +253,6 @@ function buildFromGalleryEndpointResponse(id) {
           duration: 500 // don't foget to change the duration also in CSS
         }
       });
-      $('fieldset').children('.url-input').val('');
-      $('fieldset').children('.comment-input').val('');
     }
   });
 }
@@ -288,8 +286,6 @@ function buildFromAlbumEndpointResponse(id) {
           duration: 500 // don't foget to change the duration also in CSS
         }
       });
-      $('fieldset').children('.url-input').val('');
-      $('fieldset').children('.comment-input').val('');
     }
   });
 }
@@ -304,7 +300,7 @@ function buildImgurTile(mediaURL) {
   }  else if (id.length === 5) { //for image albums
     buildFromAlbumEndpointResponse(id);
   } else {
-    throw new TypeError('Unexpected ID' + id);
+    throw new TypeError('Unexpected ID: ' + id);
   }
 }
 
@@ -348,8 +344,6 @@ function buildYoutubeTile(mediaURL) {
         preloader: false,
         fixedContentPos: false
       });
-      $('fieldset').children('.url-input').val('');
-      $('fieldset').children('.comment-input').val('');
     }
   });
 }
@@ -394,8 +388,6 @@ function buildVimeoTile(mediaURL) {
         preloader: false,
         fixedContentPos: false
       });
-      $('fieldset').children('.url-input').val('');
-      $('fieldset').children('.comment-input').val('');
     }
   });
 }
@@ -434,7 +426,7 @@ function checkTypeBuildTile(mediaURL) {
   } else if (mediaURL.slice(0,20) === 'https://i.imgur.com/') { //feature not implemented
     buildImgurTile(mediaURL);
   } else {
-    throw new TypeError('checkTypeBuildTile FAILED' + mediaURL);
+    throw new TypeError('checkTypeBuildTile FAILED - mediaURL: ' + mediaURL);
   }
 }
 
@@ -446,6 +438,8 @@ function registerGlobalEventHandlers() {
     event.preventDefault();
     var mediaURL = $('.url-input').val();
     var comment = $('.comment-input').val();
+    $('fieldset').children('.url-input').val('');
+    $('fieldset').children('.comment-input').val('');
     $('#fav-form').magnificPopup('close');
     checkTypeBuildTile(mediaURL);
     postFav(mediaURL, comment); //located in post.js
