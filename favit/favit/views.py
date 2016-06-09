@@ -56,7 +56,7 @@ def get_favs(request):
         if request.user.is_authenticated() is True:
             favs = logic.get_all_favs_for_user(request.user)
         else:
-            favs = logic.get_recent_favs()
+            favs = logic.get_all_favs()
         for fav in favs:
             response_data['fav_list'].append({
                 'user': fav.user.username,
