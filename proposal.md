@@ -3,17 +3,17 @@
 The FavIt web-app will provide users with a web interface to build a shared
 gallery of favorite images and videos from around the Internet. Users must be
 logged into their account in order to add content. Anonymous users are
-allowed to view the landing page, which displays most recently submitted Favs.
+allowed to view the landing page, which displays user submitted Favs.
 Users can add content from Imgur, Vimeo, and YouTube via URL.
 
 ## Specific Functionality:
 + Main page
-  * Provide User with Navigation Options and show recently added Favs
+  * Provide User with Navigation Options and show all user submitted Favs
     * Navigation
       * Register form
       * Login form
         * User Profile
-          * Recent
+          * All
           * Submit
           * Profile
           * Logout(avail only to logged in users)
@@ -54,7 +54,7 @@ Users can add content from Imgur, Vimeo, and YouTube via URL.
 ## Post MVP Features to add/update:
 1. Add user search functionality(filter by username)
 1. Provide user ability to delete Fav from database(don't just remove element using JQuery)
-1. Modify FavIt link using JQuery to empty Fav section and show recent favs for logged in user __Completed 6/7__
+1. Modify FavIt link using JQuery to empty Fav section and show all favs for logged in user __Completed 6/7__
 1. Fix ordering issue __Completed 6/7__
 1. Filter results based on which content provider logo is clicked. __Completed 6/8__
 1. Move Imgur API call to server-side logic
