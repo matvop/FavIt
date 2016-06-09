@@ -115,8 +115,9 @@ function setImageSrcAndThumb(imgurTile, jsonData) {
 }
 
 /**
- * Calculate the proper thumbnail width based on a pre-defined height while
- * maintaining the original aspect ratio.
+ * Calculate the proper thumbnail width (pixels) based on a pre-defined height
+ * while maintaining the original aspect ratio. Returned width must not be less
+ * than 90px as it will cause layout issues in displayed HTML.
  */
 function getViewWidth(jsonData) {
   var srcWidth = jsonData.width;
@@ -416,12 +417,12 @@ function checkTypeBuildTile(mediaURL) {
   } else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
     buildVimeoTile(mediaURL);
   } else if (mediaURL.slice(0, 17) === 'http://imgur.com/') {
-    mediaURL = mediaURL.replace('http', 'https'); //simply reducing the # of if statements needed later
+    mediaURL = mediaURL.replace('http', 'https'); //reducing the # of if statements needed later during transforms
     buildImgurTile(mediaURL);
   } else if (mediaURL.slice(0, 18) === 'https://imgur.com/') {
     buildImgurTile(mediaURL);
   } else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') { //feature not implemented
-    mediaURL = mediaURL.replace('http', 'https');
+    mediaURL = mediaURL.replace('http', 'https'); //reducing the # of if statements needed later during transforms
     buildImgurTile(mediaURL);
   } else if (mediaURL.slice(0,20) === 'https://i.imgur.com/') { //feature not implemented
     buildImgurTile(mediaURL);
@@ -480,7 +481,7 @@ function registerGlobalEventHandlers() {
 $(document).ready(function() {
   registerGlobalEventHandlers();
   getFavs(); //located in get.js
-  updateTileCount();
+  // updateTileCount();
   $('.popup-with-form').magnificPopup({
     type: 'inline',
     preloader: false,

@@ -24,10 +24,10 @@ def create_fav(request):
             response_data['comment'] = fav.comment
             response_data['created-on'] = fav.datetime.strftime(
                 '%B %d, %Y %I:%M %p')
-            return JsonResponse(response_data)
+            return JsonResponse(response_data, status=200)
     else:
         response_data['result'] = 'Error - Failed to create Fav!'
-        return JsonResponse(response_data)
+        return JsonResponse(response_data, status=500)
 
 
 def get_recent_favs_from_database(request):
@@ -43,10 +43,10 @@ def get_recent_favs_from_database(request):
                 'created': fav.datetime.strftime('%B %d, %Y %I:%M %p')
                 })
         response_data['result'] = 'Successfully retrieved Fav data.'
-        return JsonResponse(response_data)
+        return JsonResponse(response_data, status=200)
     else:
         response_data['result'] = 'Error - Failed to retrieve Fav data.'
-        return JsonResponse(response_data)
+        return JsonResponse(response_data, status=500)
 
 
 def get_favs(request):
@@ -65,10 +65,10 @@ def get_favs(request):
                 'created': fav.datetime.strftime('%B %d, %Y %I:%M %p')
                 })
         response_data['result'] = 'Successfully retrieved Fav data.'
-        return JsonResponse(response_data)
+        return JsonResponse(response_data, status=200)
     else:
         response_data['result'] = 'Error - Failed to retrieve Fav data.'
-        return JsonResponse(response_data)
+        return JsonResponse(response_data, status=500)
 
 
 def post_register(request):
@@ -84,11 +84,11 @@ def post_register(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             logic.get_all_favs_for_user(user)
-            return HttpResponseRedirect(next)
+            return HttpResponseRedirect(next, status=200)
         else:
-            return HttpResponse('Inactive User.')
+            return HttpResponse('Inactive User.', status=403)
     else:
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next, status=400)
 
 
 def post_login(request):
@@ -102,24 +102,24 @@ def post_login(request):
             if user.is_active:
                 login(request, user)
                 logic.get_all_favs_for_user(user)
-                return HttpResponseRedirect(next)
+                return HttpResponseRedirect(next, status=200)
             else:
-                return HttpResponse('Inactive User.')
+                return HttpResponse('Inactive User.', status=403)
         else:
             return HttpResponse(
                 '<div style=''font-family:monospace;font-size:2.0em;color:red;'
                 '>Invalid Username/Password.</div><br><a style='
                 'color:black;font-family:monospace;'' href=''/'
-                '>Back Home</a>')
+                '>Back Home</a>', status=401)
     else:
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next, status=400)
 
 
 def logout_user(request):
     """Log the user out."""
     next = request.GET.get('next', '/')
     logout(request)
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next, status=200)
 
 
 def render_index(request):
