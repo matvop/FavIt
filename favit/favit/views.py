@@ -30,11 +30,11 @@ def create_fav(request):
         return JsonResponse(response_data, status=500)
 
 
-def get_recent_favs_from_database(request):
-    """Retrieve the most recent Favs and send them to the client."""
+def get_all_favs_from_database(request):
+    """Retrieve all Favs and send them to the client."""
     if request.method == 'GET':
         response_data = {'fav_list': []}
-        favs = logic.get_recent_favs()
+        favs = logic.get_all_favs()
         for fav in favs:
             response_data['fav_list'].append({
                 'user': fav.user.username,

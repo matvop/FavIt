@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout_user, name='logout'),
     url(r'^create_fav/$', views.create_fav, name='create_fav'),
     url(r'^get_favs/$', views.get_favs, name='get_favs'),
-    url(r'^recent_favs/$', views.get_recent_favs_from_database,
+    url(r'^recent_favs/$', views.get_all_favs_from_database,
         name='recent_favs'),
     url(r'^favicon.ico$', RedirectView.as_view(
         url=staticfiles_storage.url('favit/favicon.ico'),

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from . import models
 
 
-def get_recent_favs():
+def get_all_favs():
     """Retrieve all Fav objects from the database."""
     return models.Fav.objects.all()
     # return models.Fav.objects.filter(
