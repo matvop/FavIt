@@ -70,7 +70,7 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
  * Remove thumbnail suffix from the URL path.
  */
 function removeThumbnailSuffixFromGIFLinkID(link) {
-  return link.replace(link.slice(-5), link.slice(-4));
+  return link.replace('h.gif', '.gif');
 }
 
 /**
@@ -78,7 +78,7 @@ function removeThumbnailSuffixFromGIFLinkID(link) {
  * thumbnail suffix 'm'.
  */
 function changeThumbnailSuffix(link) {
-  return link.replace(link.slice(-5), 'm' + link.slice(-4));
+  return link.replace('h.gif', 'm.gif');
 }
 
 /**
@@ -210,22 +210,6 @@ function convertEmptyTileToImgurAlb(json, emptyTile) {
 }
 
 /**
- * Resolve the ID at end of an Imgur URL
- */
-function resolveID(mediaURL) {
-  if (mediaURL.slice(0,19) === 'https://imgur.com/g') {
-    var id = mediaURL.replace('https://imgur.com/gallery/', '');
-  } else if (mediaURL.slice(0,29) === 'https://imgur.com/account/fav') {
-    var id = mediaURL.replace('https://imgur.com/account/favorites/', '');
-  } else if (mediaURL.slice(0,20) === 'https://imgur.com/a/') {
-    var id = mediaURL.replace('https://imgur.com/a/', '');
-  } else {
-    throw new TypeError('Resolve ID FAILED - MediaURL: ' + mediaURL);
-  }
-  return id;
-}
-
-/**
  * Get JSON response from Imgur's gallery API endpoint. Requires
  * 7 digit id. Calls the empty tile func and converts to gallery tile then
  * pre-pends to the section element in the DOM.
@@ -294,8 +278,7 @@ function buildFromAlbumEndpointResponse(id) {
 /**
  * Determine length of ID and call related AJAX function
  */
-function buildImgurTile(mediaURL) {
-  var id = resolveID(mediaURL);
+function buildImgurTile(id) {
   if (id.length === 7) { //for image gallery
     buildFromGalleryEndpointResponse(id);
   }  else if (id.length === 5) { //for image albums
@@ -393,39 +376,112 @@ function buildVimeoTile(mediaURL) {
   });
 }
 
+var regYoutube = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+var regImgur = /(?:https?:\/\/)?(?:imgur\.com\/(?:a\/|account\/favorites\/|gallery\/))(\w{5,7})(?:\S+)?$/;
+// var regImgur = /(?:https?:\/\/)?(?:i\.)?imgur\.com\/(?:account\/favorites\/)?(?:a\/)?(?:gallery\/)?(.+(?=[sbtmlh]\..{3,4})|.+(?=‌​\..{3,4})|.+?(?:(?=\s)|$))/;
+var regVimeo = /(?:https?:\/\/)?vimeo\.com\/([0-9]{8,9})$/;
+
 /**
- * Check if the URL provided is a direct path with a file extension. Currently
- * not in use.
+ * Return video id from a valid YouTube URL.
  */
-function checkForFileExt(url) { // feature may be re-enabled in the future
-  if (url.charAt(url.length - 4) === '.') {
-    var fileExt = url.slice(-3);
-  }  else if (url.charAt(url.length - 5) === '.') {
-    var fileExt = url.slice(-4);
-  }
-  return fileExt;
+function resolveYoutubeId(url) {
+  return url.match(regYoutube) ? RegExp.$1 : false;
 }
+
+/**
+ * [resolveVimeoId description]
+ */
+function resolveVimeoId(url) {
+  return url.match(regVimeo) ? RegExp.$1 : false;
+}
+
+/**
+ * [resolveImgurId description]
+ */
+function resolveImgurId(url) {
+  return url.match(regImgur) ? RegExp.$1 : false;
+}
+
+/**
+ * [validateURLInput description]
+ */
+function validateURLInput(mediaURL) {
+  if (regYoutube.test(mediaURL) === true ||
+      regImgur.test(mediaURL) === true ||
+      regVimeo.test(mediaURL) === true) {
+    $('.url-input').css('background-color', 'lightgreen');
+    return true;
+  } else {
+    $('.url-input').css('background-color', 'pink');
+    return false;
+  }
+}
+
+/**
+ * [alertVideoSupport description]
+ */
+function alertVideoSupport() {
+  return alert(
+    'Supported Video URL formats:\n\n' +
+    '* YouTube Direct URL: https://www.youtube.com/watch?v=X0z2i83fmMk\n' +
+    '* YouTube Direct w/PL: https://www.youtube.com/watch?v=XFkzRNyygfk&list=' +
+      'PL67y-alyKlu-ZjwMz92LE9gJ5m0c7iipy\n' +
+    '* youtu.be Share URL: https://youtu.be/X0z2i83fmMk\n' +
+    '* Vimeo Direct URL: https://vimeo.com/26645299\n');
+}
+
+/**
+ * [alertImgurSupport description]
+ */
+function alertImgurSupport() {
+  return alert(
+    'Supported Imgur URL formats:\n\n' +
+    'Gallery Image URL: https://imgur.com/gallery/J1xff44\n' +
+    'Gallery Album URL (option 1): http://imgur.com/gallery/hOF1g\n' +
+    'Gallery Album URL (option 2): http://imgur.com/a/hOF1g\n' +
+    'Account Favorites URL: http://imgur.com/account/favorites/lpo6i9h');
+}
+
+/**
+ * [validateForm description]
+ */
+function validateForm(mediaURL) {
+  if (validateURLInput(mediaURL) === false) {
+    if (mediaURL.includes('youtu') || mediaURL.includes('vimeo')) {
+      alertVideoSupport();
+      throw new TypeError('Invalid Video URL: ' + mediaURL);
+    } else if (mediaURL.includes('imgur')) {
+      alertImgurSupport();
+      throw new TypeError('Invalid Imgur URL: ' + mediaURL);
+    } else {
+      alert('A proper media URL from a supported content provider is required');
+      throw new TypeError('Invalid Media URL: ' + mediaURL);
+    }
+  } else {
+    return true;
+  }
+}
+
 
 /**
  * Checks submitted URL for match. Calls appropriate build function based
  * on result.
  */
 function checkTypeBuildTile(mediaURL) {
-  // var fileExt = checkForFileExt(mediaURL);
-  if (mediaURL.slice(0,24) === 'https://www.youtube.com/') {
+  if (mediaURL.includes('youtube') || mediaURL.includes('youtu.be')) {
+    var id = resolveYoutubeId(mediaURL);
+    mediaURL = 'https://www.youtube.com/watch?v=' + id;
     buildYoutubeTile(mediaURL);
-  } else if (mediaURL.slice(0,18) === 'https://vimeo.com/') {
+    return mediaURL;
+  } else if (mediaURL.includes('vimeo')) {
+    var id = resolveVimeoId(mediaURL);
+    mediaURL = 'https://vimeo.com/' + id;
     buildVimeoTile(mediaURL);
-  } else if (mediaURL.slice(0, 17) === 'http://imgur.com/') {
-    mediaURL = mediaURL.replace('http', 'https'); //reducing the # of if statements needed later during transforms
-    buildImgurTile(mediaURL);
-  } else if (mediaURL.slice(0, 18) === 'https://imgur.com/') {
-    buildImgurTile(mediaURL);
-  } else if (mediaURL.slice(0, 19) === 'http://i.imgur.com/') { //feature not implemented
-    mediaURL = mediaURL.replace('http', 'https'); //reducing the # of if statements needed later during transforms
-    buildImgurTile(mediaURL);
-  } else if (mediaURL.slice(0,20) === 'https://i.imgur.com/') { //feature not implemented
-    buildImgurTile(mediaURL);
+    return mediaURL;
+  } else if (mediaURL.includes('imgur')) {
+    var id = resolveImgurId(mediaURL);
+    buildImgurTile(id);
+    return mediaURL;
   } else {
     throw new TypeError('checkTypeBuildTile FAILED - mediaURL: ' + mediaURL);
   }
@@ -435,15 +491,24 @@ function checkTypeBuildTile(mediaURL) {
  * Set's up the event handler for the submit button on #fav-form.
  */
 function registerGlobalEventHandlers() {
+  $('.url-input').on('keyup', function(event) {
+    event.preventDefault();
+    var mediaURL = $('.url-input').val();
+    validateURLInput(mediaURL);
+  });
   $('#fav-form').on('submit', function(event) {
     event.preventDefault();
     var mediaURL = $('.url-input').val();
     var comment = $('.comment-input').val();
-    $('fieldset').children('.url-input').val('');
-    $('fieldset').children('.comment-input').val('');
-    $('#fav-form').magnificPopup('close');
-    checkTypeBuildTile(mediaURL);
-    postFav(mediaURL, comment); //located in post.js
+    if (validateForm(mediaURL) === true) {
+      $('fieldset').children('.url-input').val('');
+      $('fieldset').children('.comment-input').val('');
+      $('#fav-form').magnificPopup('close');
+      mediaURL = checkTypeBuildTile(mediaURL);
+      postFav(mediaURL, comment); //located in post.js
+    } else {
+      throw new TypeError('validateForm FAILED - mediaURL: ' + mediaURL);
+    }
   });
   $('#recent-favs').on('mouseup', function() {
     $('section').empty();

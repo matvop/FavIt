@@ -86,7 +86,7 @@ def post_register(request):
             logic.get_all_favs_for_user(user)
             return HttpResponseRedirect(next)
         else:
-            return HttpResponse('Inactive User.', status=403)
+            return HttpResponse('User exists and/or inactive.', status=403)
     else:
         return HttpResponseRedirect(next)
 
