@@ -284,6 +284,7 @@ function buildImgurTile(id) {
   }  else if (id.length === 5) { //for image albums
     buildFromAlbumEndpointResponse(id);
   } else {
+    alert('The Imgur URL provided is malformed.');
     throw new TypeError('Unexpected ID: ' + id);
   }
 }
@@ -310,14 +311,14 @@ function convertEmptyTileToYoutube(json, emptyTile) {
 * Get JSON response from noEmbed's url endpoint. Creates empty tile and converts
 * to a YouTube tile then pre-pends to the section element in the DOM
  */
-function buildYoutubeTile(mediaURL) {
+function buildYoutubeTile(id) {
   var emptyTile = createEmptyTile();
   $('section').prepend(emptyTile);
   updateTileCount();
   $.ajax({
     dataType: 'json',
     url: 'https://noembed.com/embed',
-    data: 'url=' + mediaURL,
+    data: 'url=' + 'https://www.youtube.com/watch?v=' + id,
     success: function(result) {
       convertEmptyTileToYoutube(result, emptyTile);
       $('.popup-youtube').magnificPopup({
@@ -354,14 +355,14 @@ function convertEmptyTileToVimeo(json, emptyTile) {
 * Get JSON response from noEmbed's url endpoint. Creates empty tile and converts
 * to a Vimeo tile then pre-pends to the section element in the DOM
  */
-function buildVimeoTile(mediaURL) {
+function buildVimeoTile(id) {
   var emptyTile = createEmptyTile();
   $('section').prepend(emptyTile);
   updateTileCount();
   $.ajax({
     dataType: 'json',
     url: 'https://noembed.com/embed',
-    data: 'url=' + mediaURL,
+    data: 'url=' + 'https://vimeo.com/' + id,
     success: function(result) {
       convertEmptyTileToVimeo(result, emptyTile);
       $('.popup-vimeo').magnificPopup({
@@ -470,13 +471,11 @@ function validateForm(mediaURL) {
 function checkTypeBuildTile(mediaURL) {
   if (mediaURL.includes('youtube') || mediaURL.includes('youtu.be')) {
     var id = resolveYoutubeId(mediaURL);
-    mediaURL = 'https://www.youtube.com/watch?v=' + id;
-    buildYoutubeTile(mediaURL);
+    buildYoutubeTile(id);
     return mediaURL;
   } else if (mediaURL.includes('vimeo')) {
     var id = resolveVimeoId(mediaURL);
-    mediaURL = 'https://vimeo.com/' + id;
-    buildVimeoTile(mediaURL);
+    buildVimeoTile(id);
     return mediaURL;
   } else if (mediaURL.includes('imgur')) {
     var id = resolveImgurId(mediaURL);
