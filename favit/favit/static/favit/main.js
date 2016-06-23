@@ -377,39 +377,38 @@ function buildVimeoTile(id) {
   });
 }
 
-var regYoutube = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-var regImgur = /(?:https?:\/\/)?(?:imgur\.com\/(?:a\/|account\/favorites\/|gallery\/))(\w{5,7})(?:\S+)?$/;
-// var regImgur = /(?:https?:\/\/)?(?:i\.)?imgur\.com\/(?:account\/favorites\/)?(?:a\/)?(?:gallery\/)?(.+(?=[sbtmlh]\..{3,4})|.+(?=‌​\..{3,4})|.+?(?:(?=\s)|$))/;
-var regVimeo = /(?:https?:\/\/)?vimeo\.com\/([0-9]{8,9})$/;
+var youtubePattern = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+var imgurPattern = /^(?:https?:\/\/)?(?:www\.)?(?:imgur\.com\/(?:a\/|account\/favorites\/|gallery\/))(\w{5,7})$/;
+var vimeoPattern = /^(?:https?:\/\/)?(?:www\.)?vimeo\.com\/([0-9]{8,9})$/;
 
 /**
  * Return video id from a valid YouTube URL.
  */
 function resolveYoutubeId(url) {
-  return url.match(regYoutube) ? RegExp.$1 : false;
+  return url.match(youtubePattern) ? RegExp.$1 : false;
 }
 
 /**
  * [resolveVimeoId description]
  */
 function resolveVimeoId(url) {
-  return url.match(regVimeo) ? RegExp.$1 : false;
+  return url.match(vimeoPattern) ? RegExp.$1 : false;
 }
 
 /**
  * [resolveImgurId description]
  */
 function resolveImgurId(url) {
-  return url.match(regImgur) ? RegExp.$1 : false;
+  return url.match(imgurPattern) ? RegExp.$1 : false;
 }
 
 /**
  * [validateURLInput description]
  */
 function validateURLInput(mediaURL) {
-  if (regYoutube.test(mediaURL) === true ||
-      regImgur.test(mediaURL) === true ||
-      regVimeo.test(mediaURL) === true) {
+  if (youtubePattern.test(mediaURL) === true ||
+      imgurPattern.test(mediaURL) === true ||
+      vimeoPattern.test(mediaURL) === true) {
     $('.url-input').css('background-color', 'lightgreen');
     return true;
   } else {
@@ -421,26 +420,30 @@ function validateURLInput(mediaURL) {
 /**
  * [alertVideoSupport description]
  */
-function alertVideoSupport() {
+function videoSupportAlert() {
   return alert(
     'Supported Video URL formats:\n\n' +
     '* YouTube Direct URL: https://www.youtube.com/watch?v=X0z2i83fmMk\n' +
     '* YouTube Direct w/PL: https://www.youtube.com/watch?v=XFkzRNyygfk&list=' +
       'PL67y-alyKlu-ZjwMz92LE9gJ5m0c7iipy\n' +
     '* youtu.be Share URL: https://youtu.be/X0z2i83fmMk\n' +
-    '* Vimeo Direct URL: https://vimeo.com/26645299\n');
+    '* Vimeo Direct URL: https://vimeo.com/26645299\n\n' +
+    'Optional Strings:\n\n' +
+    '"http(s)://" and "www."');
 }
 
 /**
  * [alertImgurSupport description]
  */
-function alertImgurSupport() {
+function imgurSupportAlert() {
   return alert(
     'Supported Imgur URL formats:\n\n' +
     'Gallery Image URL: https://imgur.com/gallery/J1xff44\n' +
     'Gallery Album URL (option 1): http://imgur.com/gallery/hOF1g\n' +
     'Gallery Album URL (option 2): http://imgur.com/a/hOF1g\n' +
-    'Account Favorites URL: http://imgur.com/account/favorites/lpo6i9h');
+    'Account Favorites URL: http://imgur.com/account/favorites/lpo6i9h\n\n' +
+    'Optional Strings:\n\n' +
+    '"http(s)://" and "www."');
 }
 
 /**
@@ -449,10 +452,10 @@ function alertImgurSupport() {
 function validateForm(mediaURL) {
   if (validateURLInput(mediaURL) === false) {
     if (mediaURL.includes('youtu') || mediaURL.includes('vimeo')) {
-      alertVideoSupport();
+      videoSupportAlert();
       throw new TypeError('Invalid Video URL: ' + mediaURL);
     } else if (mediaURL.includes('imgur')) {
-      alertImgurSupport();
+      imgurSupportAlert();
       throw new TypeError('Invalid Imgur URL: ' + mediaURL);
     } else {
       alert('A proper media URL from a supported content provider is required');
