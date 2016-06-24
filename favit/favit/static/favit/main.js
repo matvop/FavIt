@@ -1,5 +1,62 @@
 'use strict';
 
+var imgurSupportAlert = 'Supported Imgur URL formats:\n\n' +
+'Gallery Image URL: https://imgur.com/gallery/J1xff44\n' +
+'Gallery Album URL (option 1): http://imgur.com/gallery/hOF1g\n' +
+'Gallery Album URL (option 2): http://imgur.com/a/hOF1g\n' +
+'Account Favorites URL: http://imgur.com/account/favorites/lpo6i9h\n\n' +
+'Optional Strings:\n\n' +
+'"http(s)://" and "www."';
+
+var videoSupportAlert = 'Supported Video URL formats:\n\n' +
+  '* YouTube Direct URL: https://www.youtube.com/watch?v=X0z2i83fmMk\n' +
+  '* YouTube Direct w/PL: https://www.youtube.com/watch?v=XFkzRNyygfk&list=' +
+    'PL67y-alyKlu-ZjwMz92LE9gJ5m0c7iipy\n' +
+  '* youtu.be Share URL: https://youtu.be/X0z2i83fmMk\n' +
+  '* Vimeo Direct URL: https://vimeo.com/26645299\n\n' +
+  'Optional Strings:\n\n' +
+  '"http(s)://" and "www."';
+
+var youtubePattern = new RegExp(
+  '^' +
+    // protocol identifier
+    '(?:https?:\\/\\/)?' +
+    // host name
+    '(?:www\\.)?' +
+    // domain and path
+    '(?:youtu\\.be\\/|youtube\\.com/' +
+      '(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))' +
+    // id and arguements
+    '((\\w|-){11})(?:\\S+)?' +
+  '$'
+);
+
+var imgurPattern = new RegExp(
+  '^' +
+    // protocol identifier
+    '(?:https?:\\/\\/)?' +
+    // host name
+    '(?:www\\.)?' +
+    // domain and path
+    '(?:imgur\\.com\\/(?:a\\/|account\\/favorites\\/|gallery\\/))' +
+    // id
+    '(\\w{5,7})' +
+  '$'
+);
+
+var vimeoPattern = new RegExp(
+  '^' +
+    // protocol identifier
+    '(?:https?:\\/\\/)?' +
+    // host name
+    '(?:www\\.)?' +
+    // domain and path
+    '?vimeo\\.com\\/' +
+    // id
+    '([0-9]{8,9})' +
+  '$'
+);
+
 /**
  * Update dynamic class element to show current number of Favs in their view.
  */
@@ -377,33 +434,50 @@ function buildVimeoTile(id) {
   });
 }
 
-var youtubePattern = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-var imgurPattern = /^(?:https?:\/\/)?(?:www\.)?(?:imgur\.com\/(?:a\/|account\/favorites\/|gallery\/))(\w{5,7})$/;
-var vimeoPattern = /^(?:https?:\/\/)?(?:www\.)?vimeo\.com\/([0-9]{8,9})$/;
-
 /**
- * Return video id from a valid YouTube URL.
+ * Parse video id from a valid YouTube URL.
  */
 function resolveYoutubeId(url) {
   return url.match(youtubePattern) ? RegExp.$1 : false;
 }
 
 /**
- * [resolveVimeoId description]
+ * Parse video id from a valid Vimeo URL.
  */
 function resolveVimeoId(url) {
   return url.match(vimeoPattern) ? RegExp.$1 : false;
 }
 
 /**
- * [resolveImgurId description]
+ * Parse media id from a valid Imgur URL.
  */
 function resolveImgurId(url) {
   return url.match(imgurPattern) ? RegExp.$1 : false;
 }
 
 /**
- * [validateURLInput description]
+ * Checks submitted URL for match. Calls appropriate build function based
+ * on result.
+ */
+function checkTypeBuildTile(mediaURL) {
+  if (mediaURL.toLowerCase().includes('youtu')) {
+    var id = resolveYoutubeId(mediaURL);
+    console.log(id);
+    buildYoutubeTile(id);
+  } else if (mediaURL.toLowerCase().includes('vimeo')) {
+    var id = resolveVimeoId(mediaURL);
+    buildVimeoTile(id);
+  } else if (mediaURL.toLowerCase().includes('imgur')) {
+    var id = resolveImgurId(mediaURL);
+    buildImgurTile(id);
+  } else {
+    throw new TypeError('checkTypeBuildTile FAILED - mediaURL: ' + mediaURL);
+  }
+}
+
+/**
+ * Validate user input and provide visual notification to user whether input
+ * is acceptable for submission(called on keyup and on submit).
  */
 function validateURLInput(mediaURL) {
   if (youtubePattern.test(mediaURL) === true ||
@@ -418,44 +492,17 @@ function validateURLInput(mediaURL) {
 }
 
 /**
- * [alertVideoSupport description]
- */
-function videoSupportAlert() {
-  return alert(
-    'Supported Video URL formats:\n\n' +
-    '* YouTube Direct URL: https://www.youtube.com/watch?v=X0z2i83fmMk\n' +
-    '* YouTube Direct w/PL: https://www.youtube.com/watch?v=XFkzRNyygfk&list=' +
-      'PL67y-alyKlu-ZjwMz92LE9gJ5m0c7iipy\n' +
-    '* youtu.be Share URL: https://youtu.be/X0z2i83fmMk\n' +
-    '* Vimeo Direct URL: https://vimeo.com/26645299\n\n' +
-    'Optional Strings:\n\n' +
-    '"http(s)://" and "www."');
-}
-
-/**
- * [alertImgurSupport description]
- */
-function imgurSupportAlert() {
-  return alert(
-    'Supported Imgur URL formats:\n\n' +
-    'Gallery Image URL: https://imgur.com/gallery/J1xff44\n' +
-    'Gallery Album URL (option 1): http://imgur.com/gallery/hOF1g\n' +
-    'Gallery Album URL (option 2): http://imgur.com/a/hOF1g\n' +
-    'Account Favorites URL: http://imgur.com/account/favorites/lpo6i9h\n\n' +
-    'Optional Strings:\n\n' +
-    '"http(s)://" and "www."');
-}
-
-/**
- * [validateForm description]
+ * Check if input is valid and provide a helpful response if not.
  */
 function validateForm(mediaURL) {
   if (validateURLInput(mediaURL) === false) {
-    if (mediaURL.includes('youtu') || mediaURL.includes('vimeo')) {
-      videoSupportAlert();
+    if (mediaURL.toLowerCase().includes('youtu') ||
+        mediaURL.toLowerCase().includes('vimeo') ||
+        mediaURL.toLowerCase().includes('video')) {
+      alert(videoSupportAlert);
       throw new TypeError('Invalid Video URL: ' + mediaURL);
-    } else if (mediaURL.includes('imgur')) {
-      imgurSupportAlert();
+    } else if (mediaURL.toLowerCase().includes('imgur')) {
+      alert(imgurSupportAlert);
       throw new TypeError('Invalid Imgur URL: ' + mediaURL);
     } else {
       alert('A proper media URL from a supported content provider is required');
@@ -466,52 +513,10 @@ function validateForm(mediaURL) {
   }
 }
 
-
 /**
- * Checks submitted URL for match. Calls appropriate build function based
- * on result.
+ * Configure mouse click input events from the user.
  */
-function checkTypeBuildTile(mediaURL) {
-  if (mediaURL.includes('youtube') || mediaURL.includes('youtu.be')) {
-    var id = resolveYoutubeId(mediaURL);
-    buildYoutubeTile(id);
-    return mediaURL;
-  } else if (mediaURL.includes('vimeo')) {
-    var id = resolveVimeoId(mediaURL);
-    buildVimeoTile(id);
-    return mediaURL;
-  } else if (mediaURL.includes('imgur')) {
-    var id = resolveImgurId(mediaURL);
-    buildImgurTile(id);
-    return mediaURL;
-  } else {
-    throw new TypeError('checkTypeBuildTile FAILED - mediaURL: ' + mediaURL);
-  }
-}
-
-/**
- * Set's up the event handler for the submit button on #fav-form.
- */
-function registerGlobalEventHandlers() {
-  $('.url-input').on('keyup', function(event) {
-    event.preventDefault();
-    var mediaURL = $('.url-input').val();
-    validateURLInput(mediaURL);
-  });
-  $('#fav-form').on('submit', function(event) {
-    event.preventDefault();
-    var mediaURL = $('.url-input').val();
-    var comment = $('.comment-input').val();
-    if (validateForm(mediaURL) === true) {
-      $('fieldset').children('.url-input').val('');
-      $('fieldset').children('.comment-input').val('');
-      $('#fav-form').magnificPopup('close');
-      mediaURL = checkTypeBuildTile(mediaURL);
-      postFav(mediaURL, comment); //located in post.js
-    } else {
-      throw new TypeError('validateForm FAILED - mediaURL: ' + mediaURL);
-    }
-  });
+function configureMouseEvents() {
   $('#recent-favs').on('mouseup', function() {
     $('section').empty();
     getRecentFavs(); //located in get.js
@@ -543,15 +548,68 @@ function registerGlobalEventHandlers() {
 }
 
 /**
- * Starts up the application and loads Favs once the HTML document is fully loaded.
-*/
-$(document).ready(function() {
-  registerGlobalEventHandlers();
-  getFavs(); //located in get.js
-  // updateTileCount();
+ * Configure parameters for magnific popup type forms.
+ */
+function configureForms() {
   $('.popup-with-form').magnificPopup({
     type: 'inline',
     preloader: false,
     focus: 'fieldset > input:first-of-type',
   });
+}
+
+/**
+ * Configure keyup event behavior within the Fav url input.
+ */
+function configureKbEvents() {
+  $('.url-input').on('keyup', function() {
+    var mediaURL = $('.url-input').val();
+    validateURLInput(mediaURL);
+  });
+}
+
+/**
+ * Clear and close the Fav input form.
+ */
+function resetForm() {
+  $('fieldset').children('.url-input').val('');
+  $('fieldset').children('.comment-input').val('');
+  $('#fav-form').magnificPopup('close');
+}
+
+/**
+ * Configure submit button behavior in the Fav form.
+ */
+function configureFavFormSubmit() {
+  $('#fav-form').on('submit', function(event) {
+    event.preventDefault();
+    var mediaURL = $('.url-input').val();
+    var comment = $('.comment-input').val();
+    if (validateForm(mediaURL) === true) {
+      checkTypeBuildTile(mediaURL);
+      postFav(mediaURL, comment); //located in post.js
+      resetForm();
+    } else {
+      throw new TypeError('validateForm FAILED - mediaURL: ' + mediaURL);
+    }
+  });
+}
+
+/**
+ * Configure the event handlers for validation, submission, and content
+ * filtering.
+ */
+function registerGlobalEventHandlers() {
+  configureMouseEvents();
+  configureForms();
+  configureKbEvents();
+  configureFavFormSubmit();
+}
+
+/**
+ * Starts up the application and loads Favs once the HTML document is fully loaded.
+*/
+$(document).ready(function() {
+  getFavs(); //located in get.js
+  registerGlobalEventHandlers();
 });

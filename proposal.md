@@ -58,7 +58,7 @@ Users can add content from Imgur, Vimeo, and YouTube via URL.
 1. Fix ordering issue __Completed 6/7__
 1. Filter results based on which content provider logo is clicked. __Completed 6/8__
 1. Move Imgur API call to server-side logic
+1. Write validation using regular expressions to replace slicing. __Completed 6/22__
 1. Change Imgur Album Favs to add all images in album as hidden links to allow for gallery lightbox
-1. Optimize CSS transitions for mobile devices(enable GPU acceleration?)
 1. Expand database to include storage of title, author, publisher, and thumbnail URL
 1. Update client-side AJAX to retrieve Fav data from server rather than making API calls ever time a Fav is loaded
