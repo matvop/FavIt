@@ -1,21 +1,21 @@
 'use strict';
 
-var imgurSupportAlert = 'Supported Imgur URL formats:\n\n' +
-'Gallery Image URL: https://imgur.com/gallery/J1xff44\n' +
-'Gallery Album URL (option 1): http://imgur.com/gallery/hOF1g\n' +
-'Gallery Album URL (option 2): http://imgur.com/a/hOF1g\n' +
-'Account Favorites URL: http://imgur.com/account/favorites/lpo6i9h\n\n' +
-'Optional Strings:\n\n' +
-'"http(s)://" and "www."';
+var optionalStrings = 'Optional Strings:\n\n"http(s)://" and "www."';
 
-var videoSupportAlert = 'Supported Video URL formats:\n\n' +
-  '* YouTube Direct URL: https://www.youtube.com/watch?v=X0z2i83fmMk\n' +
-  '* YouTube Direct w/PL: https://www.youtube.com/watch?v=XFkzRNyygfk&list=' +
-    'PL67y-alyKlu-ZjwMz92LE9gJ5m0c7iipy\n' +
-  '* youtu.be Share URL: https://youtu.be/X0z2i83fmMk\n' +
-  '* Vimeo Direct URL: https://vimeo.com/26645299\n\n' +
-  'Optional Strings:\n\n' +
-  '"http(s)://" and "www."';
+var imgurSupport = 'Supported Imgur URL formats:\n\n' +
+'Gallery Image URL:\nhttps://imgur.com/gallery/J1xff44\n' +
+'Gallery Album URL (option 1):\nhttp://imgur.com/gallery/hOF1g\n' +
+'Gallery Album URL (option 2):\nhttp://imgur.com/a/hOF1g\n' +
+'Account Favorites URL:\nhttp://imgur.com/account/favorites/lpo6i9h\n\n';
+
+var videoSupport = 'Supported Video URL formats:\n\n' +
+  'YouTube Direct URL:\nhttps://www.youtube.com/watch?v=X0z2i83fmMk\n' +
+  'YouTube Direct w/PL:\nhttps://www.youtube.com/watch?v=XFkzRNyygfk&list=' +
+    'PL6...\n' +
+  'youtu.be Share URL:\nhttps://youtu.be/X0z2i83fmMk\n' +
+  'Vimeo Direct URL:\nhttps://vimeo.com/26645299\n\n';
+
+var help = imgurSupport + videoSupport + optionalStrings;
 
 var youtubePattern = new RegExp(
   '^' +
@@ -27,7 +27,7 @@ var youtubePattern = new RegExp(
     '(?:youtu\\.be\\/|youtube\\.com/' +
       '(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))' +
     // id and arguements
-    '((\\w|-){11})(?:\\S+)?' +
+    '((\\w|-){11})((?:\\S){0,128})?' +
   '$'
 );
 
@@ -462,7 +462,6 @@ function resolveImgurId(url) {
 function checkTypeBuildTile(mediaURL) {
   if (mediaURL.toLowerCase().includes('youtu')) {
     var id = resolveYoutubeId(mediaURL);
-    console.log(id);
     buildYoutubeTile(id);
   } else if (mediaURL.toLowerCase().includes('vimeo')) {
     var id = resolveVimeoId(mediaURL);
@@ -499,13 +498,13 @@ function validateForm(mediaURL) {
     if (mediaURL.toLowerCase().includes('youtu') ||
         mediaURL.toLowerCase().includes('vimeo') ||
         mediaURL.toLowerCase().includes('video')) {
-      alert(videoSupportAlert);
+      alert(videoSupport + optionalStrings);
       throw new TypeError('Invalid Video URL: ' + mediaURL);
     } else if (mediaURL.toLowerCase().includes('imgur')) {
-      alert(imgurSupportAlert);
+      alert(imgurSupport + optionalStrings);
       throw new TypeError('Invalid Imgur URL: ' + mediaURL);
     } else {
-      alert('A proper media URL from a supported content provider is required');
+      alert(help);
       throw new TypeError('Invalid Media URL: ' + mediaURL);
     }
   } else {
@@ -545,6 +544,10 @@ function configureMouseEvents() {
     $('.vim').show();
     $('.yt').show();
   });
+  $('.help').on('mouseup', function(event) {
+    event.preventDefault();
+    alert(help);
+  });
 }
 
 /**
@@ -569,15 +572,6 @@ function configureKbEvents() {
 }
 
 /**
- * Clear and close the Fav input form.
- */
-function resetForm() {
-  $('fieldset').children('.url-input').val('');
-  $('fieldset').children('.comment-input').val('');
-  $('#fav-form').magnificPopup('close');
-}
-
-/**
  * Configure submit button behavior in the Fav form.
  */
 function configureFavFormSubmit() {
@@ -586,9 +580,7 @@ function configureFavFormSubmit() {
     var mediaURL = $('.url-input').val();
     var comment = $('.comment-input').val();
     if (validateForm(mediaURL) === true) {
-      checkTypeBuildTile(mediaURL);
       postFav(mediaURL, comment); //located in post.js
-      resetForm();
     } else {
       throw new TypeError('validateForm FAILED - mediaURL: ' + mediaURL);
     }

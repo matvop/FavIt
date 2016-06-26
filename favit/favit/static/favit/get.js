@@ -23,11 +23,9 @@ function getRecentFavs() {
       loadFavs(result);
     },
     // handle a non-successful response
-    error: function(xhr, errmsg, err) {
-      $('#results').html('<div class=\'alert-box alert radius\'' +
-      'data-alert>Oops! We have encountered an error: ' + errmsg +
-      '<a href=\'#\' class=\'close\'>&times;</a></div>'); // add the error to the dom
-      console.log(xhr.status + ': ' + xhr.responseText); // provide a bit more info about the error to the console
+    error: function() {
+      alert('Error: Connection to server could not be established. ' +
+            'Please check your network connection and try again.');
     }
   });
 }
@@ -44,11 +42,9 @@ function getFavs() {
       loadFavs(result);
     },
     // handle a non-successful response
-    error: function(xhr, errmsg, err) {
-      $('#results').html('<div class=\'alert-box alert radius\'' +
-      'data-alert>Oops! We have encountered an error:' + errmsg +
-      '<a href=\'#\' class=\'close\'>&times;</a></div>'); // add the error to the dom
-      console.log(xhr.status + ': ' + xhr.responseText); // provide a bit more info about the error to the console
+    error: function() {
+      alert('Error: Connection to server could not be established. ' +
+            'Please check your network connection and try again.');
     }
   });
 }

@@ -1,4 +1,15 @@
 'use strict';
+
+/**
+ * Clear and close the Fav input form.
+ */
+function resetForm() {
+  $('fieldset').children('.url-input').val('');
+  $('fieldset').children('.comment-input').val('');
+  $('.url-input').css('background-color', 'white');
+  $('#fav-form').magnificPopup('close');
+}
+
 /**
  * Send user's 'Fav' entry to the server
  */
@@ -12,16 +23,14 @@ function postFav(mediaURL, comment) {
     }, // data sent with the post request
     // handle a successful response
     success: function(json) {
-      console.log(json); // log the returned json to the console
+      checkTypeBuildTile(mediaURL);
+      resetForm();
+      // console.log(json); // log the returned json to the console
     },
     // handle a non-successful response
-    error: function(xhr, errmsg, err) {
-      $('fieldset').children('.url-input').val('');
-      $('fieldset').children('.comment-input').val('');
-      $('#results').html('<div class=\'alert-box alert radius' +
-      'data-alert>Oops! We have encountered an error: ' + errmsg +
-      '<a href=\'#\' class=\'close\'>&times;</a></div>'); // add the error to the dom
-      console.log(xhr.status + ': ' + xhr.responseText); // provide a bit more info about the error to the console
+    error: function() {
+      alert('Error: Connection to server could not be established. ' +
+            'Please check your network connection and try again.');
     }
   });
 }
