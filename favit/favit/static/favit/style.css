@@ -32,9 +32,6 @@ header {
     align-self: center;
     margin: 5px;
 }
-.center span {
-    display: flex;
-}
 .top-links {
     cursor: pointer;
     background-color: #3C3C3C;
@@ -56,16 +53,9 @@ header {
     -moz-transition: .3s ease-in-out;
     -o-transition: .3s ease-in-out;
 }
-.supported {
-    cursor: pointer;
-    color: white;
-    width: 72px;
-    text-align: right;
-    margin-right: 5px;
-}
 .logos {
     display: flex;
-    align-items: center;
+    align-self: center;
 }
 .logos > img {
     margin: 5px;
@@ -85,10 +75,24 @@ a:hover {
     color: white;
 }
 fieldset {
-    color: white;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  align-content: center;
+  color: white;
 }
 input {
-  width: 256px;
+  outline-style: none;
+  font-size: 3.0em;
+  height: 120px;
+  width: 100%;
+  background-color: #3C3C3C;
+  border-style: solid;
+  border-color: white;
+  box-shadow: 1px 1px 10px 5px rgba(30, 30, 30, 1);
+}
+.username-entry, .password-entry {
+  background-color: #3C3C3C;
 }
 .mfp-close {
     color: white;
@@ -104,7 +108,10 @@ nav > div {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.dynamic, h2, .static, nav {
+.help {
+  cursor: pointer;
+}
+.dynamic, h2, nav {
     background-color: #3C3C3C;
     color: white;
     border-style: solid;
@@ -278,11 +285,6 @@ footer {
     margin: 5px;
     color: white;
 }
-fieldset {
-    display: flex;
-    flex-direction: column;
-    border: 0;
-}
 .contact-info {
     display: flex;
 }
@@ -318,8 +320,6 @@ fieldset {
 .mfp-fade.mfp-wrap.mfp-removing .mfp-content {
 	opacity: 0;
 }
-
-/*Should be looking for how to create a standard viewport*/
 @media screen and (max-width: 480px) {
     .supported {
         display: none;
@@ -337,7 +337,8 @@ fieldset {
         flex-direction: column;
     }
     .action-links .top-links {
+        border-width: 2px;
         font-size: .7em;
-        padding: 2px;
+        padding: 3px;
     }
 }

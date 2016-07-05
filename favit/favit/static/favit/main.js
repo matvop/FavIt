@@ -1,6 +1,6 @@
 'use strict';
 
-var optionalStrings = 'Optional Strings:\n\n"http(s)://" and "www."';
+var mq = window.matchMedia('(min-width: 481px)');
 
 var imgurSupport = 'Supported Imgur URL formats:\n\n' +
 'Gallery Image URL:\nhttps://imgur.com/gallery/J1xff44\n' +
@@ -14,6 +14,8 @@ var videoSupport = 'Supported Video URL formats:\n\n' +
     'PL6...\n' +
   'youtu.be Share URL:\nhttps://youtu.be/X0z2i83fmMk\n' +
   'Vimeo Direct URL:\nhttps://vimeo.com/26645299\n\n';
+
+var optionalStrings = 'Optional Strings:\n\n"http(s)://" and "www."';
 
 var help = imgurSupport + videoSupport + optionalStrings;
 
@@ -38,7 +40,7 @@ var imgurPattern = new RegExp(
     // host name
     '(?:www\\.)?' +
     // domain and path
-    '(?:imgur\\.com\\/(?:a\\/|account\\/favorites\\/|gallery\\/))' +
+    '(?:imgur\\.com\\/(?:a\\/|account\\/favorites\\/|gallery\\/)?)' +
     // id
     '(\\w{5,7})' +
   '$'
@@ -194,6 +196,7 @@ function checkGalleryAnimationSetAuthorField(imgurTile, jsonData) {
   if (jsonData.animated === true) {
     imgurTile.find('.author').text('Animated GIF').attr(
       'href', 'https://imgur.com/gallery/' + jsonData.id);
+    imgurTile.find('.thumb').addClass('static');
   } else {
     imgurTile.find('.author').text('Image').attr(
       'href', 'https://imgur.com/gallery/' + jsonData.id);
@@ -206,8 +209,9 @@ function checkGalleryAnimationSetAuthorField(imgurTile, jsonData) {
  */
 function checkAlbumAnimationSetAuthorField(imgurTile, json) {
   if (json.data.images[0].animated === true) {
-    imgurTile.find('.author').text('Animated GIF').attr(
-      'href', json.data.images[0].link);
+    imgurTile.find('.author').text('Animated Album').attr(
+      'href', json.data.link);
+    imgurTile.find('.thumb').addClass('static');
   } else {
     imgurTile.find('.author').text('Album').attr(
       'href', json.data.link);
@@ -228,11 +232,26 @@ function checkForBrokenGIF(linkID, imgurTile, jsonData) {
 }
 
 /**
+ *
+ */
+function changeToAnimated(imgurTile, jsonData) {
+  return imgurTile.find('.thumb').attr('src', 'http://i.imgur.com/' +
+    jsonData.id + '.gif').removeClass('static').addClass('gif');
+}
+
+/**
+ *
+ */
+function changeToStatic(imgurTile, jsonData) {
+  return imgurTile.find('.thumb').attr('src', 'http://i.imgur.com/' +
+    jsonData.id + 'm.gif').removeClass('gif').addClass('static');
+}
+
+/**
  * Take in Imgur's gallery endpoint json response and empty Fav HTML tile
  * object and modify empty tile to add data from the json response
  */
 function convertEmptyTileToImgurGal(json, emptyTile) {
-  // console.dir(json);
   var imgurTile = emptyTile;
   var viewWidth = getViewWidth(json.data);
   imgurTile.toggleClass('imgur').css('width', viewWidth);
@@ -242,6 +261,23 @@ function convertEmptyTileToImgurGal(json, emptyTile) {
   var linkID = json.data.link.replace(
     'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
   imgurTile = checkForBrokenGIF(linkID, imgurTile, json.data);
+  if (json.data.animated && mq.matches) {
+    var image = $('<img />').attr('src', 'http://i.imgur.com/' +
+      json.data.id + '.gif'); // brings image into the buffer for smoother loading
+    $(document).on('scroll', function() {
+      var tile = imgurTile;
+      var data = json.data;
+        if (tile.find('img').visible() === true && tile.find('img').hasClass('static')) {
+          tile = changeToAnimated(tile, data);
+        } else if (tile.find('img').visible() === false && tile.find('img').hasClass('gif')) {
+          tile = changeToStatic(tile, data);
+        } else {
+          console.log('already set');
+        }
+    });
+  } else {
+    console.log('not a gif');
+  }
   return imgurTile;
 }
 
@@ -263,6 +299,23 @@ function convertEmptyTileToImgurAlb(json, emptyTile) {
   var linkID = link.replace('http://i.imgur.com/', '').replace(
     link.slice(-4), '');
   imgurTile = checkForBrokenGIF(linkID, imgurTile, jsonData);
+  if (jsonData.animated && mq.matches) {
+    var image = $('<img />').attr('src', 'http://i.imgur.com/' +
+      jsonData.id + '.gif'); // brings image into the buffer for smoother loading
+    $(document).on('scroll', function() {
+      var tile = imgurTile;
+      var data = jsonData;
+        if (tile.find('img').visible() === true && tile.find('img').hasClass('static')) {
+          tile = changeToAnimated(tile, data);
+        } else if (tile.find('img').visible() === false && tile.find('img').hasClass('gif')) {
+          tile = changeToStatic(tile, data);
+        } else {
+          console.log('already set');
+        }
+    });
+  } else {
+    console.log('not a gif');
+  }
   return imgurTile;
 }
 
@@ -482,10 +535,12 @@ function validateURLInput(mediaURL) {
   if (youtubePattern.test(mediaURL) === true ||
       imgurPattern.test(mediaURL) === true ||
       vimeoPattern.test(mediaURL) === true) {
-    $('.url-input').css('background-color', 'lightgreen');
+    $('.url-input').css('background-color', 'limegreen');
     return true;
+  } else if (mediaURL === '') {
+    $('.url-input').css('background-color', '#3C3C3C');
   } else {
-    $('.url-input').css('background-color', 'pink');
+    $('.url-input').css('background-color', 'firebrick');
     return false;
   }
 }
@@ -513,9 +568,9 @@ function validateForm(mediaURL) {
 }
 
 /**
- * Configure mouse click input events from the user.
+ * register mouse click input events from the user.
  */
-function configureMouseEvents() {
+function registerMouseEvents() {
   $('#recent-favs').on('mouseup', function() {
     $('section').empty();
     getRecentFavs(); //located in get.js
@@ -551,9 +606,9 @@ function configureMouseEvents() {
 }
 
 /**
- * Configure parameters for magnific popup type forms.
+ * register parameters for magnific popup type forms.
  */
-function configureForms() {
+function registerForms() {
   $('.popup-with-form').magnificPopup({
     type: 'inline',
     preloader: false,
@@ -562,9 +617,9 @@ function configureForms() {
 }
 
 /**
- * Configure keyup event behavior within the Fav url input.
+ * register keyup event behavior within the Fav url input.
  */
-function configureKbEvents() {
+function registerKbEvents() {
   $('.url-input').on('keyup', function() {
     var mediaURL = $('.url-input').val();
     validateURLInput(mediaURL);
@@ -572,9 +627,9 @@ function configureKbEvents() {
 }
 
 /**
- * Configure submit button behavior in the Fav form.
+ * register submit button behavior in the Fav form.
  */
-function configureFavFormSubmit() {
+function registerFavFormSubmit() {
   $('#fav-form').on('submit', function(event) {
     event.preventDefault();
     var mediaURL = $('.url-input').val();
@@ -588,14 +643,14 @@ function configureFavFormSubmit() {
 }
 
 /**
- * Configure the event handlers for validation, submission, and content
+ * register the event handlers for validation, submission, and content
  * filtering.
  */
 function registerGlobalEventHandlers() {
-  configureMouseEvents();
-  configureForms();
-  configureKbEvents();
-  configureFavFormSubmit();
+  registerMouseEvents();
+  registerForms();
+  registerKbEvents();
+  registerFavFormSubmit();
 }
 
 /**
