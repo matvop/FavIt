@@ -2,6 +2,8 @@
 
 var mq = window.matchMedia('(min-width: 481px)');
 
+var imageBuffer = [];
+
 var imgurSupport = 'Supported Imgur URL formats:\n\n' +
 'Gallery Image URL:\nhttps://imgur.com/gallery/J1xff44\n' +
 'Gallery Album URL (option 1):\nhttp://imgur.com/gallery/hOF1g\n' +
@@ -261,22 +263,36 @@ function convertEmptyTileToImgurGal(json, emptyTile) {
   var linkID = json.data.link.replace(
     'http://i.imgur.com/', '').replace(json.data.link.slice(-4), '');
   imgurTile = checkForBrokenGIF(linkID, imgurTile, json.data);
+  // if image is animated and media query matches include image change event listeners
   if (json.data.animated && mq.matches) {
-    var image = $('<img />').attr('src', 'http://i.imgur.com/' +
-      json.data.id + '.gif'); // brings image into the buffer for smoother loading
+    imageBuffer.push($('<img />').attr('src', 'http://i.imgur.com/' +
+      json.data.id + '.gif')); // brings image into memory for smoother loading
     $(document).on('scroll', function() {
       var tile = imgurTile;
       var data = json.data;
-        if (tile.find('img').visible() === true && tile.find('img').hasClass('static')) {
-          tile = changeToAnimated(tile, data);
-        } else if (tile.find('img').visible() === false && tile.find('img').hasClass('gif')) {
-          tile = changeToStatic(tile, data);
-        } else {
-          console.log('already set');
-        }
+      if (tile.find('img').visible() && tile.find('img').hasClass('static')) {
+        tile = changeToAnimated(tile, data);
+      } else if (tile.find('img').visible() === false &&
+        tile.find('img').hasClass('gif')) {
+        tile = changeToStatic(tile, data);
+      } else {
+        console.log('already set');
+      }
+    });
+    $('.thumb').on('load', function() {
+      var tile = imgurTile;
+      var data = json.data;
+      if (tile.find('img').visible() && tile.find('img').hasClass('static')) {
+        tile = changeToAnimated(tile, data);
+      } else if (tile.find('img').visible() === false &&
+        tile.find('img').hasClass('gif')) {
+        tile = changeToStatic(tile, data);
+      } else {
+        console.log('already set');
+      }
     });
   } else {
-    console.log('not a gif');
+    return imgurTile;
   }
   return imgurTile;
 }
@@ -299,22 +315,37 @@ function convertEmptyTileToImgurAlb(json, emptyTile) {
   var linkID = link.replace('http://i.imgur.com/', '').replace(
     link.slice(-4), '');
   imgurTile = checkForBrokenGIF(linkID, imgurTile, jsonData);
+  // if image is animated and media query matches include image change event listeners
   if (jsonData.animated && mq.matches) {
-    var image = $('<img />').attr('src', 'http://i.imgur.com/' +
-      jsonData.id + '.gif'); // brings image into the buffer for smoother loading
+    imageBuffer.push($('<img />').attr('src', 'http://i.imgur.com/' +
+      jsonData.id + '.gif')); // brings image into memory for smoother loading
     $(document).on('scroll', function() {
       var tile = imgurTile;
       var data = jsonData;
-        if (tile.find('img').visible() === true && tile.find('img').hasClass('static')) {
-          tile = changeToAnimated(tile, data);
-        } else if (tile.find('img').visible() === false && tile.find('img').hasClass('gif')) {
-          tile = changeToStatic(tile, data);
-        } else {
-          console.log('already set');
-        }
+      if (tile.find('img').visible() &&
+        tile.find('img').hasClass('static')) {
+        tile = changeToAnimated(tile, data);
+      } else if (tile.find('img').visible() === false &&
+        tile.find('img').hasClass('gif')) {
+        tile = changeToStatic(tile, data);
+      } else {
+        console.log('already set');
+      }
+    });
+    $('.thumb').on('load', function() {
+      var tile = imgurTile;
+      var data = jsonData;
+      if (tile.find('img').visible() && tile.find('img').hasClass('static')) {
+        tile = changeToAnimated(tile, data);
+      } else if (tile.find('img').visible() === false &&
+        tile.find('img').hasClass('gif')) {
+        tile = changeToStatic(tile, data);
+      } else {
+        console.log('already set');
+      }
     });
   } else {
-    console.log('not a gif');
+    return imgurTile;
   }
   return imgurTile;
 }
@@ -543,6 +574,7 @@ function validateURLInput(mediaURL) {
     $('.url-input').css('background-color', 'firebrick');
     return false;
   }
+  throw new TypeError('Input Error (validateURLInput): ' + mediaURL);
 }
 
 /**
@@ -571,38 +603,38 @@ function validateForm(mediaURL) {
  * register mouse click input events from the user.
  */
 function registerMouseEvents() {
-  $('#recent-favs').on('mouseup', function() {
+  $('#recent-favs').on('click', function() {
     $('section').empty();
     getRecentFavs(); //located in get.js
   });
-  $('#user-favs').on('mouseup', function() {
+  $('#user-favs').on('click', function() {
     $('section').empty();
     getFavs(); //located in get.js
   });
-  $('#imgur-logo').on('mouseup', function() {
+  $('#imgur-logo').on('click', function() {
     $('.imgur').show();
     $('.vim').hide();
     $('.yt').hide();
   });
-  $('#vimeo-logo').on('mouseup', function() {
+  $('#vimeo-logo').on('click', function() {
     $('.vim').show();
     $('.imgur').hide();
     $('.yt').hide();
   });
-  $('#yt-logo').on('mouseup', function() {
+  $('#yt-logo').on('click', function() {
     $('.yt').show();
     $('.imgur').hide();
     $('.vim').hide();
   });
-  $('.supported').on('mouseup', function() {
-    $('.imgur').show();
-    $('.vim').show();
-    $('.yt').show();
-  });
-  $('.help').on('mouseup', function(event) {
+  $('.help').on('click', function(event) {
     event.preventDefault();
     alert(help);
   });
+  $('.logos img').on('mousedown', function() {
+    $('.imgur').show();
+    $('.vim').show();
+    $('.yt').show();
+  })
 }
 
 /**

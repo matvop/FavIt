@@ -33,11 +33,13 @@ Users can add content from Imgur, Vimeo, and YouTube via URL.
   * Use to render and serve HTML to the user
   * Communicate Favs from the user to the database
   * Authenticate user login information in the database
-+ JavaScript/CSS
++ JavaScript
   * Dynamically create and load Fav HTML objects using JQuery
+  * Communicate with server APIs using AJAX
+  * Provide input validation using Regular Expressions
 + CSS
   * Used to provide style and layout for HTML elements
-  * Provide an efficient and visually appealing way of viewing Favs via pop-up style animations
+  * Provide a visually appealing method of viewing Favs via pop-up style animations
 
 ## MVP Timeline:
 1. Determine user input that should be saved for Fav creation
@@ -52,13 +54,13 @@ Users can add content from Imgur, Vimeo, and YouTube via URL.
 1. Add docstrings to code with concise descriptions
 
 ## Post MVP Features to add/update:
-1. Add user search functionality(filter by username)
 1. Provide user ability to delete Fav from database(don't just remove element using JQuery)
 1. Modify FavIt link using JQuery to empty Fav section and show all favs for logged in user __Completed 6/7__
 1. Fix ordering issue __Completed 6/7__
 1. Filter results based on which content provider logo is clicked. __Completed 6/8__
 1. Move Imgur API call to server-side logic
-1. Write validation using regular expressions to replace slicing. __Completed 6/22__
+1. Write input validation using regular expressions to replace slicing. __Completed 6/22__
 1. Change Imgur Album Favs to add all images in album as hidden links to allow for gallery lightbox
+1. Include method of detecting element visibility within the user's view-port and swap thumbnail for GIF when visible, and vice versa when not. __Completed 7/5__
 1. Expand database to include storage of title, author, publisher, and thumbnail URL
 1. Update client-side AJAX to retrieve Fav data from server rather than making API calls ever time a Fav is loaded
