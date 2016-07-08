@@ -55,11 +55,12 @@ var vimeoPattern = new RegExp(
     // host name
     '(?:www\\.)?' +
     // domain and path
-    '?vimeo\\.com\\/' +
+    '(?:vimeo\\.com\\/)' +
     // id
     '([0-9]{8,9})' +
   '$'
 );
+
 
 /**
  * Update dynamic class element to show current number of Favs in their view.

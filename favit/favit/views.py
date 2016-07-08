@@ -11,12 +11,13 @@ def create_fav(request):
     """Fav post from user saved into the database if valid."""
     if request.method == 'POST':
         url_text = request.POST.get('url_text')
+        print('server received url_text: ' + url_text)
         comment_text = request.POST.get('comment_text')
         response_data = {}
-        if url_text[0:4] != 'http':
-            response_data['result'] = 'Error - Failed to create Fav!'
-            return JsonResponse(response_data, status=500)
-        else:
+        string_list = url_text.split()
+        if any(
+            string for string in string_list) == any(
+                word for word in ['vimeo', 'youtu', 'imgur']):
             fav = logic.save_fav(url_text, comment_text, request.user)
             response_data['result'] = 'Created fav successfully!'
             response_data['user'] = fav.user.username
@@ -25,6 +26,9 @@ def create_fav(request):
             response_data['created-on'] = fav.datetime.strftime(
                 '%B %d, %Y %I:%M %p')
             return JsonResponse(response_data, status=200)
+        else:
+            response_data['result'] = 'Error - Failed to create Fav!'
+            return JsonResponse(response_data, status=500)
     else:
         response_data['result'] = 'Error - Failed to create Fav!'
         return JsonResponse(response_data, status=500)

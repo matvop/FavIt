@@ -54,6 +54,7 @@ Users can add content from Imgur, Vimeo, and YouTube via URL.
 1. Add docstrings to code with concise descriptions
 
 ## Post MVP Features to add/update:
+1. Write code that creates a 10-15 second animated GIF from video type media to use as thumbnail
 1. Provide user ability to delete Fav from database(don't just remove element using JQuery)
 1. Modify FavIt link using JQuery to empty Fav section and show all favs for logged in user __Completed 6/7__
 1. Fix ordering issue __Completed 6/7__

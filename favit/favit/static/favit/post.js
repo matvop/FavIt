@@ -28,9 +28,10 @@ function postFav(mediaURL, comment) {
       // console.log(json); // log the returned json to the console
     },
     // handle a non-successful response
-    error: function() {
-      alert('Error: Connection to server could not be established. ' +
-            'Please check your network connection and try again.');
+    error: function(json) {
+      console.log(json);
+      alert(json.statusText + ' ' + json.status + ' \n' +
+            json.responseText);
     }
   });
 }
