@@ -6,7 +6,7 @@
 function resetForm() {
   $('fieldset').children('.url-input').val('');
   $('fieldset').children('.comment-input').val('');
-  $('.url-input').css('background-color', 'white');
+  $('.url-input').css('background-color', '#3C3C3C');
   $('#fav-form').magnificPopup('close');
 }
 
@@ -25,13 +25,20 @@ function postFav(mediaURL, comment) {
     success: function(json) {
       checkTypeBuildTile(mediaURL);
       resetForm();
-      // console.log(json); // log the returned json to the console
     },
     // handle a non-successful response
     error: function(json) {
-      console.log(json);
-      alert(json.statusText + ' ' + json.status + ' \n' +
-            json.responseText);
+      if (json.status === 0) {
+        console.log('Unable to communcate with server.' +
+          json.statusText + ' ' + json.status);
+        alert('Unable to connect to server. Please try again later.');
+      } else {
+        console.log('Server was sent mediaURL: ' + mediaURL);
+        console.log(json);
+        console.log(json.statusText + ' ' + json.status);
+        console.log(json.responseText);
+        alert('Internal server error. Please check log.');
+      }
     }
   });
 }

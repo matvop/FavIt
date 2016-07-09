@@ -23,9 +23,10 @@ function getRecentFavs() {
       loadFavs(result);
     },
     // handle a non-successful response
-    error: function() {
-      alert('Error: Connection to server could not be established. ' +
-            'Please check your network connection and try again.');
+    error: function(json) {
+      console.log(json.statusText + ' ' + json.status);
+      console.log(json.responseText);
+      alert('Internal server error. Please check log.');
     }
   });
 }
@@ -42,9 +43,10 @@ function getFavs() {
       loadFavs(result);
     },
     // handle a non-successful response
-    error: function() {
-      alert('Error: Connection to server could not be established. ' +
-            'Please check your network connection and try again.');
+    error: function(json) {
+      console.log(json.statusText + ' ' + json.status);
+      console.log(json.responseText);
+      alert('Internal server error. Please check log.');
     }
   });
 }

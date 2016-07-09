@@ -42,7 +42,7 @@ var imgurPattern = new RegExp(
     // host name
     '(?:www\\.)?' +
     // domain and path
-    '(?:imgur\\.com\\/(?:a\\/|account\\/favorites\\/|gallery\\/)?)' +
+    '(?:imgur\\.com\\/(?:a\\/|account\\/favorites\\/|gallery\\/))' +
     // id
     '(\\w{5,7})' +
   '$'
@@ -272,24 +272,24 @@ function convertEmptyTileToImgurGal(json, emptyTile) {
       var tile = imgurTile;
       var data = json.data;
       if (tile.find('img').visible() && tile.find('img').hasClass('static')) {
-        tile = changeToAnimated(tile, data);
+        return changeToAnimated(tile, data);
       } else if (tile.find('img').visible() === false &&
         tile.find('img').hasClass('gif')) {
-        tile = changeToStatic(tile, data);
+        return changeToStatic(tile, data);
       } else {
-        console.log('already set');
+        return imgurTile;
       }
     });
     $('.thumb').on('load', function() {
       var tile = imgurTile;
       var data = json.data;
       if (tile.find('img').visible() && tile.find('img').hasClass('static')) {
-        tile = changeToAnimated(tile, data);
+        return changeToAnimated(tile, data);
       } else if (tile.find('img').visible() === false &&
         tile.find('img').hasClass('gif')) {
-        tile = changeToStatic(tile, data);
+        return changeToStatic(tile, data);
       } else {
-        console.log('already set');
+        return imgurTile;
       }
     });
   } else {
@@ -325,24 +325,24 @@ function convertEmptyTileToImgurAlb(json, emptyTile) {
       var data = jsonData;
       if (tile.find('img').visible() &&
         tile.find('img').hasClass('static')) {
-        tile = changeToAnimated(tile, data);
+        return changeToAnimated(tile, data);
       } else if (tile.find('img').visible() === false &&
         tile.find('img').hasClass('gif')) {
-        tile = changeToStatic(tile, data);
+        return changeToStatic(tile, data);
       } else {
-        console.log('already set');
+        return imgurTile;
       }
     });
     $('.thumb').on('load', function() {
       var tile = imgurTile;
       var data = jsonData;
       if (tile.find('img').visible() && tile.find('img').hasClass('static')) {
-        tile = changeToAnimated(tile, data);
+        return changeToAnimated(tile, data);
       } else if (tile.find('img').visible() === false &&
         tile.find('img').hasClass('gif')) {
-        tile = changeToStatic(tile, data);
+        return changeToStatic(tile, data);
       } else {
-        console.log('already set');
+        return imgurTile;
       }
     });
   } else {
@@ -687,7 +687,7 @@ function registerGlobalEventHandlers() {
 }
 
 /**
- * Starts up the application and loads Favs once the HTML document is fully loaded.
+ * Load Favs and register event handlers once the HTML document is loaded.
 */
 $(document).ready(function() {
   getFavs(); //located in get.js

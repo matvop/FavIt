@@ -11,7 +11,6 @@ def create_fav(request):
     """Fav post from user saved into the database if valid."""
     if request.method == 'POST':
         url_text = request.POST.get('url_text')
-        print('server received url_text: ' + url_text)
         comment_text = request.POST.get('comment_text')
         response_data = {}
         string_list = url_text.split()
